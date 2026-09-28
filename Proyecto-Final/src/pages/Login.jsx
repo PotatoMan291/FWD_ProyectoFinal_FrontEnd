@@ -1,7 +1,9 @@
 function Login() {
   return (
     <main className="page-container">
-      <p className="section-label">PURAVIDA TRIPS</p>
+      <p className="section-eyebrow">
+        PURAVIDA TRIPS
+      </p>
 
       <h1>Iniciar sesión</h1>
 
