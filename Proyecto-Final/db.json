@@ -1,0 +1,66 @@
+{
+  "usuarios": [
+    {
+      "id": "1",
+      "nombre": "Administrador",
+      "correo": "admin@puravidatrips.com",
+      "password": "admin123",
+      "rol": "admin"
+    },
+    {
+      "id": "2",
+      "nombre": "Turista Demo",
+      "correo": "turista@puravidatrips.com",
+      "password": "123456",
+      "rol": "turista"
+    },
+    {
+      "id": "3",
+      "nombre": "Operador Demo",
+      "correo": "operador@puravidatrips.com",
+      "password": "123456",
+      "rol": "operador"
+    }
+  ],
+  "categorias": [
+    {
+      "id": "1",
+      "nombre": "Aventura"
+    },
+    {
+      "id": "2",
+      "nombre": "Naturaleza"
+    },
+    {
+      "id": "3",
+      "nombre": "Playa"
+    },
+    {
+      "id": "4",
+      "nombre": "Cultura"
+    }
+  ],
+  "ubicaciones": [
+    {
+      "id": "1",
+      "nombre": "San José"
+    },
+    {
+      "id": "2",
+      "nombre": "Guanacaste"
+    },
+    {
+      "id": "3",
+      "nombre": "Puntarenas"
+    },
+    {
+      "id": "4",
+      "nombre": "Alajuela"
+    }
+  ],
+  "tours": [],
+  "disponibilidades": [],
+  "reservas": [],
+  "pagos": [],
+  "favoritos": []
+}
