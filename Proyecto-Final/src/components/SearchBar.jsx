@@ -5,47 +5,43 @@ function SearchBar() {
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
+  function handleSubmit(event) {
     event.preventDefault();
 
-    const searchValue = search.trim();
+    const value = search.trim();
 
-    if (!searchValue) {
+    if (value) {
+      navigate(
+        `/tours?search=${encodeURIComponent(value)}`
+      );
+    } else {
       navigate("/tours");
-      return;
     }
-
-    navigate(`/tours?search=${encodeURIComponent(searchValue)}`);
-  };
+  }
 
   return (
     <form
       className="search-bar"
       onSubmit={handleSubmit}
+      role="search"
     >
-      <div className="search-field">
+      <div className="search-input-wrapper">
         <span
           className="search-icon"
           aria-hidden="true"
         >
-          ⌕
+          🔎
         </span>
 
-        <div className="search-field-content">
-          <label htmlFor="tour-search">
-            ¿Qué quieres explorar?
-          </label>
-
-          <input
-            id="tour-search"
-            type="search"
-            value={search}
-            onChange={(event) =>
-              setSearch(event.target.value)
-            }
-            placeholder="Ej. aventura, playa, naturaleza..."
-          />
-        </div>
+        <input
+          type="search"
+          value={search}
+          onChange={(event) =>
+            setSearch(event.target.value)
+          }
+          placeholder="¿Qué experiencia estás buscando?"
+          aria-label="Buscar experiencias turísticas"
+        />
       </div>
 
       <button

@@ -1,27 +1,21 @@
-import {
-  createResource,
-  deleteResource,
-  getResource,
-  getResourceById,
-  updateResource,
-} from "./api";
+import api from "./api";
 
-export function getTours() {
-  return getResource("tours");
+export async function getTours() {
+  return api.get("/tours");
 }
 
-export function getTourById(id) {
-  return getResourceById("tours", id);
+export async function getTourById(id) {
+  return api.get(`/tours/${id}`);
 }
 
-export function createTour(tour) {
-  return createResource("tours", tour);
+export async function createTour(tour) {
+  return api.post("/tours", tour);
 }
 
-export function updateTour(id, tour) {
-  return updateResource("tours", id, tour);
+export async function updateTour(id, tour) {
+  return api.put(`/tours/${id}`, tour);
 }
 
-export function deleteTour(id) {
-  return deleteResource("tours", id);
+export async function deleteTour(id) {
+  return api.delete(`/tours/${id}`);
 }

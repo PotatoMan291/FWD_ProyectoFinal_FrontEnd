@@ -10,36 +10,38 @@ async function request(endpoint, options = {}) {
   });
 
   if (!response.ok) {
-    throw new Error(`Error HTTP: ${response.status}`);
+    throw new Error(
+      `Error ${response.status}: ${response.statusText}`
+    );
   }
 
   return response.json();
 }
 
-export function getResource(resource) {
-  return request(`/${resource}`);
-}
+const api = {
+  get(endpoint) {
+    return request(endpoint);
+  },
 
-export function getResourceById(resource, id) {
-  return request(`/${resource}/${id}`);
-}
+  post(endpoint, data) {
+    return request(endpoint, {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  },
 
-export function createResource(resource, data) {
-  return request(`/${resource}`, {
-    method: "POST",
-    body: JSON.stringify(data),
-  });
-}
+  put(endpoint, data) {
+    return request(endpoint, {
+      method: "PUT",
+      body: JSON.stringify(data),
+    });
+  },
 
-export function updateResource(resource, id, data) {
-  return request(`/${resource}/${id}`, {
-    method: "PUT",
-    body: JSON.stringify(data),
-  });
-}
+  delete(endpoint) {
+    return request(endpoint, {
+      method: "DELETE",
+    });
+  },
+};
 
-export function deleteResource(resource, id) {
-  return request(`/${resource}/${id}`, {
-    method: "DELETE",
-  });
-}
+export default api;
