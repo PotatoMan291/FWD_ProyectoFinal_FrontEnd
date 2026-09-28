@@ -8,27 +8,25 @@ function CategoryCard({
 }) {
   return (
     <Link
-      to={`/tours?category=${encodeURIComponent(search || title)}`}
+      to={`/tours?categoria=${encodeURIComponent(
+        search || title
+      )}`}
       className="category-card"
     >
-      <div
-        className="category-icon"
+      <span
+        className="category-card-icon"
         aria-hidden="true"
       >
         {icon}
-      </div>
+      </span>
 
-      <div>
-        <h3>{title}</h3>
+      <h3>{title}</h3>
 
-        <p>{description}</p>
-      </div>
+      <p>{description}</p>
 
-      <span
-        className="category-arrow"
-        aria-hidden="true"
-      >
-        →
+      <span className="category-card-link">
+        Explorar
+        <span aria-hidden="true"> →</span>
       </span>
     </Link>
   );
