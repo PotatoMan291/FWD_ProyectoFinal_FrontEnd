@@ -1,21 +1,11 @@
-import { Link } from "react-router-dom";
-
-function Navbar() {
+function Footer() {
   return (
-    <header className="navbar">
-      <div className="navbar-container">
-        <Link to="/" className="navbar-logo">
-          PuraVida Trips
-        </Link>
-
-        <nav className="navbar-links">
-          <Link to="/">Inicio</Link>
-          <Link to="/tours">Tours</Link>
-          <Link to="/login">Iniciar sesión</Link>
-        </nav>
-      </div>
-    </header>
+    <footer className="footer">
+      <p>
+        © 2026 PuraVida Trips. Explora Costa Rica, vive la experiencia.
+      </p>
+    </footer>
   );
 }
 
-export default Navbar;
+export default Footer;

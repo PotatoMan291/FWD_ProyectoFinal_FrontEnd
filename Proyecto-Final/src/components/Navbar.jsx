@@ -8,7 +8,7 @@ function Navbar() {
           PuraVida Trips
         </Link>
 
-        <nav className="navbar-links">
+        <nav className="navbar-links" aria-label="Navegación principal">
           <Link to="/">Inicio</Link>
           <Link to="/tours">Tours</Link>
           <Link to="/login">Iniciar sesión</Link>
