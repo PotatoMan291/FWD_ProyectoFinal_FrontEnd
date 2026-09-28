@@ -5,7 +5,9 @@
       "nombre": "Administrador",
       "correo": "admin@puravidatrips.com",
       "password": "admin123",
-     
+      "rol": "admin"
+    },
+    {
       "id": "2",
       "nombre": "Turista Demo",
       "correo": "turista@puravidatrips.com",
