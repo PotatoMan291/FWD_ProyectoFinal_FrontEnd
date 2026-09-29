@@ -25,15 +25,15 @@ function Footer() {
             Tours
           </Link>
 
-          <Link to="/tours?category=Aventura">
+          <Link to="/tours?categoria=Aventura">
             Aventura
           </Link>
 
-          <Link to="/tours?category=Naturaleza">
+          <Link to="/tours?categoria=Naturaleza">
             Naturaleza
           </Link>
 
-          <Link to="/tours?category=Playa">
+          <Link to="/tours?categoria=Playa">
             Playa
           </Link>
         </div>

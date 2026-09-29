@@ -4,6 +4,8 @@ import {
   useState,
 } from "react";
 
+import { useSearchParams } from "react-router-dom";
+
 import Swal from "sweetalert2";
 
 import TourCard from "../components/TourCard";
@@ -13,13 +15,26 @@ import ComparisonModal from "../components/ComparisonModal";
 import { getTours } from "../services/tourService";
 
 function Marketplace() {
+
+
   const [tours, setTours] = useState([]);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const [search, setSearch] = useState("");
-  const [category, setCategory] = useState("");
+  const [searchParams] = useSearchParams();
+
+  const [search, setSearch] = useState(
+    () => searchParams.get("search") || ""
+  );
+
+  const [category, setCategory] = useState(
+    () =>
+      searchParams.get("categoria") ||
+      searchParams.get("category") ||
+      ""
+  );
+
   const [location, setLocation] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
   const [sort, setSort] = useState("");
