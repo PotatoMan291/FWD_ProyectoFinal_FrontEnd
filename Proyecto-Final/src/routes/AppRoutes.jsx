@@ -7,6 +7,7 @@ import Home from "../pages/Home";
 import Marketplace from "../pages/Marketplace";
 import Login from "../pages/Login";
 import NotFound from "../pages/NotFound";
+import TourDetail from "../pages/TourDetail";
 
 function AppRoutes() {
   return (
@@ -16,6 +17,11 @@ function AppRoutes() {
       <Route
         path="/tours"
         element={<Marketplace />}
+      />
+
+      <Route
+        path="/tours/:id"
+        element={<TourDetail />}
       />
 
       <Route
