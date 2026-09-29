@@ -1,8 +1,32 @@
+import { useEffect, useState } from "react";
+
 import Button from "../components/Button";
 import CategoryCard from "../components/CategoryCard";
 import FeaturedTourCard from "../components/FeaturedTourCard";
 import SearchBar from "../components/SearchBar";
 import SectionTitle from "../components/SectionTitle";
+import { getTours } from "../services/tourService";
+
+const fallbackFeaturedTours = [
+  {
+    category: "Naturaleza",
+    title: "Experiencias entre naturaleza",
+    location: "Costa Rica",
+    price: 25000,
+  },
+  {
+    category: "Aventura",
+    title: "Aventura y adrenalina",
+    location: "Costa Rica",
+    price: 35000,
+  },
+  {
+    category: "Playa",
+    title: "Escapada tropical",
+    location: "Costa Rica",
+    price: 30000,
+  },
+];
 
 const categories = [
   {
@@ -35,28 +59,24 @@ const categories = [
   },
 ];
 
-const featuredTours = [
-  {
-    category: "Naturaleza",
-    title: "Experiencias entre naturaleza",
-    location: "Costa Rica",
-    price: 25000,
-  },
-  {
-    category: "Aventura",
-    title: "Aventura y adrenalina",
-    location: "Costa Rica",
-    price: 35000,
-  },
-  {
-    category: "Playa",
-    title: "Escapada tropical",
-    location: "Costa Rica",
-    price: 30000,
-  },
-];
-
 function Home() {
+  const [featuredTours, setFeaturedTours] = useState(
+    fallbackFeaturedTours
+  );
+
+  useEffect(() => {
+    async function loadFeaturedTours() {
+      try {
+        const tours = await getTours();
+        setFeaturedTours(tours.slice(0, 3));
+      } catch (error) {
+        console.error("Error al cargar las experiencias destacadas:", error);
+      }
+    }
+
+    loadFeaturedTours();
+  }, []);
+
   return (
     <main>
       <section className="hero">
