@@ -1,34 +1,34 @@
-import { useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import {
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
-import SectionTitle from "../components/SectionTitle";
+import Swal from "sweetalert2";
+
 import TourCard from "../components/TourCard";
+import CompareBar from "../components/CompareBar";
+import ComparisonModal from "../components/ComparisonModal";
+
 import { getTours } from "../services/tourService";
 
 function Marketplace() {
-  const [searchParams, setSearchParams] = useSearchParams();
-
   const [tours, setTours] = useState([]);
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const [search, setSearch] = useState(
-    searchParams.get("search") || ""
-  );
-
-  const [category, setCategory] = useState(
-    searchParams.get("categoria") || ""
-  );
-
-  const [location, setLocation] = useState(
-    searchParams.get("ubicacion") || ""
-  );
-
-  const [maxPrice, setMaxPrice] = useState(
-    searchParams.get("precio") || ""
-  );
-
+  const [search, setSearch] = useState("");
+  const [category, setCategory] = useState("");
+  const [location, setLocation] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
   const [sort, setSort] = useState("");
+
+  const [selectedCompareIds, setSelectedCompareIds] =
+    useState([]);
+
+  const [showComparison, setShowComparison] =
+    useState(false);
 
   useEffect(() => {
     async function loadTours() {
@@ -41,8 +41,9 @@ function Marketplace() {
         setTours(data);
       } catch (err) {
         console.error(err);
+
         setError(
-          "No se pudieron cargar las experiencias. Verifica que JSON Server esté ejecutándose."
+          "No se pudieron cargar las experiencias turísticas."
         );
       } finally {
         setLoading(false);
@@ -75,25 +76,25 @@ function Marketplace() {
   const filteredTours = useMemo(() => {
     let result = [...tours];
 
-    const normalizedSearch = search
+    const searchValue = search
       .trim()
       .toLowerCase();
 
-    if (normalizedSearch) {
+    if (searchValue) {
       result = result.filter((tour) => {
-        const searchableText = [
-          tour.nombre,
-          tour.descripcion,
-          tour.categoria,
-          tour.ubicacion,
-          tour.operador,
-          ...(tour.caracteristicas || []),
-        ]
-          .join(" ")
-          .toLowerCase();
-
-        return searchableText.includes(
-          normalizedSearch
+        return (
+          tour.nombre
+            ?.toLowerCase()
+            .includes(searchValue) ||
+          tour.descripcion
+            ?.toLowerCase()
+            .includes(searchValue) ||
+          tour.ubicacion
+            ?.toLowerCase()
+            .includes(searchValue) ||
+          tour.categoria
+            ?.toLowerCase()
+            .includes(searchValue)
         );
       });
     }
@@ -112,21 +113,34 @@ function Marketplace() {
 
     if (maxPrice) {
       result = result.filter(
-        (tour) => tour.precio <= Number(maxPrice)
+        (tour) =>
+          Number(tour.precio) <= Number(maxPrice)
       );
     }
 
     if (sort === "price-asc") {
-      result.sort((a, b) => a.precio - b.precio);
+      result.sort(
+        (a, b) =>
+          Number(a.precio) - Number(b.precio)
+      );
     }
 
     if (sort === "price-desc") {
-      result.sort((a, b) => b.precio - a.precio);
+      result.sort(
+        (a, b) =>
+          Number(b.precio) - Number(a.precio)
+      );
     }
 
-    if (sort === "name") {
+    if (sort === "name-asc") {
       result.sort((a, b) =>
         a.nombre.localeCompare(b.nombre)
+      );
+    }
+
+    if (sort === "name-desc") {
+      result.sort((a, b) =>
+        b.nombre.localeCompare(a.nombre)
       );
     }
 
@@ -140,35 +154,62 @@ function Marketplace() {
     sort,
   ]);
 
-  useEffect(() => {
-    const params = {};
+  const selectedCompareTours = useMemo(() => {
+    return selectedCompareIds
+      .map((id) =>
+        tours.find(
+          (tour) => String(tour.id) === String(id)
+        )
+      )
+      .filter(Boolean);
+  }, [selectedCompareIds, tours]);
 
-    if (search.trim()) {
-      params.search = search.trim();
+  function handleCompare(id) {
+    const stringId = String(id);
+
+    const alreadySelected =
+      selectedCompareIds.includes(stringId);
+
+    if (alreadySelected) {
+      setSelectedCompareIds((current) =>
+        current.filter(
+          (tourId) => tourId !== stringId
+        )
+      );
+
+      return;
     }
 
-    if (category) {
-      params.categoria = category;
+    if (selectedCompareIds.length >= 3) {
+      Swal.fire({
+        icon: "info",
+        title: "Límite de comparación",
+        text: "Solo puedes comparar hasta 3 experiencias al mismo tiempo.",
+        confirmButtonText: "Entendido",
+        confirmButtonColor: "#176A4E",
+      });
+
+      return;
     }
 
-    if (location) {
-      params.ubicacion = location;
-    }
+    setSelectedCompareIds((current) => [
+      ...current,
+      stringId,
+    ]);
+  }
 
-    if (maxPrice) {
-      params.precio = maxPrice;
-    }
+  function handleRemoveCompare(id) {
+    setSelectedCompareIds((current) =>
+      current.filter(
+        (tourId) => String(tourId) !== String(id)
+      )
+    );
+  }
 
-    setSearchParams(params, {
-      replace: true,
-    });
-  }, [
-    search,
-    category,
-    location,
-    maxPrice,
-    setSearchParams,
-  ]);
+  function handleClearComparison() {
+    setSelectedCompareIds([]);
+    setShowComparison(false);
+  }
 
   function clearFilters() {
     setSearch("");
@@ -179,49 +220,57 @@ function Marketplace() {
   }
 
   return (
-    <main className="marketplace-page">
-      <section className="marketplace-header">
-        <div className="content-container">
-          <SectionTitle
-            eyebrow="MARKETPLACE"
-            title="Encuentra tu próxima experiencia"
-            description="Explora tours y experiencias turísticas en diferentes destinos de Costa Rica."
-          />
-        </div>
-      </section>
+    <>
+      <main className="marketplace-page">
+        <section className="marketplace-header">
+          <div className="marketplace-header-content">
+            <span className="section-eyebrow">
+              Explora Costa Rica
+            </span>
 
-      <section className="marketplace-section">
-        <div className="content-container">
+            <h1>Encuentra tu próxima experiencia</h1>
+
+            <p>
+              Descubre tours y experiencias turísticas
+              para disfrutar Costa Rica.
+            </p>
+          </div>
+        </section>
+
+        <section className="marketplace-content">
           <div className="marketplace-layout">
-            <aside
-              className="filters-panel"
-              aria-label="Filtros de búsqueda"
-            >
+            <aside className="marketplace-filters">
               <div className="filters-header">
-                <h2>Filtrar experiencias</h2>
+                <div>
+                  <span className="section-eyebrow">
+                    Filtrar
+                  </span>
+
+                  <h2>Encuentra lo que buscas</h2>
+                </div>
 
                 <button
                   type="button"
-                  className="clear-filters"
                   onClick={clearFilters}
+                  className="clear-filters-button"
                 >
                   Limpiar
                 </button>
               </div>
 
               <div className="filter-group">
-                <label htmlFor="tour-search">
+                <label htmlFor="marketplace-search">
                   Buscar
                 </label>
 
                 <input
-                  id="tour-search"
+                  id="marketplace-search"
                   type="search"
+                  placeholder="Ej. aventura, playa..."
                   value={search}
                   onChange={(event) =>
                     setSearch(event.target.value)
                   }
-                  placeholder="¿Qué quieres hacer?"
                 />
               </div>
 
@@ -243,8 +292,8 @@ function Marketplace() {
 
                   {categories.map((item) => (
                     <option
-                      key={item}
                       value={item}
+                      key={item}
                     >
                       {item}
                     </option>
@@ -270,8 +319,8 @@ function Marketplace() {
 
                   {locations.map((item) => (
                     <option
-                      key={item}
                       value={item}
+                      key={item}
                     >
                       {item}
                     </option>
@@ -284,87 +333,75 @@ function Marketplace() {
                   Precio máximo
                 </label>
 
-                <select
+                <input
                   id="price-filter"
+                  type="number"
+                  min="0"
+                  placeholder="Ej. 50000"
                   value={maxPrice}
                   onChange={(event) =>
                     setMaxPrice(event.target.value)
                   }
+                />
+              </div>
+
+              <div className="filter-group">
+                <label htmlFor="sort-filter">
+                  Ordenar por
+                </label>
+
+                <select
+                  id="sort-filter"
+                  value={sort}
+                  onChange={(event) =>
+                    setSort(event.target.value)
+                  }
                 >
                   <option value="">
-                    Cualquier precio
+                    Recomendados
                   </option>
 
-                  <option value="20000">
-                    Hasta ₡20.000
+                  <option value="price-asc">
+                    Precio: menor a mayor
                   </option>
 
-                  <option value="30000">
-                    Hasta ₡30.000
+                  <option value="price-desc">
+                    Precio: mayor a menor
                   </option>
 
-                  <option value="40000">
-                    Hasta ₡40.000
+                  <option value="name-asc">
+                    Nombre: A-Z
                   </option>
 
-                  <option value="50000">
-                    Hasta ₡50.000
-                  </option>
-
-                  <option value="60000">
-                    Hasta ₡60.000
+                  <option value="name-desc">
+                    Nombre: Z-A
                   </option>
                 </select>
               </div>
             </aside>
 
             <div className="marketplace-results">
-              <div className="marketplace-toolbar">
+              <div className="marketplace-results-header">
                 <div>
-                  <strong>
-                    {filteredTours.length}
-                  </strong>{" "}
-                  experiencias encontradas
+                  <span className="results-count">
+                    {filteredTours.length} experiencias
+                  </span>
+
+                  <h2>
+                    Experiencias disponibles
+                  </h2>
                 </div>
 
-                <div className="sort-control">
-                  <label htmlFor="sort">
-                    Ordenar:
-                  </label>
-
-                  <select
-                    id="sort"
-                    value={sort}
-                    onChange={(event) =>
-                      setSort(event.target.value)
-                    }
-                  >
-                    <option value="">
-                      Relevancia
-                    </option>
-
-                    <option value="price-asc">
-                      Precio: menor a mayor
-                    </option>
-
-                    <option value="price-desc">
-                      Precio: mayor a menor
-                    </option>
-
-                    <option value="name">
-                      Nombre
-                    </option>
-                  </select>
-                </div>
+                {selectedCompareTours.length > 0 && (
+                  <span className="comparison-counter">
+                    {selectedCompareTours.length}{" "}
+                    seleccionadas para comparar
+                  </span>
+                )}
               </div>
 
               {loading && (
                 <div className="marketplace-state">
-                  <div
-                    className="loading-spinner"
-                    aria-hidden="true"
-                  />
-
                   <p>
                     Cargando experiencias...
                   </p>
@@ -372,69 +409,73 @@ function Marketplace() {
               )}
 
               {!loading && error && (
-                <div className="marketplace-state error-state">
-                  <span
-                    className="state-icon"
-                    aria-hidden="true"
-                  >
-                    !
-                  </span>
-
-                  <h2>
-                    No pudimos cargar los tours
-                  </h2>
-
+                <div className="marketplace-state error">
                   <p>{error}</p>
                 </div>
               )}
 
               {!loading &&
                 !error &&
-                filteredTours.length > 0 && (
-                  <div className="tours-grid">
-                    {filteredTours.map((tour) => (
-                      <TourCard
-                        key={tour.id}
-                        {...tour}
-                      />
-                    ))}
+                filteredTours.length === 0 && (
+                  <div className="marketplace-state">
+                    <h3>
+                      No encontramos experiencias
+                    </h3>
+
+                    <p>
+                      Intenta cambiar los filtros de
+                      búsqueda.
+                    </p>
+
+                    <button
+                      type="button"
+                      className="primary-button"
+                      onClick={clearFilters}
+                    >
+                      Limpiar filtros
+                    </button>
                   </div>
                 )}
 
               {!loading &&
                 !error &&
-                filteredTours.length === 0 && (
-                  <div className="marketplace-state empty-state">
-                    <span
-                      className="state-icon"
-                      aria-hidden="true"
-                    >
-                      ?
-                    </span>
-
-                    <h2>
-                      No encontramos experiencias
-                    </h2>
-
-                    <p>
-                      Intenta modificar los filtros o
-                      realizar una búsqueda diferente.
-                    </p>
-
-                    <button
-                      type="button"
-                      className="clear-filters-button"
-                      onClick={clearFilters}
-                    >
-                      Ver todas las experiencias
-                    </button>
+                filteredTours.length > 0 && (
+                  <div className="tour-grid">
+                    {filteredTours.map((tour) => (
+                      <TourCard
+                        key={tour.id}
+                        {...tour}
+                        isCompared={selectedCompareIds.includes(
+                          String(tour.id)
+                        )}
+                        onCompare={handleCompare}
+                      />
+                    ))}
                   </div>
                 )}
             </div>
           </div>
-        </div>
-      </section>
-    </main>
+        </section>
+      </main>
+
+      <CompareBar
+        selectedTours={selectedCompareTours}
+        onRemove={handleRemoveCompare}
+        onClear={handleClearComparison}
+        onOpenComparison={() =>
+          setShowComparison(true)
+        }
+      />
+
+      {showComparison && (
+        <ComparisonModal
+          selectedTours={selectedCompareTours}
+          onClose={() => setShowComparison(false)}
+          onRemove={handleRemoveCompare}
+          onClear={handleClearComparison}
+        />
+      )}
+    </>
   );
 }
 
