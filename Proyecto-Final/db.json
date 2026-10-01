@@ -20,6 +20,13 @@
       "correo": "operador@puravidatrips.com",
       "password": "123456",
       "rol": "operador"
+    },
+    {
+      "id": "WsrEi9Ikf9M",
+      "nombre": "Steven Salas",
+      "correo": "steven@gmail.com",
+      "password": "12345678",
+      "rol": "turista"
     }
   ],
   "categorias": [
@@ -207,5 +214,6 @@
   "disponibilidades": [],
   "reservas": [],
   "pagos": [],
-  "favoritos": []
+  "favoritos": [],
+  "$schema": "./node_modules/json-server/schema.json"
 }
