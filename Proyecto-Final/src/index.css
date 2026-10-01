@@ -3057,3 +3057,371 @@ button[aria-disabled="true"] {
     animation: none;
   }
 }
+/* =========================================================
+   ACCESSIBILITY PANEL
+   ========================================================= */
+
+.accessibility-widget {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 2000;
+}
+
+.accessibility-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 12px 18px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  background: var(--color-primary);
+  color: var(--color-white);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: var(--shadow-md);
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.accessibility-toggle:hover {
+  background: var(--color-primary-dark);
+  transform: translateY(-2px);
+}
+
+.accessibility-toggle:focus-visible,
+.accessibility-close:focus-visible,
+.accessibility-option:focus-visible,
+.accessibility-reset:focus-visible,
+.accessibility-speech-button:focus-visible,
+.accessibility-panel select:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+/* =========================================================
+   ACCESSIBILITY PANEL
+   ========================================================= */
+
+.accessibility-panel {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 12px);
+  width: min(380px, calc(100vw - 32px));
+  max-height: min(720px, calc(100vh - 100px));
+  overflow-y: auto;
+  padding: 24px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-background);
+  color: var(--color-text);
+  box-shadow: var(--shadow-md);
+}
+
+.accessibility-panel-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.accessibility-eyebrow {
+  margin: 0 0 4px;
+  color: var(--color-primary-light);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.accessibility-panel h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+}
+
+.accessibility-close {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  place-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--color-text);
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.accessibility-options {
+  display: grid;
+  gap: 22px;
+}
+
+.accessibility-options fieldset {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.accessibility-options legend {
+  margin-bottom: 9px;
+  color: var(--color-text);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.accessibility-option-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.accessibility-font-options {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.accessibility-option {
+  display: inline-flex;
+  min-height: 42px;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 9px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-background-soft);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.accessibility-option:hover {
+  border-color: var(--color-primary-light);
+}
+
+.accessibility-option.active {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: var(--color-white);
+}
+
+.accessibility-options select {
+  width: 100%;
+  min-height: 42px;
+  padding: 9px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-background);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  cursor: pointer;
+}
+
+.accessibility-help {
+  margin: 8px 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+/* =========================================================
+   TEXT TO SPEECH
+   ========================================================= */
+
+.accessibility-speech-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.accessibility-speech-button {
+  min-height: 38px;
+  padding: 8px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-background-soft);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.accessibility-speech-button:hover:not(:disabled) {
+  border-color: var(--color-primary-light);
+}
+
+.accessibility-speech-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
+.accessibility-reset {
+  width: 100%;
+  margin-top: 24px;
+  padding: 11px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.accessibility-reset:hover {
+  background: var(--color-background-soft);
+}
+
+/* =========================================================
+   DARK MODE
+   ========================================================= */
+
+:root[data-theme="dark"] {
+  --color-background: #10241c;
+  --color-background-soft: #17372a;
+  --color-text: #f3f5ef;
+  --color-text-muted: #c3cec7;
+  --color-border: #385347;
+  --color-white: #ffffff;
+}
+
+:root[data-theme="dark"] .accessibility-option.active {
+  color: #ffffff;
+}
+
+/* =========================================================
+   HIGH CONTRAST
+   ========================================================= */
+
+:root[data-contrast="high"] {
+  --color-primary: #003d29;
+  --color-primary-light: #005f42;
+  --color-primary-dark: #001f14;
+  --color-accent: #ffc400;
+  --color-background: #ffffff;
+  --color-background-soft: #eeeeee;
+  --color-text: #000000;
+  --color-text-muted: #222222;
+  --color-border: #000000;
+}
+
+:root[data-theme="dark"][data-contrast="high"] {
+  --color-primary: #ffffff;
+  --color-primary-light: #ffffff;
+  --color-primary-dark: #dddddd;
+  --color-accent: #ffd400;
+  --color-background: #000000;
+  --color-background-soft: #171717;
+  --color-text: #ffffff;
+  --color-text-muted: #eeeeee;
+  --color-border: #ffffff;
+  --color-white: #000000;
+}
+
+/* =========================================================
+   FONT SIZE
+   ========================================================= */
+
+:root[data-font-size="large"] {
+  font-size: 112.5%;
+}
+
+:root[data-font-size="x-large"] {
+  font-size: 125%;
+}
+
+/* =========================================================
+   COLOR BLIND MODES
+   ========================================================= */
+
+:root[data-color-blind="protanopia"] {
+  filter: saturate(0.75) hue-rotate(8deg);
+}
+
+:root[data-color-blind="deuteranopia"] {
+  filter: saturate(0.8) hue-rotate(-8deg);
+}
+
+:root[data-color-blind="tritanopia"] {
+  filter: saturate(0.8) hue-rotate(18deg);
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 768px) {
+  .accessibility-widget {
+    right: 16px;
+    bottom: 16px;
+  }
+
+  .accessibility-toggle {
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    border-radius: 50%;
+  }
+
+  .accessibility-toggle span:last-child {
+    display: none;
+  }
+
+  .accessibility-panel {
+    right: 0;
+    width: min(350px, calc(100vw - 32px));
+  }
+}
+
+@media (max-width: 420px) {
+  .accessibility-widget {
+    right: 12px;
+    bottom: 12px;
+  }
+
+  .accessibility-panel {
+    width: calc(100vw - 24px);
+    padding: 20px;
+  }
+
+  .accessibility-option-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .accessibility-font-options {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .accessibility-toggle,
+  .accessibility-option {
+    transition: none;
+  }
+}

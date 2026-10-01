@@ -142,7 +142,7 @@ function Home() {
           <div className="featured-grid">
             {featuredTours.map((tour) => (
               <FeaturedTourCard
-                key={tour.title}
+                key={tour.id}
                 {...tour}
               />
             ))}
