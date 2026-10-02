@@ -25,7 +25,7 @@ const fallbackFeaturedTours = [
       "https://images.unsplash.com/photo-1527631746610-bca00a040d60?auto=format&fit=crop&w=900&q=80",
     category: "Aventura",
     title: "Canopy y aventura en Monteverde",
-    location: "Monteverde, Puntarenas",
+    location: "Puntarenas",
     price: 42000,
   },
   {

@@ -16,10 +16,23 @@ function AuthProvider({ children }) {
 
   useEffect(() => {
     try {
-      const savedUser = localStorage.getItem(AUTH_STORAGE_KEY);
+      const savedUser =
+        localStorage.getItem(AUTH_STORAGE_KEY);
 
       if (savedUser) {
-        setUser(JSON.parse(savedUser));
+        const parsedUser = JSON.parse(savedUser);
+
+        if (
+          parsedUser?.id &&
+          parsedUser?.correo &&
+          parsedUser?.rol
+        ) {
+          setUser(parsedUser);
+        } else {
+          localStorage.removeItem(
+            AUTH_STORAGE_KEY
+          );
+        }
       }
     } catch (error) {
       console.error(
@@ -27,7 +40,9 @@ function AuthProvider({ children }) {
         error
       );
 
-      localStorage.removeItem(AUTH_STORAGE_KEY);
+      localStorage.removeItem(
+        AUTH_STORAGE_KEY
+      );
     } finally {
       setLoading(false);
     }
@@ -47,11 +62,16 @@ function AuthProvider({ children }) {
       AUTH_STORAGE_KEY,
       JSON.stringify(sessionUser)
     );
+
+    return sessionUser;
   };
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem(AUTH_STORAGE_KEY);
+
+    localStorage.removeItem(
+      AUTH_STORAGE_KEY
+    );
   };
 
   const hasRole = (role) => {
@@ -59,7 +79,9 @@ function AuthProvider({ children }) {
   };
 
   const hasAnyRole = (roles) => {
-    return user ? roles.includes(user.rol) : false;
+    return user
+      ? roles.includes(user.rol)
+      : false;
   };
 
   const value = useMemo(
@@ -83,7 +105,8 @@ function AuthProvider({ children }) {
 }
 
 export function useAuth() {
-  const context = useContext(AuthContext);
+  const context =
+    useContext(AuthContext);
 
   if (!context) {
     throw new Error(

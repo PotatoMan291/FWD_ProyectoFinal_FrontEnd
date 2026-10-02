@@ -71,7 +71,7 @@ function TourCard({
               size={15}
             />
 
-            Hasta {personas} personas
+            {personas}
           </span>
         </div>
 

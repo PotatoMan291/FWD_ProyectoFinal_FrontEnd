@@ -47,8 +47,13 @@ export async function getWeatherByLocation(
   location
 ) {
   const coordinates =
-    LOCATION_COORDINATES[location] ||
-    LOCATION_COORDINATES["San José"];
+    LOCATION_COORDINATES[location];
+
+  if (!coordinates) {
+    throw new Error(
+      "No existen coordenadas para esta ubicación."
+    );
+  }
 
   const params =
     new URLSearchParams({

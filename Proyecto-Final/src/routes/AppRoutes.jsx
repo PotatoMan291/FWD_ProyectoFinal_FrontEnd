@@ -9,8 +9,8 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import NotFound from "../pages/NotFound";
 import TourDetail from "../pages/TourDetail";
+import RoleDashboard from "../pages/RoleDashboard";
 
-import PrivateRoute from "../components/PrivateRoute";
 import GuestRoute from "../components/GuestRoute";
 import RoleRoute from "../components/RoleRoute";
 
@@ -53,27 +53,7 @@ function AppRoutes() {
       </Route>
 
       {/* =========================
-          RUTAS PRIVADAS
-      ========================= */}
-
-      <Route element={<PrivateRoute />}>
-        {/*
-
-        Las siguientes rutas se agregarán
-        posteriormente.
-
-        Ejemplo:
-
-        <Route
-          path="/perfil"
-          element={<Profile />}
-        />
-
-        */}
-      </Route>
-
-      {/* =========================
-          RUTAS POR ROL
+          TURISTA
       ========================= */}
 
       <Route
@@ -83,8 +63,17 @@ function AppRoutes() {
           />
         }
       >
-        {/* Futuras rutas del turista */}
+        <Route
+          path="/turista"
+          element={
+            <RoleDashboard role="turista" />
+          }
+        />
       </Route>
+
+      {/* =========================
+          OPERADOR
+      ========================= */}
 
       <Route
         element={
@@ -93,8 +82,17 @@ function AppRoutes() {
           />
         }
       >
-        {/* Futuras rutas del operador */}
+        <Route
+          path="/operador"
+          element={
+            <RoleDashboard role="operador" />
+          }
+        />
       </Route>
+
+      {/* =========================
+          ADMINISTRADOR
+      ========================= */}
 
       <Route
         element={
@@ -103,7 +101,12 @@ function AppRoutes() {
           />
         }
       >
-        {/* Futuras rutas del administrador */}
+        <Route
+          path="/admin"
+          element={
+            <RoleDashboard role="admin" />
+          }
+        />
       </Route>
 
       {/* =========================

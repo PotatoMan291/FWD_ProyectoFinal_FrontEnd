@@ -144,7 +144,7 @@ function ComparisonModal({
                       </span>
 
                       <strong>
-                        Hasta {tour.personas} personas
+                        {tour.personas}
                       </strong>
                     </div>
 
