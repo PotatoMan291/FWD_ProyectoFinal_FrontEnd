@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import Icon from "./Icon";
 
 function ComparisonModal({
   selectedTours,
@@ -20,7 +21,9 @@ function ComparisonModal({
     >
       <div
         className="comparison-modal"
-        onClick={(event) => event.stopPropagation()}
+        onClick={(event) =>
+          event.stopPropagation()
+        }
       >
         <div className="comparison-modal-header">
           <div>
@@ -33,8 +36,8 @@ function ComparisonModal({
             </h2>
 
             <p>
-              Revisa las características de cada tour antes
-              de elegir tu experiencia.
+              Revisa las características de cada
+              tour antes de elegir tu experiencia.
             </p>
           </div>
 
@@ -44,7 +47,10 @@ function ComparisonModal({
             onClick={onClose}
             aria-label="Cerrar comparación"
           >
-            ×
+            <Icon
+              name="close"
+              size={17}
+            />
           </button>
         </div>
 
@@ -53,14 +59,15 @@ function ComparisonModal({
             className={`comparison-columns comparison-columns-${selectedTours.length}`}
           >
             {selectedTours.map((tour) => {
-              const formattedPrice = new Intl.NumberFormat(
-                "es-CR",
-                {
-                  style: "currency",
-                  currency: "CRC",
-                  maximumFractionDigits: 0,
-                }
-              ).format(tour.precio);
+              const formattedPrice =
+                new Intl.NumberFormat(
+                  "es-CR",
+                  {
+                    style: "currency",
+                    currency: "CRC",
+                    maximumFractionDigits: 0,
+                  }
+                ).format(tour.precio);
 
               return (
                 <article
@@ -80,61 +87,106 @@ function ComparisonModal({
 
                   <div className="comparison-tour-content">
                     <div className="comparison-tour-heading">
-                      <h3>{tour.nombre}</h3>
+                      <h3>
+                        {tour.nombre}
+                      </h3>
 
                       <button
                         type="button"
                         className="comparison-remove"
-                        onClick={() => onRemove(tour.id)}
+                        onClick={() =>
+                          onRemove(
+                            tour.id
+                          )
+                        }
                         aria-label={`Quitar ${tour.nombre} de la comparación`}
                       >
-                        ×
+                        <Icon
+                          name="close"
+                          size={15}
+                        />
                       </button>
                     </div>
 
                     <div className="comparison-item">
-                      <span>Ubicación</span>
-                      <strong>{tour.ubicacion}</strong>
+                      <span>
+                        Ubicación
+                      </span>
+
+                      <strong>
+                        {tour.ubicacion}
+                      </strong>
                     </div>
 
                     <div className="comparison-item">
-                      <span>Precio</span>
-                      <strong>{formattedPrice}</strong>
+                      <span>
+                        Precio
+                      </span>
+
+                      <strong>
+                        {formattedPrice}
+                      </strong>
                     </div>
 
                     <div className="comparison-item">
-                      <span>Duración</span>
-                      <strong>{tour.duracion}</strong>
+                      <span>
+                        Duración
+                      </span>
+
+                      <strong>
+                        {tour.duracion}
+                      </strong>
                     </div>
 
                     <div className="comparison-item">
-                      <span>Capacidad</span>
+                      <span>
+                        Capacidad
+                      </span>
+
                       <strong>
                         Hasta {tour.personas} personas
                       </strong>
                     </div>
 
                     <div className="comparison-item">
-                      <span>Operador</span>
-                      <strong>{tour.operador}</strong>
+                      <span>
+                        Operador
+                      </span>
+
+                      <strong>
+                        {tour.operador}
+                      </strong>
                     </div>
 
                     <div className="comparison-item comparison-description">
-                      <span>Descripción</span>
-                      <p>{tour.descripcion}</p>
+                      <span>
+                        Descripción
+                      </span>
+
+                      <p>
+                        {tour.descripcion}
+                      </p>
                     </div>
 
                     <div className="comparison-item">
-                      <span>Características</span>
+                      <span>
+                        Características
+                      </span>
 
                       <div className="comparison-features">
                         {tour.caracteristicas?.map(
-                          (caracteristica) => (
+                          (
+                            caracteristica
+                          ) => (
                             <span
-                              key={caracteristica}
+                              key={
+                                caracteristica
+                              }
                               className="tour-feature-badge"
                             >
-                              {caracteristica}
+                              {
+                                caracteristica
+                              }
                             </span>
                           )
                         )}
@@ -157,8 +209,8 @@ function ComparisonModal({
 
         <div className="comparison-modal-footer">
           <span>
-            {selectedTours.length} de 3 experiencias
-            seleccionadas
+            {selectedTours.length} de 3
+            experiencias seleccionadas
           </span>
 
           <div>

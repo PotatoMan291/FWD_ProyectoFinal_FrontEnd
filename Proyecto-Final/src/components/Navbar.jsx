@@ -8,6 +8,9 @@ import Swal from "sweetalert2";
 
 import { useAuth } from "../context/AuthContext";
 
+import AccessibilityPanel from "./AccessibilityPanel";
+import Icon from "./Icon";
+
 function Navbar() {
   const navigate = useNavigate();
 
@@ -26,10 +29,8 @@ function Navbar() {
       showCancelButton: true,
       confirmButtonText: "Cerrar sesión",
       cancelButtonText: "Cancelar",
-      confirmButtonColor:
-        "#176a4e",
-      cancelButtonColor:
-        "#56665f",
+      confirmButtonColor: "#176a4e",
+      cancelButtonColor: "#56665f",
     });
 
     if (!result.isConfirmed) {
@@ -124,6 +125,8 @@ function Navbar() {
         </nav>
 
         <div className="navbar-actions">
+          <AccessibilityPanel />
+
           {!isAuthenticated ? (
             <Link
               to="/register"
@@ -142,6 +145,11 @@ function Navbar() {
                 className="navbar-logout"
                 onClick={handleLogout}
               >
+                <Icon
+                  name="logout"
+                  size={15}
+                />
+
                 Cerrar sesión
               </button>
             </>

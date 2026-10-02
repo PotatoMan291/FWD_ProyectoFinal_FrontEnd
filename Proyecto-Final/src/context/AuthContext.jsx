@@ -2,6 +2,7 @@ import {
   createContext,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from "react";
 
@@ -9,16 +10,16 @@ const AuthContext = createContext();
 
 const AUTH_STORAGE_KEY = "puravida_auth";
 
-export function AuthProvider({ children }) {
+function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     try {
-      const storedUser = localStorage.getItem(AUTH_STORAGE_KEY);
+      const savedUser = localStorage.getItem(AUTH_STORAGE_KEY);
 
-      if (storedUser) {
-        setUser(JSON.parse(storedUser));
+      if (savedUser) {
+        setUser(JSON.parse(savedUser));
       }
     } catch (error) {
       console.error(
@@ -46,8 +47,6 @@ export function AuthProvider({ children }) {
       AUTH_STORAGE_KEY,
       JSON.stringify(sessionUser)
     );
-
-    return sessionUser;
   };
 
   const logout = () => {
@@ -55,25 +54,26 @@ export function AuthProvider({ children }) {
     localStorage.removeItem(AUTH_STORAGE_KEY);
   };
 
-  const isAuthenticated = Boolean(user);
-
   const hasRole = (role) => {
     return user?.rol === role;
   };
 
-  const hasAnyRole = (roles = []) => {
-    return roles.includes(user?.rol);
+  const hasAnyRole = (roles) => {
+    return user ? roles.includes(user.rol) : false;
   };
 
-  const value = {
-    user,
-    loading,
-    isAuthenticated,
-    login,
-    logout,
-    hasRole,
-    hasAnyRole,
-  };
+  const value = useMemo(
+    () => ({
+      user,
+      loading,
+      isAuthenticated: Boolean(user),
+      login,
+      logout,
+      hasRole,
+      hasAnyRole,
+    }),
+    [user, loading]
+  );
 
   return (
     <AuthContext.Provider value={value}>
@@ -93,3 +93,5 @@ export function useAuth() {
 
   return context;
 }
+
+export default AuthProvider;

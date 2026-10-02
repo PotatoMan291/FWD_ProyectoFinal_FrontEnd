@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import Icon from "./Icon";
 
 function TourCard({
   id,
@@ -15,11 +16,14 @@ function TourCard({
   isCompared = false,
   onCompare,
 }) {
-  const formattedPrice = new Intl.NumberFormat("es-CR", {
-    style: "currency",
-    currency: "CRC",
-    maximumFractionDigits: 0,
-  }).format(precio);
+  const formattedPrice = new Intl.NumberFormat(
+    "es-CR",
+    {
+      style: "currency",
+      currency: "CRC",
+      maximumFractionDigits: 0,
+    }
+  ).format(precio);
 
   return (
     <article className="tour-card">
@@ -37,8 +41,12 @@ function TourCard({
 
       <div className="tour-card-content">
         <div className="tour-card-location">
-          <span aria-hidden="true">⌖</span>
-          {ubicacion}
+          <Icon
+            name="mapPin"
+            size={15}
+          />
+
+          <span>{ubicacion}</span>
         </div>
 
         <h3>{nombre}</h3>
@@ -49,31 +57,42 @@ function TourCard({
 
         <div className="tour-card-meta">
           <span>
-            <span aria-hidden="true">◷</span>
+            <Icon
+              name="clock"
+              size={15}
+            />
+
             {duracion}
           </span>
 
           <span>
-            <span aria-hidden="true">♙</span>
+            <Icon
+              name="users"
+              size={15}
+            />
+
             Hasta {personas} personas
           </span>
         </div>
 
         {caracteristicas.length > 0 && (
           <div className="tour-card-features">
-            {caracteristicas.slice(0, 3).map((caracteristica) => (
-              <span
-                className="tour-feature-badge"
-                key={caracteristica}
-              >
-                {caracteristica}
-              </span>
-            ))}
+            {caracteristicas
+              .slice(0, 3)
+              .map((caracteristica) => (
+                <span
+                  className="tour-feature-badge"
+                  key={caracteristica}
+                >
+                  {caracteristica}
+                </span>
+              ))}
           </div>
         )}
 
         <div className="tour-card-operator">
-          Operado por <strong>{operador}</strong>
+          Operado por{" "}
+          <strong>{operador}</strong>
         </div>
 
         <div className="tour-card-footer">
@@ -97,8 +116,9 @@ function TourCard({
 
             <button
               type="button"
-              className={`tour-compare-button ${isCompared ? "active" : ""
-                }`}
+              className={`tour-compare-button ${
+                isCompared ? "active" : ""
+              }`}
               onClick={() => onCompare(id)}
               aria-pressed={isCompared}
               aria-label={
@@ -107,8 +127,15 @@ function TourCard({
                   : `Agregar ${nombre} a la comparación`
               }
             >
+              {isCompared && (
+                <Icon
+                  name="check"
+                  size={15}
+                />
+              )}
+
               {isCompared
-                ? "✓ Comparando"
+                ? "Comparando"
                 : "Comparar"}
             </button>
           </div>

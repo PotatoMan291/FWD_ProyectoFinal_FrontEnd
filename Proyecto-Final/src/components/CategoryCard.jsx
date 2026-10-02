@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import Icon from "./Icon";
 
 function CategoryCard({
   icon,
@@ -17,7 +18,10 @@ function CategoryCard({
         className="category-card-icon"
         aria-hidden="true"
       >
-        {icon}
+        <Icon
+          name={icon}
+          size={25}
+        />
       </span>
 
       <h3>{title}</h3>
@@ -26,7 +30,10 @@ function CategoryCard({
 
       <span className="category-card-link">
         Explorar
-        <span aria-hidden="true"> →</span>
+        <Icon
+          name="arrowRight"
+          size={16}
+        />
       </span>
     </Link>
   );

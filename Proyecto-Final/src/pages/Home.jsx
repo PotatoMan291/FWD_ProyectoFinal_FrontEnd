@@ -3,55 +3,66 @@ import { useEffect, useState } from "react";
 import Button from "../components/Button";
 import CategoryCard from "../components/CategoryCard";
 import FeaturedTourCard from "../components/FeaturedTourCard";
+import Icon from "../components/Icon";
 import SearchBar from "../components/SearchBar";
 import SectionTitle from "../components/SectionTitle";
+
 import { getTours } from "../services/tourService";
 
 const fallbackFeaturedTours = [
   {
+    id: "1",
+    image:
+      "https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?auto=format&fit=crop&w=900&q=80",
     category: "Naturaleza",
-    title: "Experiencias entre naturaleza",
-    location: "Costa Rica",
-    price: 25000,
-  },
-  {
-    category: "Aventura",
-    title: "Aventura y adrenalina",
-    location: "Costa Rica",
+    title: "Caminata al Volcán Arenal",
+    location: "Alajuela",
     price: 35000,
   },
   {
+    id: "2",
+    image:
+      "https://images.unsplash.com/photo-1527631746610-bca00a040d60?auto=format&fit=crop&w=900&q=80",
+    category: "Aventura",
+    title: "Canopy y aventura en Monteverde",
+    location: "Monteverde, Puntarenas",
+    price: 42000,
+  },
+  {
+    id: "3",
+    image:
+      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=900&q=80",
     category: "Playa",
-    title: "Escapada tropical",
-    location: "Costa Rica",
-    price: 30000,
+    title: "Atardecer en Playa Tamarindo",
+    location: "Guanacaste",
+    price: 28000,
   },
 ];
 
 const categories = [
   {
-    icon: "🌿",
+    icon: "leaf",
     title: "Naturaleza",
     description:
       "Bosques, volcanes y paisajes únicos.",
     search: "Naturaleza",
   },
   {
-    icon: "🏄",
+    icon: "mountain",
     title: "Aventura",
     description:
       "Experiencias para quienes buscan adrenalina.",
     search: "Aventura",
   },
   {
-    icon: "🌊",
+    icon: "wave",
     title: "Playa",
     description:
       "Descubre las costas y playas de Costa Rica.",
     search: "Playa",
   },
   {
-    icon: "🏛️",
+    icon: "culture",
     title: "Cultura",
     description:
       "Conoce la historia y cultura local.",
@@ -59,18 +70,38 @@ const categories = [
   },
 ];
 
+function normalizeFeaturedTour(tour) {
+  return {
+    id: tour.id,
+    image: tour.imagen,
+    category: tour.categoria,
+    title: tour.nombre,
+    location: tour.ubicacion,
+    price: tour.precio,
+  };
+}
+
 function Home() {
-  const [featuredTours, setFeaturedTours] = useState(
-    fallbackFeaturedTours
-  );
+  const [featuredTours, setFeaturedTours] =
+    useState(fallbackFeaturedTours);
 
   useEffect(() => {
     async function loadFeaturedTours() {
       try {
         const tours = await getTours();
-        setFeaturedTours(tours.slice(0, 3));
+
+        const normalizedTours = tours
+          .slice(0, 3)
+          .map(normalizeFeaturedTour);
+
+        if (normalizedTours.length > 0) {
+          setFeaturedTours(normalizedTours);
+        }
       } catch (error) {
-        console.error("Error al cargar las experiencias destacadas:", error);
+        console.error(
+          "Error al cargar las experiencias destacadas:",
+          error
+        );
       }
     }
 
@@ -80,7 +111,30 @@ function Home() {
   return (
     <main>
       <section className="hero">
-        <div className="hero-background" />
+        <video
+          className="hero-video"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          aria-hidden="true"
+        >
+          <source
+            src="/videos/costa-rica.mp4"
+            type="video/mp4"
+          />
+
+          <source
+            src="/videos/costa-rica.webm"
+            type="video/webm"
+          />
+        </video>
+
+        <div
+          className="hero-background"
+          aria-hidden="true"
+        />
 
         <div className="hero-container">
           <div className="hero-content">
@@ -94,8 +148,9 @@ function Home() {
             </h1>
 
             <p className="hero-description">
-              Encuentra, compara y reserva tours y experiencias
-              turísticas pensadas para que vivas Costa Rica.
+              Encuentra, compara y reserva tours y
+              experiencias turísticas pensadas para que
+              vivas Costa Rica.
             </p>
 
             <SearchBar />
@@ -142,7 +197,7 @@ function Home() {
           <div className="featured-grid">
             {featuredTours.map((tour) => (
               <FeaturedTourCard
-                key={tour.title}
+                key={tour.id}
                 {...tour}
               />
             ))}
@@ -158,13 +213,13 @@ function Home() {
             </p>
 
             <h2>
-              Costa Rica tiene una experiencia
-              esperándote.
+              Costa Rica tiene una experiencia esperándote.
             </h2>
 
             <p>
               Explora nuevos lugares, apoya experiencias
-              locales y crea recuerdos que duren para siempre.
+              locales y crea recuerdos que duren para
+              siempre.
             </p>
 
             <Button to="/tours">
@@ -176,9 +231,7 @@ function Home() {
             className="experience-decoration"
             aria-hidden="true"
           >
-            <span>✦</span>
-            <span>✧</span>
-            <span>✦</span>
+            <Icon name="compass" size={112} />
           </div>
         </div>
       </section>
@@ -190,8 +243,7 @@ function Home() {
           </p>
 
           <h2>
-            Tu próxima aventura
-            comienza aquí.
+            Tu próxima aventura comienza aquí.
           </h2>
 
           <p>

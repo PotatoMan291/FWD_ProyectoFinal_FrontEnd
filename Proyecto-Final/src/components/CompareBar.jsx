@@ -1,3 +1,5 @@
+import Icon from "./Icon";
+
 function CompareBar({
   selectedTours,
   onRemove,
@@ -8,16 +10,23 @@ function CompareBar({
     return null;
   }
 
-  const canCompare = selectedTours.length >= 2;
+  const canCompare =
+    selectedTours.length >= 2;
 
   return (
-    <aside className="compare-bar">
+    <aside
+      className="compare-bar"
+      aria-label="Comparación de experiencias"
+    >
       <div className="compare-bar-content">
         <div className="compare-bar-info">
-          <strong>Comparar experiencias</strong>
+          <strong>
+            Comparar experiencias
+          </strong>
 
           <span>
-            {selectedTours.length} de 3 seleccionadas
+            {selectedTours.length} de 3
+            seleccionadas
           </span>
         </div>
 
@@ -27,16 +36,26 @@ function CompareBar({
               className="compare-mini-card"
               key={tour.id}
             >
-              <img src={tour.imagen} alt="" />
+              <img
+                src={tour.imagen}
+                alt=""
+              />
 
-              <span>{tour.nombre}</span>
+              <span>
+                {tour.nombre}
+              </span>
 
               <button
                 type="button"
-                onClick={() => onRemove(tour.id)}
+                onClick={() =>
+                  onRemove(tour.id)
+                }
                 aria-label={`Quitar ${tour.nombre} de la comparación`}
               >
-                ×
+                <Icon
+                  name="close"
+                  size={15}
+                />
               </button>
             </div>
           ))}
@@ -54,9 +73,13 @@ function CompareBar({
           <button
             type="button"
             className={`compare-main-button ${
-              !canCompare ? "disabled" : ""
+              !canCompare
+                ? "disabled"
+                : ""
             }`}
-            onClick={onOpenComparison}
+            onClick={
+              onOpenComparison
+            }
             disabled={!canCompare}
           >
             Comparar
