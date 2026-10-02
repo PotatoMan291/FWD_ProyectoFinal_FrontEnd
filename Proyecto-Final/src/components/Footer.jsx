@@ -5,7 +5,11 @@ function Footer() {
     <footer className="footer">
       <div className="footer-container">
         <div className="footer-brand">
-          <Link to="/" className="footer-logo">
+          <Link
+            to="/"
+            className="footer-logo"
+            aria-label="PuraVida Trips - Inicio"
+          >
             <img
               src="/logo.png"
               alt="PuraVida Trips"
@@ -45,7 +49,7 @@ function Footer() {
             Iniciar sesión
           </Link>
 
-          <Link to="/login">
+          <Link to="/register">
             Registrarse
           </Link>
         </div>
@@ -53,9 +57,7 @@ function Footer() {
         <div className="footer-column">
           <h3>PuraVida Trips</h3>
 
-          <span>
-            Costa Rica
-          </span>
+          <span>Costa Rica</span>
 
           <span>
             Experiencias que conectan
@@ -65,7 +67,8 @@ function Footer() {
 
       <div className="footer-bottom">
         <p>
-          © 2026 PuraVida Trips. Todos los derechos reservados.
+          © 2026 PuraVida Trips. Todos los derechos
+          reservados.
         </p>
       </div>
     </footer>

@@ -1,14 +1,17 @@
 import {
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
   useState,
 } from "react";
 
-const AccessibilityContext = createContext();
+const AccessibilityContext =
+  createContext();
 
-const ACCESSIBILITY_STORAGE_KEY = "puravida_accessibility";
+const ACCESSIBILITY_STORAGE_KEY =
+  "puravida_accessibility";
 
 const defaultPreferences = {
   theme: "light",
@@ -18,30 +21,74 @@ const defaultPreferences = {
   speechEnabled: false,
 };
 
+function getPreferredSpanishVoice(voices) {
+  if (!voices.length) {
+    return null;
+  }
+
+  const spanishVoices = voices.filter(
+    (voice) =>
+      voice.lang
+        ?.toLowerCase()
+        .startsWith("es")
+  );
+
+  return (
+    spanishVoices.find((voice) =>
+      voice.name
+        .toLowerCase()
+        .includes("google")
+    ) ||
+    spanishVoices.find((voice) =>
+      voice.lang
+        .toLowerCase()
+        .includes("es-cr")
+    ) ||
+    spanishVoices.find((voice) =>
+      voice.lang
+        .toLowerCase()
+        .includes("es-mx")
+    ) ||
+    spanishVoices.find((voice) =>
+      voice.lang
+        .toLowerCase()
+        .includes("es-es")
+    ) ||
+    spanishVoices[0] ||
+    voices[0]
+  );
+}
+
 function AccessibilityProvider({ children }) {
-  const [preferences, setPreferences] = useState(() => {
-    try {
-      const savedPreferences = localStorage.getItem(
-        ACCESSIBILITY_STORAGE_KEY
-      );
+  const [preferences, setPreferences] =
+    useState(() => {
+      try {
+        const savedPreferences =
+          localStorage.getItem(
+            ACCESSIBILITY_STORAGE_KEY
+          );
 
-      if (savedPreferences) {
-        return {
-          ...defaultPreferences,
-          ...JSON.parse(savedPreferences),
-        };
+        if (savedPreferences) {
+          return {
+            ...defaultPreferences,
+            ...JSON.parse(savedPreferences),
+          };
+        }
+      } catch (error) {
+        console.error(
+          "Error al cargar las preferencias de accesibilidad:",
+          error
+        );
       }
-    } catch (error) {
-      console.error(
-        "Error al cargar las preferencias de accesibilidad:",
-        error
-      );
-    }
 
-    return defaultPreferences;
-  });
+      return defaultPreferences;
+    });
 
-  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [isSpeaking, setIsSpeaking] =
+    useState(false);
+
+  const [voices, setVoices] =
+    useState([]);
 
   useEffect(() => {
     localStorage.setItem(
@@ -51,106 +98,295 @@ function AccessibilityProvider({ children }) {
   }, [preferences]);
 
   useEffect(() => {
-    const root = document.documentElement;
+    const root =
+      document.documentElement;
 
-    root.dataset.theme = preferences.theme;
-    root.dataset.contrast = preferences.contrast;
-    root.dataset.fontSize = preferences.fontSize;
-    root.dataset.colorBlind = preferences.colorBlindMode;
+    root.dataset.theme =
+      preferences.theme;
+
+    root.dataset.contrast =
+      preferences.contrast;
+
+    root.dataset.fontSize =
+      preferences.fontSize;
+
+    root.dataset.colorBlind =
+      preferences.colorBlindMode;
   }, [preferences]);
 
   useEffect(() => {
+    if (
+      !("speechSynthesis" in window)
+    ) {
+      return undefined;
+    }
+
+    const loadVoices = () => {
+      setVoices(
+        window.speechSynthesis.getVoices()
+      );
+    };
+
+    loadVoices();
+
+    window.speechSynthesis.addEventListener(
+      "voiceschanged",
+      loadVoices
+    );
+
     return () => {
-      if ("speechSynthesis" in window) {
-        window.speechSynthesis.cancel();
-      }
+      window.speechSynthesis.removeEventListener(
+        "voiceschanged",
+        loadVoices
+      );
     };
   }, []);
 
-  const updatePreference = (key, value) => {
-    setPreferences((currentPreferences) => ({
-      ...currentPreferences,
-      [key]: value,
-    }));
-  };
+  const updatePreference = useCallback(
+    (key, value) => {
+      setPreferences(
+        (currentPreferences) => ({
+          ...currentPreferences,
+          [key]: value,
+        })
+      );
+    },
+    []
+  );
 
-  const resetPreferences = () => {
-    stopSpeech();
-
-    setPreferences(defaultPreferences);
-  };
-
-  const speak = (text) => {
-    if (
-      !preferences.speechEnabled ||
-      !("speechSynthesis" in window) ||
-      !text?.trim()
-    ) {
-      return;
-    }
-
-    window.speechSynthesis.cancel();
-
-    const utterance = new SpeechSynthesisUtterance(text);
-
-    utterance.lang = "es-CR";
-    utterance.rate = 0.95;
-    utterance.pitch = 1;
-    utterance.volume = 1;
-
-    utterance.onstart = () => {
-      setIsSpeaking(true);
-    };
-
-    utterance.onend = () => {
-      setIsSpeaking(false);
-    };
-
-    utterance.onerror = () => {
-      setIsSpeaking(false);
-    };
-
-    setIsSpeaking(true);
-
-    window.speechSynthesis.speak(utterance);
-  };
-
-  const speakPageContent = () => {
-    const mainContent = document.querySelector("main");
-
-    if (!mainContent) {
-      return;
-    }
-
-    const text = mainContent.innerText
-      .replace(/\s+/g, " ")
-      .trim();
-
-    if (!text) {
-      return;
-    }
-
-    speak(text);
-  };
-
-  const stopSpeech = () => {
+  const stopSpeech = useCallback(() => {
     if ("speechSynthesis" in window) {
       window.speechSynthesis.cancel();
     }
 
     setIsSpeaking(false);
-  };
+  }, []);
 
-  const toggleSpeech = () => {
-    updatePreference(
-      "speechEnabled",
-      !preferences.speechEnabled
+  const speak = useCallback(
+    (text) => {
+      if (
+        !preferences.speechEnabled ||
+        !("speechSynthesis" in window) ||
+        !text?.trim()
+      ) {
+        return;
+      }
+
+      const cleanText = text
+        .replace(/\s+/g, " ")
+        .trim()
+        .slice(0, 320);
+
+      if (!cleanText) {
+        return;
+      }
+
+      window.speechSynthesis.cancel();
+
+      const utterance =
+        new SpeechSynthesisUtterance(
+          cleanText
+        );
+
+      const preferredVoice =
+        getPreferredSpanishVoice(
+          voices
+        );
+
+      utterance.lang =
+        preferredVoice?.lang ||
+        "es-CR";
+
+      utterance.voice =
+        preferredVoice || null;
+
+      utterance.rate = 0.92;
+      utterance.pitch = 1;
+      utterance.volume = 1;
+
+      utterance.onstart = () =>
+        setIsSpeaking(true);
+
+      utterance.onend = () =>
+        setIsSpeaking(false);
+
+      utterance.onerror = () =>
+        setIsSpeaking(false);
+
+      window.speechSynthesis.speak(
+        utterance
+      );
+    },
+    [
+      preferences.speechEnabled,
+      voices,
+    ]
+  );
+
+  useEffect(() => {
+    if (
+      !preferences.speechEnabled ||
+      !("speechSynthesis" in window)
+    ) {
+      return undefined;
+    }
+
+    let hoverTimer;
+    let lastElement = null;
+
+    const getSpeakableElement = (
+      target
+    ) => {
+      if (
+        !(target instanceof Element)
+      ) {
+        return null;
+      }
+
+      return target.closest(
+        '[data-speak], h1, h2, h3, h4, p, a, button, label, legend, li'
+      );
+    };
+
+    const getText = (element) => {
+      if (!element) {
+        return "";
+      }
+
+      return (
+        element.getAttribute(
+          "aria-label"
+        ) ||
+        element.innerText ||
+        element.textContent ||
+        ""
+      );
+    };
+
+    const handlePointerOver = (
+      event
+    ) => {
+      const element =
+        getSpeakableElement(
+          event.target
+        );
+
+      if (
+        !element ||
+        element.closest(
+          ".accessibility-widget"
+        )
+      ) {
+        return;
+      }
+
+      if (
+        event.relatedTarget instanceof
+          Node &&
+        element.contains(
+          event.relatedTarget
+        )
+      ) {
+        return;
+      }
+
+      if (
+        element === lastElement
+      ) {
+        return;
+      }
+
+      lastElement = element;
+
+      clearTimeout(hoverTimer);
+
+      hoverTimer =
+        window.setTimeout(() => {
+          speak(getText(element));
+        }, 450);
+    };
+
+    const handleFocusIn = (
+      event
+    ) => {
+      const element =
+        getSpeakableElement(
+          event.target
+        );
+
+      if (
+        !element ||
+        element.closest(
+          ".accessibility-widget"
+        )
+      ) {
+        return;
+      }
+
+      lastElement = element;
+
+      speak(getText(element));
+    };
+
+    document.addEventListener(
+      "pointerover",
+      handlePointerOver
     );
 
-    if (preferences.speechEnabled) {
+    document.addEventListener(
+      "focusin",
+      handleFocusIn
+    );
+
+    return () => {
+      clearTimeout(hoverTimer);
+
+      document.removeEventListener(
+        "pointerover",
+        handlePointerOver
+      );
+
+      document.removeEventListener(
+        "focusin",
+        handleFocusIn
+      );
+    };
+  }, [
+    preferences.speechEnabled,
+    speak,
+  ]);
+
+  const resetPreferences =
+    useCallback(() => {
+      stopSpeech();
+      setPreferences(
+        defaultPreferences
+      );
+    }, [stopSpeech]);
+
+  const toggleSpeech =
+    useCallback(() => {
+      setPreferences(
+        (currentPreferences) => ({
+          ...currentPreferences,
+          speechEnabled:
+            !currentPreferences.speechEnabled,
+        })
+      );
+    }, []);
+
+  useEffect(() => {
+    if (!preferences.speechEnabled) {
       stopSpeech();
     }
-  };
+  }, [
+    preferences.speechEnabled,
+    stopSpeech,
+  ]);
+
+  useEffect(() => {
+    return () => stopSpeech();
+  }, [stopSpeech]);
 
   const value = useMemo(
     () => ({
@@ -159,22 +395,34 @@ function AccessibilityProvider({ children }) {
       updatePreference,
       resetPreferences,
       speak,
-      speakPageContent,
       stopSpeech,
       toggleSpeech,
     }),
-    [preferences, isSpeaking]
+    [
+      preferences,
+      isSpeaking,
+      updatePreference,
+      resetPreferences,
+      speak,
+      stopSpeech,
+      toggleSpeech,
+    ]
   );
 
   return (
-    <AccessibilityContext.Provider value={value}>
+    <AccessibilityContext.Provider
+      value={value}
+    >
       {children}
     </AccessibilityContext.Provider>
   );
 }
 
 export function useAccessibility() {
-  const context = useContext(AccessibilityContext);
+  const context =
+    useContext(
+      AccessibilityContext
+    );
 
   if (!context) {
     throw new Error(

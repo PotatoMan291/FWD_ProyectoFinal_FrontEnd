@@ -3425,3 +3425,1989 @@ button[aria-disabled="true"] {
     transition: none;
   }
 }
+
+/* =========================================================
+   ACCESSIBILITY - FINAL VISUAL OVERRIDES
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   LIGHT MODE - FOOTER
+--------------------------------------------------------- */
+
+.footer {
+  background: var(--color-background-soft);
+  color: var(--color-primary);
+  border-top: 1px solid var(--color-border);
+}
+
+.footer-brand p {
+  color: var(--color-text-muted);
+}
+
+.footer-column a,
+.footer-column span {
+  color: var(--color-text-muted);
+}
+
+.footer-column a:hover {
+  color: var(--color-primary-light);
+}
+
+.footer-bottom {
+  border-top: 1px solid var(--color-border);
+}
+
+.footer-bottom p {
+  color: var(--color-text-muted);
+}
+
+
+/* ---------------------------------------------------------
+   TOUR CARD - DETAIL BUTTON
+--------------------------------------------------------- */
+
+.tour-card-detail-button,
+.tour-card-detail-button:visited {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  background: var(--color-primary-light);
+  color: var(--color-white);
+
+  border: 1px solid var(--color-primary-light);
+}
+
+.tour-card-detail-button:hover,
+.tour-card-detail-button:focus-visible {
+  background: var(--color-primary);
+  color: var(--color-white);
+}
+
+
+/* ---------------------------------------------------------
+   DARK MODE
+--------------------------------------------------------- */
+
+:root[data-theme="dark"] {
+  --color-background: #10241c;
+  --color-background-soft: #17372a;
+
+  --color-text: #f3f5ef;
+  --color-text-muted: #c3cec7;
+
+  --color-border: #385347;
+
+  --color-light: #17372a;
+  --color-muted: #c3cec7;
+
+  --color-secondary: #55c99b;
+}
+
+
+/* ---------------------------------------------------------
+   DARK MODE - SURFACES
+--------------------------------------------------------- */
+
+:root[data-theme="dark"] .navbar,
+:root[data-theme="dark"] .category-card,
+:root[data-theme="dark"] .tour-card,
+:root[data-theme="dark"] .marketplace-filters,
+:root[data-theme="dark"] .compare-mini-card,
+:root[data-theme="dark"] .compare-clear-button,
+:root[data-theme="dark"] .comparison-tour-column,
+:root[data-theme="dark"] .tour-detail-info-card,
+:root[data-theme="dark"] .auth-card {
+  background: #17372a;
+}
+
+
+/* ---------------------------------------------------------
+   DARK MODE - NAVBAR
+--------------------------------------------------------- */
+
+:root[data-theme="dark"] .navbar-logo {
+  padding: 5px 8px;
+  border-radius: 12px;
+  background: #fffdf8;
+}
+
+:root[data-theme="dark"] .navbar-role {
+  color: #55c99b;
+}
+
+:root[data-theme="dark"] .navbar-logout {
+  color: #55c99b;
+}
+
+:root[data-theme="dark"] .navbar-action-secondary {
+  color: #55c99b;
+}
+
+
+/* ---------------------------------------------------------
+   DARK MODE - FOOTER
+--------------------------------------------------------- */
+
+:root[data-theme="dark"] .footer {
+  background: #10241c;
+  color: #f3f5ef;
+  border-top-color: #385347;
+}
+
+:root[data-theme="dark"] .footer-logo img {
+  padding: 5px 8px;
+  border-radius: 12px;
+  background: #fffdf8;
+}
+
+:root[data-theme="dark"] .footer-brand p,
+:root[data-theme="dark"] .footer-column a,
+:root[data-theme="dark"] .footer-column span,
+:root[data-theme="dark"] .footer-bottom p {
+  color: #c3cec7;
+}
+
+:root[data-theme="dark"] .footer-column a:hover {
+  color: #55c99b;
+}
+
+:root[data-theme="dark"] .footer-bottom {
+  border-top-color: #385347;
+}
+
+
+/* ---------------------------------------------------------
+   DARK MODE - TEXTOS PRINCIPALES
+--------------------------------------------------------- */
+
+:root[data-theme="dark"] .section-heading h2,
+:root[data-theme="dark"] .category-card h3,
+:root[data-theme="dark"] .tour-card h3,
+:root[data-theme="dark"] .tour-card-content h3,
+:root[data-theme="dark"] .tour-card-footer strong,
+:root[data-theme="dark"] .tour-card-price,
+:root[data-theme="dark"] .filters-header h2,
+:root[data-theme="dark"] .marketplace-results-header h2,
+:root[data-theme="dark"] .marketplace-state h3,
+:root[data-theme="dark"] .compare-bar-info strong,
+:root[data-theme="dark"] .comparison-modal-header h2,
+:root[data-theme="dark"] .comparison-tour-heading h3,
+:root[data-theme="dark"] .tour-detail-summary h1,
+:root[data-theme="dark"] .tour-detail-price-block strong,
+:root[data-theme="dark"] .tour-detail-info-card strong,
+:root[data-theme="dark"] .tour-detail-panel h2,
+:root[data-theme="dark"] .tour-detail-map-section h2,
+:root[data-theme="dark"] .tour-detail-weather strong,
+:root[data-theme="dark"] .tour-detail-state h1,
+:root[data-theme="dark"] .auth-header h1,
+:root[data-theme="dark"] .auth-demo p {
+  color: #f3f5ef;
+}
+
+
+/* ---------------------------------------------------------
+   DARK MODE - TEXTOS SECUNDARIOS / LINKS
+--------------------------------------------------------- */
+
+:root[data-theme="dark"] .section-eyebrow,
+:root[data-theme="dark"] .nav-link:hover,
+:root[data-theme="dark"] .nav-link.active,
+:root[data-theme="dark"] .category-arrow,
+:root[data-theme="dark"] .tour-card-category,
+:root[data-theme="dark"] .tour-card-footer a,
+:root[data-theme="dark"] .compare-clear-button:hover,
+:root[data-theme="dark"] .tour-detail-back-link,
+:root[data-theme="dark"] .tour-detail-category,
+:root[data-theme="dark"] .tour-detail-temperature,
+:root[data-theme="dark"] .auth-footer a,
+:root[data-theme="dark"] .accessibility-eyebrow {
+  color: #55c99b;
+}
+
+
+/* ---------------------------------------------------------
+   DARK MODE - SEARCH
+--------------------------------------------------------- */
+
+/*
+   El buscador mantiene fondo claro intencionalmente.
+   Por eso su icono debe conservar el verde original.
+*/
+
+:root[data-theme="dark"] .search-icon {
+  color: #176a4e;
+}
+
+
+/* ---------------------------------------------------------
+   DARK MODE - COMPARISON BAR
+--------------------------------------------------------- */
+
+:root[data-theme="dark"] .compare-bar {
+  background: rgba(16, 36, 28, 0.96);
+}
+
+:root[data-theme="dark"] .compare-mini-card {
+  background: #17372a;
+}
+
+:root[data-theme="dark"] .compare-clear-button {
+  background: #17372a;
+  color: #f3f5ef;
+}
+
+:root[data-theme="dark"] .compare-clear-button:hover {
+  background: #1d4232;
+  color: #55c99b;
+}
+
+
+/* ---------------------------------------------------------
+   DARK MODE - COMPARISON
+--------------------------------------------------------- */
+
+:root[data-theme="dark"] .comparison-modal {
+  background: #10241c;
+}
+
+:root[data-theme="dark"] .comparison-modal-close {
+  background: #17372a;
+  color: #f3f5ef;
+}
+
+:root[data-theme="dark"] .comparison-modal-close:hover {
+  background: #385347;
+}
+
+:root[data-theme="dark"] .comparison-remove {
+  color: #c3cec7;
+}
+
+:root[data-theme="dark"] .comparison-remove:hover {
+  color: #55c99b;
+}
+
+:root[data-theme="dark"] .comparison-modal-footer {
+  background: #17372a;
+  color: #c3cec7;
+}
+
+
+/* ---------------------------------------------------------
+   DARK MODE - TOUR DETAIL
+--------------------------------------------------------- */
+
+:root[data-theme="dark"] .tour-detail-secondary-button,
+:root[data-theme="dark"] .tour-detail-back-button {
+  background: #17372a;
+  color: #f3f5ef;
+}
+
+:root[data-theme="dark"] .tour-detail-secondary-button:hover,
+:root[data-theme="dark"] .tour-detail-back-button:hover {
+  background: #1d4232;
+  color: #55c99b;
+}
+
+:root[data-theme="dark"] .tour-detail-panel {
+  background: #17372a;
+}
+
+
+/* ---------------------------------------------------------
+   DARK MODE - AUTH
+--------------------------------------------------------- */
+
+:root[data-theme="dark"] .form-field input {
+  background: #10241c;
+  color: #f3f5ef;
+}
+
+:root[data-theme="dark"] .form-field input:focus {
+  background: #17372a;
+  color: #f3f5ef;
+}
+
+:root[data-theme="dark"] .form-field input::placeholder {
+  color: #9fb0a8;
+}
+
+
+/* ---------------------------------------------------------
+   DARK MODE - FEATURE BADGES
+--------------------------------------------------------- */
+
+:root[data-theme="dark"] .tour-feature-badge {
+  background: #17372a;
+  color: #55c99b;
+  border: 1px solid #385347;
+}
+
+
+/* ---------------------------------------------------------
+   DARK MODE - STATUS
+--------------------------------------------------------- */
+
+:root[data-theme="dark"] .marketplace-state {
+  background: #17372a;
+}
+
+:root[data-theme="dark"] .marketplace-state.error {
+  background: #351f1f;
+}
+
+
+/* ---------------------------------------------------------
+   DARK MODE - BUTTONS
+--------------------------------------------------------- */
+
+:root[data-theme="dark"] .tour-card-detail-button,
+:root[data-theme="dark"] .tour-card-detail-button:visited {
+  background: #176a4e;
+  color: #ffffff;
+}
+
+:root[data-theme="dark"] .tour-card-detail-button:hover {
+  background: #123b2b;
+  color: #ffffff;
+}
+
+:root[data-theme="dark"] .tour-compare-button {
+  border-color: #55c99b;
+  color: #55c99b;
+}
+
+:root[data-theme="dark"] .tour-compare-button:hover,
+:root[data-theme="dark"] .tour-compare-button.active {
+  background: #176a4e;
+  color: #ffffff;
+}
+
+:root[data-theme="dark"] .comparison-details-button {
+  background: #176a4e;
+  color: #ffffff;
+}
+
+:root[data-theme="dark"] .comparison-details-button:hover {
+  background: #123b2b;
+}
+
+:root[data-theme="dark"] .comparison-close-button {
+  background: #176a4e;
+  color: #ffffff;
+}
+
+:root[data-theme="dark"] .comparison-close-button:hover {
+  background: #123b2b;
+}
+
+
+/* ---------------------------------------------------------
+   DARK MODE - ACCESSIBILITY ACTIVE STATES
+--------------------------------------------------------- */
+
+:root[data-theme="dark"] .accessibility-option.active {
+  background: #176a4e;
+  border-color: #55c99b;
+  color: #ffffff;
+}
+
+:root[data-theme="dark"] .accessibility-speech-button {
+  background: #17372a;
+  color: #f3f5ef;
+}
+
+
+/* ---------------------------------------------------------
+   DARK MODE - FOCUS
+--------------------------------------------------------- */
+
+:root[data-theme="dark"] :focus-visible {
+  outline-color: #edb83e;
+}
+
+/* =========================================================
+   PURAVIDA TRIPS
+   REFINAMIENTO VISUAL + ACCESIBILIDAD
+========================================================= */
+
+/* =========================================================
+   ICONOS
+========================================================= */
+
+.category-card-icon,
+.category-card-link,
+.featured-tour-link,
+.search-icon,
+.tour-card-location,
+.tour-card-meta span,
+.tour-detail-location,
+.tour-detail-back-link,
+.tour-detail-primary-button,
+.navbar-logout,
+.accessibility-option,
+.compare-mini-card button,
+.comparison-modal-close,
+.comparison-remove {
+  display: inline-flex;
+  align-items: center;
+}
+
+.category-card-icon {
+  width: 50px;
+  height: 50px;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: var(--color-background-soft);
+  color: var(--color-primary-light);
+}
+
+.category-card-link,
+.featured-tour-link {
+  gap: 7px;
+}
+
+.tour-card-location,
+.tour-card-meta span,
+.tour-detail-location,
+.tour-detail-back-link,
+.tour-detail-primary-button,
+.navbar-logout,
+.accessibility-option {
+  gap: 7px;
+}
+
+.category-card-link svg,
+.featured-tour-link svg,
+.tour-card-location svg,
+.tour-card-meta svg,
+.tour-detail-location svg,
+.tour-detail-back-link svg,
+.tour-detail-primary-button svg,
+.navbar-logout svg,
+.accessibility-option svg {
+  flex-shrink: 0;
+}
+
+/* =========================================================
+   HERO CON VIDEO
+========================================================= */
+
+.hero {
+  isolation: isolate;
+  background: var(--color-primary);
+}
+
+.hero-video,
+.hero-background {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+}
+
+.hero-video {
+  z-index: -3;
+  object-fit: cover;
+}
+
+.hero-background {
+  z-index: -2;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(10, 31, 23, 0.92) 0%,
+      rgba(10, 31, 23, 0.78) 45%,
+      rgba(10, 31, 23, 0.34) 100%
+    );
+}
+
+.hero::after {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  z-index: -1;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.08),
+      rgba(0, 0, 0, 0.2)
+    );
+
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-video {
+    display: none;
+  }
+}
+
+/* =========================================================
+   TOURS DESTACADOS
+========================================================= */
+
+.featured-tour-card {
+  display: block;
+  color: inherit;
+  cursor: pointer;
+}
+
+.featured-tour-card:hover {
+  color: inherit;
+}
+
+.featured-tour-card:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 4px;
+}
+
+.featured-tour-card .tour-card-image {
+  aspect-ratio: 16 / 10;
+  height: auto;
+}
+
+.featured-tour-card .tour-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.featured-tour-link {
+  gap: 7px;
+
+  color: var(--color-primary-light) !important;
+
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* =========================================================
+   BANNER DE EXPERIENCIA
+========================================================= */
+
+.experience-decoration {
+  width: 230px;
+  min-width: 230px;
+
+  height: 230px;
+  min-height: 230px;
+
+  border: 1px solid
+    rgba(237, 184, 62, 0.42);
+
+  background:
+    rgba(255, 255, 255, 0.04);
+
+  color: var(--color-accent);
+}
+
+.experience-decoration svg {
+  width: 112px;
+  height: 112px;
+}
+
+.experience-decoration span {
+  display: none;
+}
+
+/* =========================================================
+   BOTÓN VER DETALLES
+========================================================= */
+
+.tour-card-detail-button,
+.tour-card-detail-button:visited,
+.tour-card-detail-button:hover,
+.tour-card-detail-button:active {
+  background: var(--color-primary-light) !important;
+  color: #ffffff !important;
+}
+
+.tour-card-detail-button:hover {
+  background: var(--color-primary) !important;
+}
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+.search-bar {
+  background: #ffffff;
+}
+
+.search-field label,
+.search-field input {
+  color: #173f30 !important;
+}
+
+.search-field input::placeholder {
+  color: #66736d;
+}
+
+.search-icon {
+  color: #176a4e;
+}
+
+/* =========================================================
+   FOOTER - CLARO
+========================================================= */
+
+.footer {
+  background: #e7eee8 !important;
+  color: #173f30;
+
+  border-top: 1px solid #cbd8cf;
+}
+
+.footer-logo,
+.footer-logo img {
+  background: transparent !important;
+}
+
+.footer-logo {
+  display: inline-flex;
+}
+
+.footer-brand p,
+.footer-column a,
+.footer-column span,
+.footer p,
+.footer span {
+  color: #56665f !important;
+}
+
+.footer-column h3 {
+  color: #6f4900 !important;
+}
+
+.footer-column a:hover {
+  color: #123b2b !important;
+}
+
+.footer-bottom {
+  border-top-color: #cbd8cf !important;
+}
+
+.footer-bottom p {
+  color: #66736d !important;
+}
+
+/* =========================================================
+   DARK MODE
+========================================================= */
+
+:root[data-theme="dark"] {
+  --color-background: #0f2119;
+  --color-background-soft: #17372a;
+
+  --color-text: #f3f5ef;
+  --color-text-muted: #c3cec7;
+
+  --color-border: #3d5a4c;
+
+  --color-white: #1a3a2c;
+
+  --color-secondary: #55c99b;
+  --color-muted: #c3cec7;
+  --color-light: #17372a;
+}
+
+:root[data-theme="dark"] body {
+  background: var(--color-background);
+  color: var(--color-text);
+}
+
+/* ---------- NAVBAR ---------- */
+
+:root[data-theme="dark"] .navbar {
+  background: #0b1812;
+  border-bottom-color: #3d5a4c;
+}
+
+:root[data-theme="dark"] .navbar-logo {
+  background: transparent !important;
+
+  filter:
+    brightness(1.22)
+    saturate(0.92)
+    drop-shadow(
+      0 2px 8px
+      rgba(0, 0, 0, 0.2)
+    );
+}
+
+:root[data-theme="dark"] .nav-link,
+:root[data-theme="dark"] .navbar-user {
+  color: #c3cec7;
+}
+
+:root[data-theme="dark"] .nav-link:hover,
+:root[data-theme="dark"] .nav-link.active {
+  color: #7fe0b5;
+}
+
+:root[data-theme="dark"] .navbar-action,
+:root[data-theme="dark"] .auth-submit-button {
+  background: #2d9b70;
+  color: #ffffff;
+}
+
+:root[data-theme="dark"] .navbar-action:hover,
+:root[data-theme="dark"] .auth-submit-button:hover:not(:disabled) {
+  background: #55c99b;
+  color: #0f2119;
+}
+
+:root[data-theme="dark"] .navbar-action-secondary,
+:root[data-theme="dark"] .navbar-logout {
+  border-color: #55c99b;
+  color: #9de9c5;
+  background: transparent;
+}
+
+:root[data-theme="dark"] .navbar-action-secondary:hover,
+:root[data-theme="dark"] .navbar-logout:hover {
+  background: #55c99b;
+  color: #0f2119;
+}
+
+:root[data-theme="dark"] .navbar-role {
+  background: #17372a;
+  color: #d7e5de;
+  border-color: #3d5a4c;
+}
+
+/* ---------- FONDOS ---------- */
+
+:root[data-theme="dark"] .categories-section,
+:root[data-theme="dark"] .cta-section,
+:root[data-theme="dark"] .page-container,
+:root[data-theme="dark"] .marketplace-page,
+:root[data-theme="dark"] .tour-detail-page,
+:root[data-theme="dark"] .auth-page {
+  background: var(--color-background);
+}
+
+:root[data-theme="dark"] .featured-section {
+  background: #132c21;
+}
+
+/* ---------- CARDS ---------- */
+
+:root[data-theme="dark"] .category-card,
+:root[data-theme="dark"] .tour-card,
+:root[data-theme="dark"] .marketplace-filters,
+:root[data-theme="dark"] .compare-mini-card,
+:root[data-theme="dark"] .compare-clear-button,
+:root[data-theme="dark"] .comparison-tour-column,
+:root[data-theme="dark"] .comparison-modal-footer,
+:root[data-theme="dark"] .tour-detail-info-card,
+:root[data-theme="dark"] .auth-card {
+  background: #17372a;
+  border-color: #3d5a4c;
+}
+
+:root[data-theme="dark"] .category-card:hover {
+  border-color: #55c99b;
+}
+
+:root[data-theme="dark"] .category-card-icon,
+:root[data-theme="dark"] .marketplace-state,
+:root[data-theme="dark"] .tour-detail-panel,
+:root[data-theme="dark"] .tour-detail-secondary-button,
+:root[data-theme="dark"] .tour-detail-back-button,
+:root[data-theme="dark"] .comparison-modal-close,
+:root[data-theme="dark"] .accessibility-option,
+:root[data-theme="dark"] .accessibility-speech-button,
+:root[data-theme="dark"] .accessibility-reset,
+:root[data-theme="dark"] .form-field input {
+  background: #17372a;
+  color: #f3f5ef;
+  border-color: #3d5a4c;
+}
+
+/* ---------- TEXTOS ---------- */
+
+:root[data-theme="dark"] .category-card h3,
+:root[data-theme="dark"] .tour-card h3,
+:root[data-theme="dark"] .filters-header h2,
+:root[data-theme="dark"] .marketplace-results-header h2,
+:root[data-theme="dark"] .tour-card-price,
+:root[data-theme="dark"] .tour-detail-summary h1,
+:root[data-theme="dark"] .tour-detail-panel h2,
+:root[data-theme="dark"] .tour-detail-map-section h2,
+:root[data-theme="dark"] .tour-detail-price-block strong,
+:root[data-theme="dark"] .tour-detail-weather strong,
+:root[data-theme="dark"] .auth-header h1,
+:root[data-theme="dark"] .comparison-modal-header h2,
+:root[data-theme="dark"] .comparison-tour-heading h3 {
+  color: #f3f5ef;
+}
+
+:root[data-theme="dark"] .category-card p,
+:root[data-theme="dark"] .tour-card-location,
+:root[data-theme="dark"] .tour-card-description,
+:root[data-theme="dark"] .tour-card-operator,
+:root[data-theme="dark"] .tour-card-price-label,
+:root[data-theme="dark"] .section-description,
+:root[data-theme="dark"] .tour-detail-description,
+:root[data-theme="dark"] .tour-detail-location,
+:root[data-theme="dark"] .tour-detail-info-label,
+:root[data-theme="dark"] .tour-detail-muted,
+:root[data-theme="dark"] .comparison-modal-header p,
+:root[data-theme="dark"] .comparison-item > span,
+:root[data-theme="dark"] .comparison-description p,
+:root[data-theme="dark"] .comparison-modal-footer,
+:root[data-theme="dark"] .auth-header p:last-child,
+:root[data-theme="dark"] .accessibility-help {
+  color: #c3cec7;
+}
+
+:root[data-theme="dark"] .tour-card-category,
+:root[data-theme="dark"] .section-eyebrow,
+:root[data-theme="dark"] .accessibility-eyebrow,
+:root[data-theme="dark"] .results-count {
+  color: #7fe0b5;
+}
+
+:root[data-theme="dark"] .category-card-link,
+:root[data-theme="dark"] .featured-tour-link,
+:root[data-theme="dark"] .tour-card-footer a,
+:root[data-theme="dark"] .clear-filters-button,
+:root[data-theme="dark"] .auth-footer a {
+  color: #7fe0b5 !important;
+}
+
+/* ---------- BOTONES ---------- */
+
+:root[data-theme="dark"] .button-outline {
+  border-color: #55c99b;
+  color: #9de9c5;
+}
+
+:root[data-theme="dark"] .button-outline:hover {
+  background: #55c99b;
+  color: #0f2119;
+}
+
+:root[data-theme="dark"] .cta-container h2 {
+  color: #f3f5ef;
+}
+
+:root[data-theme="dark"] .cta-container p:not(.section-eyebrow) {
+  color: #c3cec7;
+}
+
+:root[data-theme="dark"] .cta-container .section-eyebrow {
+  color: #edb83e;
+}
+
+/* Ver detalles */
+
+:root[data-theme="dark"] .tour-card-detail-button,
+:root[data-theme="dark"] .tour-card-detail-button:visited,
+:root[data-theme="dark"] .tour-card-detail-button:hover,
+:root[data-theme="dark"] .tour-card-detail-button:active {
+  background: #55c99b !important;
+  color: #0f2119 !important;
+}
+
+:root[data-theme="dark"] .tour-card-detail-button:hover {
+  background: #7fe0b5 !important;
+}
+
+/* Comparar */
+
+:root[data-theme="dark"] .tour-compare-button {
+  border-color: #55c99b;
+  color: #7fe0b5;
+}
+
+:root[data-theme="dark"] .tour-compare-button:hover,
+:root[data-theme="dark"] .tour-compare-button.active {
+  background: #55c99b;
+  color: #0f2119;
+}
+
+/* ---------- COMPARACIÓN ---------- */
+
+:root[data-theme="dark"] .compare-bar {
+  background:
+    rgba(11, 24, 18, 0.96);
+
+  border-top-color: #3d5a4c;
+}
+
+:root[data-theme="dark"] .compare-bar-info strong,
+:root[data-theme="dark"] .compare-mini-card span,
+:root[data-theme="dark"] .compare-clear-button,
+:root[data-theme="dark"] .comparison-item strong {
+  color: #f3f5ef;
+}
+
+:root[data-theme="dark"] .compare-bar-info span,
+:root[data-theme="dark"] .compare-mini-card button,
+:root[data-theme="dark"] .comparison-remove {
+  color: #c3cec7;
+}
+
+:root[data-theme="dark"] .compare-main-button,
+:root[data-theme="dark"] .comparison-details-button,
+:root[data-theme="dark"] .comparison-close-button,
+:root[data-theme="dark"] .tour-detail-primary-button {
+  background: #55c99b;
+  color: #0f2119 !important;
+}
+
+:root[data-theme="dark"] .compare-main-button:hover,
+:root[data-theme="dark"] .comparison-details-button:hover,
+:root[data-theme="dark"] .comparison-close-button:hover,
+:root[data-theme="dark"] .tour-detail-primary-button:hover {
+  background: #7fe0b5;
+  color: #0f2119 !important;
+}
+
+:root[data-theme="dark"] .comparison-modal {
+  background: #102a1f;
+}
+
+:root[data-theme="dark"] .comparison-modal-close {
+  color: #f3f5ef;
+}
+
+:root[data-theme="dark"] .comparison-modal-footer {
+  background: #132c21;
+}
+
+/* ---------- CTA ---------- */
+
+:root[data-theme="dark"] .cta-section {
+  background: #0f2119;
+}
+
+:root[data-theme="dark"] .cta-container h2 {
+  color: #f3f5ef;
+}
+
+:root[data-theme="dark"] .cta-container p:not(.section-eyebrow) {
+  color: #c3cec7;
+}
+
+/* ---------- FOOTER OSCURO ---------- */
+
+:root[data-theme="dark"] .footer {
+  background: #0b1812 !important;
+  color: #f3f5ef;
+
+  border-top-color: #3d5a4c;
+}
+
+:root[data-theme="dark"] .footer-brand p,
+:root[data-theme="dark"] .footer-column a,
+:root[data-theme="dark"] .footer-column span,
+:root[data-theme="dark"] .footer p,
+:root[data-theme="dark"] .footer span {
+  color: #c3cec7 !important;
+}
+
+:root[data-theme="dark"] .footer-column h3 {
+  color: #edb83e !important;
+}
+
+:root[data-theme="dark"] .footer-column a:hover {
+  color: #ffffff !important;
+}
+
+:root[data-theme="dark"] .footer-bottom {
+  border-top-color: #3d5a4c !important;
+}
+
+:root[data-theme="dark"] .footer-bottom p {
+  color: #9fb1a8 !important;
+}
+
+/* =========================================================
+   ACCESIBILIDAD EN NAVBAR
+========================================================= */
+
+.accessibility-widget {
+  position: relative;
+
+  right: auto;
+  bottom: auto;
+
+  z-index: 100;
+}
+
+.accessibility-toggle {
+  width: 40px;
+  height: 40px;
+
+  min-height: 40px;
+
+  padding: 0;
+
+  border-radius: 50%;
+
+  box-shadow: none;
+}
+
+.accessibility-toggle:hover {
+  transform: translateY(-1px);
+}
+
+.accessibility-panel {
+  top: calc(100% + 12px);
+
+  right: 0;
+  bottom: auto;
+
+  width: min(
+    380px,
+    calc(100vw - 32px)
+  );
+}
+
+@media (max-width: 900px) {
+  .accessibility-toggle {
+    width: 38px;
+    height: 38px;
+  }
+}
+
+@media (max-width: 768px) {
+  .accessibility-widget {
+    position: relative;
+  }
+
+  .accessibility-toggle {
+    width: 38px;
+    height: 38px;
+  }
+
+  .accessibility-panel {
+    position: fixed;
+
+    top: 74px;
+    right: 16px;
+    bottom: auto;
+
+    width: min(
+      350px,
+      calc(100vw - 32px)
+    );
+
+    max-height:
+      calc(100vh - 90px);
+  }
+}
+
+@media (max-width: 420px) {
+  .accessibility-panel {
+    top: 68px;
+    right: 12px;
+
+    width:
+      calc(100vw - 24px);
+  }
+}
+
+/* =========================================================
+   CONTRASTE
+   El modo alto contraste NO cambia el tema.
+   Solo aumenta bordes y separación visual.
+========================================================= */
+
+:root[data-contrast="high"] {
+  --color-primary: #123b2b;
+  --color-primary-light: #176a4e;
+  --color-primary-dark: #173f30;
+
+  --color-accent: #edb83e;
+
+  --color-background: #fffdf8;
+  --color-background-soft: #f3f5ef;
+
+  --color-text: #173f30;
+  --color-text-muted: #56665f;
+
+  --color-border: #123b2b;
+
+  --color-white: #ffffff;
+
+  --color-secondary: #176a4e;
+  --color-muted: #56665f;
+  --color-light: #f3f5ef;
+
+  --contrast-border: #123b2b;
+}
+
+:root[data-theme="dark"][data-contrast="high"] {
+  --color-primary: #dff8ea;
+  --color-primary-light: #7fe0b5;
+  --color-primary-dark: #f3f5ef;
+
+  --color-accent: #edb83e;
+
+  --color-background: #0f2119;
+  --color-background-soft: #17372a;
+
+  --color-text: #f3f5ef;
+  --color-text-muted: #c3cec7;
+
+  --color-border: #dff8ea;
+
+  --color-white: #17372a;
+
+  --color-secondary: #7fe0b5;
+  --color-muted: #c3cec7;
+  --color-light: #17372a;
+
+  --contrast-border: #f3f5ef;
+}
+
+:root[data-contrast="high"] .navbar,
+:root[data-contrast="high"] .search-bar,
+:root[data-contrast="high"] .category-card,
+:root[data-contrast="high"] .tour-card,
+:root[data-contrast="high"] .marketplace-filters,
+:root[data-contrast="high"] .marketplace-state,
+:root[data-contrast="high"] .compare-bar,
+:root[data-contrast="high"] .compare-mini-card,
+:root[data-contrast="high"] .comparison-modal,
+:root[data-contrast="high"] .comparison-tour-column,
+:root[data-contrast="high"] .tour-detail-info-card,
+:root[data-contrast="high"] .tour-detail-panel,
+:root[data-contrast="high"] .auth-card,
+:root[data-contrast="high"] .accessibility-panel,
+:root[data-contrast="high"] .footer {
+  border-color:
+    var(--contrast-border) !important;
+
+  box-shadow:
+    0 0 0 1px
+    var(--contrast-border);
+}
+
+:root[data-contrast="high"] button:focus-visible,
+:root[data-contrast="high"] a:focus-visible,
+:root[data-contrast="high"] input:focus-visible,
+:root[data-contrast="high"] select:focus-visible,
+:root[data-contrast="high"] textarea:focus-visible {
+  outline:
+    3px solid
+    var(--color-accent) !important;
+
+  outline-offset: 3px;
+}
+
+/* =========================================================
+   DALTONISMO
+========================================================= */
+
+:root[data-color-blind="protanopia"] {
+  filter:
+    url("#pv-protanopia");
+}
+
+:root[data-color-blind="deuteranopia"] {
+  filter:
+    url("#pv-deuteranopia");
+}
+
+:root[data-color-blind="tritanopia"] {
+  filter:
+    url("#pv-tritanopia");
+}
+
+/* =========================================================
+   LOGO SIN FONDO BLANCO
+========================================================= */
+
+.navbar-logo,
+.footer-logo img {
+  background:
+    transparent !important;
+}
+
+/* =========================================================
+   IMÁGENES
+========================================================= */
+
+.tour-card-image img,
+.tour-detail-image,
+.comparison-tour-image img {
+  object-fit: cover;
+}
+
+/* =========================================================
+   LIMPIEZA DE ESTILOS ANTIGUOS
+========================================================= */
+
+.category-icon,
+.category-arrow,
+.experience-decoration span {
+  display: none !important;
+}
+
+.accessibility-filter-definitions {
+  position: absolute;
+
+  width: 0;
+  height: 0;
+
+  overflow: hidden;
+
+  pointer-events: none;
+}
+
+/* =========================================================
+   CORRECCIONES FINALES DE TEMA, CONTRASTE Y LEGIBILIDAD
+   PuraVida Trips
+========================================================= */
+
+/* =========================================================
+   MODO OSCURO
+   Mantiene la identidad visual sin reutilizar colores claros
+========================================================= */
+
+:root[data-theme="dark"] {
+  --color-background: #10241c;
+  --color-background-soft: #17372a;
+
+  --color-text: #f3f5ef;
+  --color-text-muted: #c3cec7;
+
+  --color-border: #385347;
+
+  /* Alias utilizados por componentes anteriores */
+  --color-muted: #c3cec7;
+  --color-light: #17372a;
+  --color-secondary: #55c99b;
+
+  /* Nunca debe convertirse en negro */
+  --color-white: #ffffff;
+}
+
+
+/* =========================================================
+   ALTO CONTRASTE
+   IMPORTANTE:
+   El contraste NO cambia el tema.
+   Solo hace que los bordes y focos sean más visibles.
+========================================================= */
+
+/* Tema claro + alto contraste */
+:root[data-contrast="high"]:not([data-theme="dark"]) {
+  --color-primary: #123b2b;
+  --color-primary-light: #176a4e;
+  --color-primary-dark: #173f30;
+
+  --color-accent: #edb83e;
+
+  --color-background: #fffdf8;
+  --color-background-soft: #f3f5ef;
+
+  --color-text: #173f30;
+  --color-text-muted: #56665f;
+
+  --color-secondary: #176a4e;
+  --color-muted: #56665f;
+  --color-light: #f3f5ef;
+
+  --color-white: #ffffff;
+
+  --color-border: #000000;
+}
+
+
+/* Tema oscuro + alto contraste */
+:root[data-theme="dark"][data-contrast="high"] {
+  /*
+     IMPORTANTE:
+     Conservamos los mismos colores del modo oscuro.
+     NO convertimos el fondo en negro ni los botones en blanco.
+  */
+
+  --color-primary: #123b2b;
+  --color-primary-light: #176a4e;
+  --color-primary-dark: #173f30;
+
+  --color-accent: #edb83e;
+
+  --color-background: #10241c;
+  --color-background-soft: #17372a;
+
+  --color-text: #f3f5ef;
+  --color-text-muted: #c3cec7;
+
+  --color-secondary: #55c99b;
+  --color-muted: #c3cec7;
+  --color-light: #17372a;
+
+  --color-white: #ffffff;
+
+  /* El borde sí aumenta su contraste */
+  --color-border: #ffffff;
+}
+
+
+/* =========================================================
+   ALTO CONTRASTE:
+   RESALTAR LOS BORDES SIN CAMBIAR EL TEMA
+========================================================= */
+
+:root[data-contrast="high"] *,
+:root[data-contrast="high"] *::before,
+:root[data-contrast="high"] *::after {
+  border-color: #000000;
+}
+
+:root[data-theme="dark"][data-contrast="high"] *,
+:root[data-theme="dark"][data-contrast="high"] *::before,
+:root[data-theme="dark"][data-contrast="high"] *::after {
+  border-color: #ffffff;
+}
+
+
+/* Elementos principales con borde más evidente */
+
+:root[data-contrast="high"] .navbar,
+:root[data-contrast="high"] .footer,
+:root[data-contrast="high"] .category-card,
+:root[data-contrast="high"] .tour-card,
+:root[data-contrast="high"] .marketplace-filters,
+:root[data-contrast="high"] .compare-bar,
+:root[data-contrast="high"] .comparison-modal,
+:root[data-contrast="high"] .tour-detail-info-card,
+:root[data-contrast="high"] .tour-detail-panel,
+:root[data-contrast="high"] .auth-card,
+:root[data-contrast="high"] .accessibility-panel {
+  border-width: 2px;
+}
+
+
+/* =========================================================
+   TEXTO BLANCO EN HERO
+========================================================= */
+
+.hero,
+.hero h1,
+.hero h1 span,
+.hero-description {
+  color: #ffffff !important;
+}
+
+.hero h1 span {
+  color: #edb83e !important;
+}
+
+
+/*
+   La parte "Descubre Costa Rica" debe ser blanca.
+*/
+.hero h1 {
+  color: #ffffff !important;
+}
+
+
+/* =========================================================
+   BUSCADOR
+   "¿Qué quieres explorar?" debe mantenerse visible
+========================================================= */
+
+.search-bar {
+  background: #ffffff;
+}
+
+.search-field label {
+  color: #173f30 !important;
+}
+
+.search-field input {
+  color: #173f30 !important;
+}
+
+.search-field input::placeholder {
+  color: #66736d !important;
+}
+
+.search-icon {
+  color: #176a4e !important;
+}
+
+
+/* En modo oscuro el buscador continúa siendo blanco,
+   por lo que mantenemos el texto oscuro dentro de él. */
+
+:root[data-theme="dark"] .search-field label,
+:root[data-theme="dark"] .search-field input {
+  color: #173f30 !important;
+}
+
+:root[data-theme="dark"] .search-field input::placeholder {
+  color: #66736d !important;
+}
+
+
+/* =========================================================
+   "ENCUENTRA TU PRÓXIMA EXPERIENCIA"
+========================================================= */
+
+:root[data-theme="dark"] .section-heading h2 {
+  color: #f3f5ef !important;
+}
+
+:root[data-theme="dark"][data-contrast="high"] .section-heading h2 {
+  color: #f3f5ef !important;
+}
+
+
+/* =========================================================
+   BOTÓN "VER TODOS LOS TOURS"
+========================================================= */
+
+:root[data-theme="dark"] .button-outline {
+  border-color: #edb83e !important;
+  background: transparent !important;
+  color: #edb83e !important;
+}
+
+:root[data-theme="dark"] .button-outline:hover {
+  background: #edb83e !important;
+  color: #123b2b !important;
+}
+
+:root[data-theme="dark"][data-contrast="high"] .button-outline {
+  border-color: #edb83e !important;
+  background: transparent !important;
+  color: #edb83e !important;
+}
+
+:root[data-theme="dark"][data-contrast="high"] .button-outline:hover {
+  background: #edb83e !important;
+  color: #123b2b !important;
+}
+
+
+/* =========================================================
+   EXPERIENCE BANNER
+   "Costa Rica tiene una experiencia esperándote."
+========================================================= */
+
+:root[data-theme="dark"] .experience-banner {
+  background: #10241c;
+}
+
+:root[data-theme="dark"] .experience-banner-container {
+  background:
+    linear-gradient(
+      120deg,
+      #176a4e,
+      #123b2b
+    ) !important;
+}
+
+
+/* Título */
+
+:root[data-theme="dark"] .experience-banner h2,
+:root[data-theme="dark"][data-contrast="high"] .experience-banner h2 {
+  color: #ffffff !important;
+}
+
+
+/* Texto */
+
+:root[data-theme="dark"] .experience-banner p:not(.section-eyebrow),
+:root[data-theme="dark"][data-contrast="high"] .experience-banner p:not(.section-eyebrow) {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+
+/* Botón "Explorar experiencias" */
+
+:root[data-theme="dark"] .experience-banner .button-primary {
+  background: #176a4e !important;
+  color: #ffffff !important;
+  border-color: #176a4e !important;
+}
+
+:root[data-theme="dark"] .experience-banner .button-primary:hover {
+  background: #123b2b !important;
+  color: #ffffff !important;
+}
+
+:root[data-theme="dark"][data-contrast="high"] .experience-banner .button-primary {
+  background: #176a4e !important;
+  color: #ffffff !important;
+  border-color: #ffffff !important;
+}
+
+:root[data-theme="dark"][data-contrast="high"] .experience-banner .button-primary:hover {
+  background: #176a4e !important;
+  color: #ffffff !important;
+}
+
+
+/* =========================================================
+   DECORACIÓN DE EXPERIENCIA
+   Evita que vuelva a verse desordenada
+========================================================= */
+
+.experience-decoration {
+  border-color: rgba(237, 184, 62, 0.55) !important;
+}
+
+.experience-decoration span {
+  color: #edb83e !important;
+}
+
+
+/* =========================================================
+   CTA
+   "Tu próxima aventura comienza aquí."
+========================================================= */
+
+:root[data-theme="dark"] .cta-section {
+  background: #10241c !important;
+}
+
+:root[data-theme="dark"] .cta-container h2,
+:root[data-theme="dark"][data-contrast="high"] .cta-container h2 {
+  color: #f3f5ef !important;
+}
+
+:root[data-theme="dark"] .cta-container p:not(.section-eyebrow) {
+  color: #c3cec7 !important;
+}
+
+
+/* Botón "Comenzar a explorar" */
+
+:root[data-theme="dark"] .cta-container .button-primary {
+  background: #176a4e !important;
+  color: #ffffff !important;
+  border-color: #176a4e !important;
+}
+
+:root[data-theme="dark"] .cta-container .button-primary:hover {
+  background: #123b2b !important;
+  color: #ffffff !important;
+}
+
+:root[data-theme="dark"][data-contrast="high"] .cta-container .button-primary {
+  background: #176a4e !important;
+  color: #ffffff !important;
+  border-color: #ffffff !important;
+}
+
+:root[data-theme="dark"][data-contrast="high"] .cta-container .button-primary:hover {
+  background: #176a4e !important;
+  color: #ffffff !important;
+}
+
+
+/* =========================================================
+   TARJETAS DE TOURS
+========================================================= */
+
+:root[data-theme="dark"] .tour-card {
+  background: #17372a !important;
+  border-color: #385347 !important;
+}
+
+:root[data-theme="dark"] .tour-card h3 {
+  color: #f3f5ef !important;
+}
+
+:root[data-theme="dark"] .tour-card-location,
+:root[data-theme="dark"] .tour-card-description,
+:root[data-theme="dark"] .tour-card-meta,
+:root[data-theme="dark"] .tour-card-operator {
+  color: #c3cec7 !important;
+}
+
+:root[data-theme="dark"] .tour-card-price {
+  color: #f3f5ef !important;
+}
+
+:root[data-theme="dark"] .tour-card-footer a {
+  color: #55c99b !important;
+}
+
+
+/* =========================================================
+   "VER DETALLES"
+   Forzamos blanco en todos los estados
+========================================================= */
+
+.tour-card-detail-button,
+.tour-card-detail-button:visited,
+.tour-card-detail-button:active,
+.tour-card-detail-button:focus,
+.tour-card-detail-button:hover {
+  background: #176a4e !important;
+  color: #ffffff !important;
+}
+
+.tour-card-detail-button:hover {
+  background: #123b2b !important;
+}
+
+
+/* Modo oscuro */
+
+:root[data-theme="dark"] .tour-card-detail-button,
+:root[data-theme="dark"] .tour-card-detail-button:visited,
+:root[data-theme="dark"] .tour-card-detail-button:active,
+:root[data-theme="dark"] .tour-card-detail-button:focus {
+  background: #176a4e !important;
+  color: #ffffff !important;
+}
+
+
+/* Alto contraste oscuro */
+
+:root[data-theme="dark"][data-contrast="high"] .tour-card-detail-button,
+:root[data-theme="dark"][data-contrast="high"] .tour-card-detail-button:visited,
+:root[data-theme="dark"][data-contrast="high"] .tour-card-detail-button:active,
+:root[data-theme="dark"][data-contrast="high"] .tour-card-detail-button:focus,
+:root[data-theme="dark"][data-contrast="high"] .tour-card-detail-button:hover {
+  background: #176a4e !important;
+  color: #ffffff !important;
+  border-color: #ffffff !important;
+}
+
+
+/* =========================================================
+   BARRA DE COMPARACIÓN
+========================================================= */
+
+:root[data-theme="dark"] .compare-bar {
+  background: rgba(16, 36, 28, 0.97) !important;
+  border-top-color: #385347 !important;
+}
+
+:root[data-theme="dark"] .compare-bar-info strong {
+  color: #f3f5ef !important;
+}
+
+:root[data-theme="dark"] .compare-bar-info span {
+  color: #c3cec7 !important;
+}
+
+
+/* Botón "Limpiar" */
+
+:root[data-theme="dark"] .compare-clear-button,
+:root[data-theme="dark"] .comparison-modal-footer .compare-clear-button {
+  background: #17372a !important;
+  color: #ffffff !important;
+  border-color: #385347 !important;
+}
+
+:root[data-theme="dark"] .compare-clear-button:hover,
+:root[data-theme="dark"] .comparison-modal-footer .compare-clear-button:hover {
+  background: #385347 !important;
+  color: #ffffff !important;
+}
+
+
+/* Alto contraste oscuro */
+
+:root[data-theme="dark"][data-contrast="high"] .compare-clear-button,
+:root[data-theme="dark"][data-contrast="high"] .comparison-modal-footer .compare-clear-button {
+  background: #17372a !important;
+  color: #ffffff !important;
+  border-color: #ffffff !important;
+}
+
+:root[data-theme="dark"][data-contrast="high"] .compare-clear-button:hover,
+:root[data-theme="dark"][data-contrast="high"] .comparison-modal-footer .compare-clear-button:hover {
+  background: #385347 !important;
+  color: #ffffff !important;
+}
+
+
+/* =========================================================
+   BOTÓN DE ACCESIBILIDAD
+========================================================= */
+
+/*
+   Compatible tanto si el botón está en el navbar
+   como si todavía conserva la clase accessibility-toggle.
+*/
+
+.accessibility-toggle {
+  background: #123b2b !important;
+  color: #ffffff !important;
+  border-color: #176a4e !important;
+}
+
+.accessibility-toggle:hover {
+  background: #176a4e !important;
+  color: #ffffff !important;
+}
+
+
+/* Icono SVG */
+
+.accessibility-toggle svg,
+.accessibility-toggle svg path,
+.accessibility-toggle svg circle,
+.accessibility-toggle svg rect,
+.accessibility-toggle svg line,
+.accessibility-toggle svg polyline {
+  color: #ffffff !important;
+  fill: none;
+  stroke: #ffffff !important;
+}
+
+
+/* Si el icono utiliza fill */
+
+.accessibility-toggle svg [fill] {
+  fill: #ffffff !important;
+}
+
+
+/* Modo oscuro */
+
+:root[data-theme="dark"] .accessibility-toggle,
+:root[data-theme="dark"] .accessibility-toggle:hover {
+  background: #123b2b !important;
+  color: #ffffff !important;
+  border-color: #176a4e !important;
+}
+
+
+/* Alto contraste oscuro */
+
+:root[data-theme="dark"][data-contrast="high"] .accessibility-toggle,
+:root[data-theme="dark"][data-contrast="high"] .accessibility-toggle:hover,
+:root[data-theme="dark"][data-contrast="high"] .accessibility-toggle[aria-expanded="true"] {
+  background: #123b2b !important;
+  color: #ffffff !important;
+  border-color: #ffffff !important;
+}
+
+
+/* Si el icono es un SVG dentro del botón */
+
+:root[data-theme="dark"][data-contrast="high"] .accessibility-toggle svg,
+:root[data-theme="dark"][data-contrast="high"] .accessibility-toggle svg * {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+  fill: #ffffff !important;
+}
+
+
+/* =========================================================
+   PANEL DE ACCESIBILIDAD
+========================================================= */
+
+:root[data-theme="dark"] .accessibility-panel {
+  background: #10241c !important;
+  color: #f3f5ef !important;
+  border-color: #385347 !important;
+}
+
+:root[data-theme="dark"] .accessibility-panel h2,
+:root[data-theme="dark"] .accessibility-options legend {
+  color: #f3f5ef !important;
+}
+
+:root[data-theme="dark"] .accessibility-option,
+:root[data-theme="dark"] .accessibility-speech-button {
+  background: #17372a !important;
+  color: #f3f5ef !important;
+  border-color: #385347 !important;
+}
+
+:root[data-theme="dark"] .accessibility-option.active {
+  background: #176a4e !important;
+  color: #ffffff !important;
+  border-color: #176a4e !important;
+}
+
+:root[data-theme="dark"] .accessibility-help {
+  color: #c3cec7 !important;
+}
+
+:root[data-theme="dark"] .accessibility-options select {
+  background: #17372a !important;
+  color: #f3f5ef !important;
+  border-color: #385347 !important;
+}
+
+
+/* Alto contraste oscuro */
+
+:root[data-theme="dark"][data-contrast="high"] .accessibility-option.active {
+  background: #176a4e !important;
+  color: #ffffff !important;
+  border-color: #ffffff !important;
+}
+
+
+/* =========================================================
+   BOTONES GENERALES EN MODO OSCURO
+========================================================= */
+
+:root[data-theme="dark"] .button-primary {
+  background: #176a4e !important;
+  color: #ffffff !important;
+}
+
+:root[data-theme="dark"] .button-primary:hover {
+  background: #123b2b !important;
+  color: #ffffff !important;
+}
+
+
+/* =========================================================
+   MODO OSCURO + ALTO CONTRASTE
+   Los botones conservan el color del tema.
+========================================================= */
+
+:root[data-theme="dark"][data-contrast="high"] .button-primary,
+:root[data-theme="dark"][data-contrast="high"] .search-button,
+:root[data-theme="dark"][data-contrast="high"] .compare-main-button,
+:root[data-theme="dark"][data-contrast="high"] .comparison-details-button,
+:root[data-theme="dark"][data-contrast="high"] .comparison-close-button {
+  background: #176a4e !important;
+  color: #ffffff !important;
+  border-color: #ffffff !important;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+/* Claro */
+
+.footer {
+  background: #e1e9e3 !important;
+  color: #123b2b !important;
+  border-top: 2px solid #bad1c1 !important;
+}
+
+.footer-brand p,
+.footer-column a,
+.footer-column span,
+.footer-bottom p {
+  color: #355247 !important;
+}
+
+.footer-column h3 {
+  color: #123b2b !important;
+}
+
+.footer-column a:hover {
+  color: #176a4e !important;
+}
+
+
+/* Oscuro */
+
+:root[data-theme="dark"] .footer {
+  background: #0b1813 !important;
+  color: #f3f5ef !important;
+  border-top-color: #385347 !important;
+}
+
+:root[data-theme="dark"] .footer-brand p,
+:root[data-theme="dark"] .footer-column a,
+:root[data-theme="dark"] .footer-column span,
+:root[data-theme="dark"] .footer-bottom p {
+  color: #c3cec7 !important;
+}
+
+:root[data-theme="dark"] .footer-column h3 {
+  color: #edb83e !important;
+}
+
+:root[data-theme="dark"] .footer-column a:hover {
+  color: #55c99b !important;
+}
+
+:root[data-theme="dark"] .footer-bottom {
+  border-top-color: #385347 !important;
+}
+
+
+/* =========================================================
+   LOGO
+   El contenedor mantiene contraste con el fondo
+========================================================= */
+
+.navbar-brand,
+.footer-logo {
+  display: inline-flex;
+  align-items: center;
+}
+
+:root[data-theme="dark"] .navbar-logo,
+:root[data-theme="dark"] .footer-logo img {
+  background: transparent !important;
+}
+
+
+/* =========================================================
+   FOCUS
+========================================================= */
+
+:root[data-theme="dark"] button:focus-visible,
+:root[data-theme="dark"] a:focus-visible,
+:root[data-theme="dark"] input:focus-visible,
+:root[data-theme="dark"] select:focus-visible,
+:root[data-theme="dark"] textarea:focus-visible {
+  outline-color: #edb83e !important;
+}
+
+
+/* =========================================================
+   EVITAR CAMBIOS DE COLOR NO DESEADOS EN ALTO CONTRASTE
+========================================================= */
+
+:root[data-theme="dark"][data-contrast="high"] .experience-banner,
+:root[data-theme="dark"][data-contrast="high"] .experience-banner-container,
+:root[data-theme="dark"][data-contrast="high"] .cta-section,
+:root[data-theme="dark"][data-contrast="high"] .featured-section,
+:root[data-theme="dark"][data-contrast="high"] .categories-section {
+  color: inherit;
+}
+
+
+/* =========================================================
+   TRANSICIONES SUAVES ENTRE TEMAS
+========================================================= */
+
+body,
+.navbar,
+.category-card,
+.tour-card,
+.marketplace-filters,
+.compare-bar,
+.footer,
+.cta-section,
+.accessibility-panel,
+.accessibility-option,
+.compare-clear-button {
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}

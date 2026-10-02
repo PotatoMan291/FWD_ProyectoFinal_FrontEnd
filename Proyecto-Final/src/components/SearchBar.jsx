@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Icon from "./Icon";
 
 function SearchBar() {
   const [search, setSearch] = useState("");
@@ -15,7 +16,9 @@ function SearchBar() {
       return;
     }
 
-    navigate(`/tours?search=${encodeURIComponent(searchValue)}`);
+    navigate(
+      `/tours?search=${encodeURIComponent(searchValue)}`
+    );
   };
 
   return (
@@ -28,7 +31,10 @@ function SearchBar() {
           className="search-icon"
           aria-hidden="true"
         >
-          ⌕
+          <Icon
+            name="search"
+            size={24}
+          />
         </span>
 
         <div className="search-field-content">

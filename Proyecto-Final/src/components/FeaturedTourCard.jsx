@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
+import Icon from "./Icon";
 
 function FeaturedTourCard({
+  id,
   image,
   category,
   title,
@@ -8,7 +10,11 @@ function FeaturedTourCard({
   price,
 }) {
   return (
-    <article className="tour-card">
+    <Link
+      to={`/tours/${id}`}
+      className="tour-card featured-tour-card"
+      aria-label={`Ver detalles de ${title}`}
+    >
       <div className="tour-card-image">
         {image ? (
           <img
@@ -35,15 +41,20 @@ function FeaturedTourCard({
 
         <div className="tour-card-footer">
           <strong>
-            Desde ₡{Number(price).toLocaleString("es-CR")}
+            Desde ₡
+            {Number(price).toLocaleString("es-CR")}
           </strong>
 
-          <Link to="/tours">
-            Ver tour →
-          </Link>
+          <span className="featured-tour-link">
+            Ver detalles
+            <Icon
+              name="arrowRight"
+              size={16}
+            />
+          </span>
         </div>
       </div>
-    </article>
+    </Link>
   );
 }
 
