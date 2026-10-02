@@ -1,16 +1,21 @@
 import {
   Navigate,
   Outlet,
+  useLocation,
 } from "react-router-dom";
 
 import { useAuth } from "../context/AuthContext";
 
-function RoleRoute({ allowedRoles = [] }) {
+function RoleRoute({
+  allowedRoles = [],
+}) {
   const {
     user,
     isAuthenticated,
     loading,
   } = useAuth();
+
+  const location = useLocation();
 
   if (loading) {
     return (
@@ -29,6 +34,11 @@ function RoleRoute({ allowedRoles = [] }) {
       <Navigate
         to="/login"
         replace
+        state={{
+          from:
+            location.pathname +
+            location.search,
+        }}
       />
     );
   }
