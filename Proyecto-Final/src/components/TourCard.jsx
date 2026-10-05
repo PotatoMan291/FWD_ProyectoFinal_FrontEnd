@@ -1,4 +1,9 @@
 import { Link } from "react-router-dom";
+
+import {
+  useLanguage,
+} from "../context/LanguageContext";
+
 import Icon from "./Icon";
 
 function TourCard({
@@ -16,26 +21,44 @@ function TourCard({
   isCompared = false,
   onCompare,
 }) {
-  const formattedPrice = new Intl.NumberFormat(
-    "es-CR",
-    {
-      style: "currency",
-      currency: "CRC",
-      maximumFractionDigits: 0,
-    }
-  ).format(precio);
+  const {
+    t,
+    getTour,
+  } = useLanguage();
+
+  const translatedTour =
+    getTour({
+      id,
+      nombre,
+      categoria,
+      ubicacion,
+      duracion,
+      personas,
+      descripcion,
+      caracteristicas,
+    });
+
+  const formattedPrice =
+    new Intl.NumberFormat(
+      "es-CR",
+      {
+        style: "currency",
+        currency: "CRC",
+        maximumFractionDigits: 0,
+      }
+    ).format(precio);
 
   return (
     <article className="tour-card">
       <div className="tour-card-image-wrapper">
         <img
           src={imagen}
-          alt={`Experiencia turística: ${nombre}`}
+          alt={`${translatedTour.nombre}`}
           className="tour-card-image"
         />
 
         <span className="tour-card-category">
-          {categoria}
+          {translatedTour.categoria}
         </span>
       </div>
 
@@ -46,13 +69,17 @@ function TourCard({
             size={15}
           />
 
-          <span>{ubicacion}</span>
+          <span>
+            {translatedTour.ubicacion}
+          </span>
         </div>
 
-        <h3>{nombre}</h3>
+        <h3>
+          {translatedTour.nombre}
+        </h3>
 
         <p className="tour-card-description">
-          {descripcion}
+          {translatedTour.descripcion}
         </p>
 
         <div className="tour-card-meta">
@@ -62,7 +89,7 @@ function TourCard({
               size={15}
             />
 
-            {duracion}
+            {translatedTour.duracion}
           </span>
 
           <span>
@@ -71,34 +98,37 @@ function TourCard({
               size={15}
             />
 
-            {personas}
+            {translatedTour.personas}
           </span>
         </div>
 
-        {caracteristicas.length > 0 && (
+        {translatedTour.caracteristicas
+          ?.length > 0 && (
           <div className="tour-card-features">
-            {caracteristicas
+            {translatedTour.caracteristicas
               .slice(0, 3)
-              .map((caracteristica) => (
-                <span
-                  className="tour-feature-badge"
-                  key={caracteristica}
-                >
-                  {caracteristica}
-                </span>
-              ))}
+              .map(
+                (feature) => (
+                  <span
+                    className="tour-feature-badge"
+                    key={feature}
+                  >
+                    {feature}
+                  </span>
+                )
+              )}
           </div>
         )}
 
         <div className="tour-card-operator">
-          Operado por{" "}
+          {t("tour.operatedBy")}{" "}
           <strong>{operador}</strong>
         </div>
 
         <div className="tour-card-footer">
           <div>
             <span className="tour-card-price-label">
-              Desde
+              {t("tour.from")}
             </span>
 
             <strong className="tour-card-price">
@@ -111,20 +141,34 @@ function TourCard({
               to={`/tours/${id}`}
               className="tour-card-detail-button"
             >
-              Ver detalles
+              {t("tour.details")}
             </Link>
 
             <button
               type="button"
               className={`tour-compare-button ${
-                isCompared ? "active" : ""
+                isCompared
+                  ? "active"
+                  : ""
               }`}
-              onClick={() => onCompare(id)}
-              aria-pressed={isCompared}
+              onClick={() =>
+                onCompare(id)
+              }
+              aria-pressed={
+                isCompared
+              }
               aria-label={
                 isCompared
-                  ? `Quitar ${nombre} de la comparación`
-                  : `Agregar ${nombre} a la comparación`
+                  ? `${t(
+                      "tour.removeFromComparison"
+                    )}: ${
+                      translatedTour.nombre
+                    }`
+                  : `${t(
+                      "tour.addToComparison"
+                    )}: ${
+                      translatedTour.nombre
+                    }`
               }
             >
               {isCompared && (
@@ -135,8 +179,8 @@ function TourCard({
               )}
 
               {isCompared
-                ? "Comparando"
-                : "Comparar"}
+                ? t("tour.comparing")
+                : t("tour.compare")}
             </button>
           </div>
         </div>

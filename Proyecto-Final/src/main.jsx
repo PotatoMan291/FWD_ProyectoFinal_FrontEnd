@@ -3,18 +3,24 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 
 import App from "./App";
+
 import AuthProvider from "./context/AuthContext";
+import LanguageProvider from "./context/LanguageContext";
 import AccessibilityProvider from "./context/AccessibilityContext";
 
 import "./index.css";
 
-createRoot(document.getElementById("root")).render(
+createRoot(
+  document.getElementById("root")
+).render(
   <StrictMode>
     <BrowserRouter>
       <AuthProvider>
-        <AccessibilityProvider>
-          <App />
-        </AccessibilityProvider>
+        <LanguageProvider>
+          <AccessibilityProvider>
+            <App />
+          </AccessibilityProvider>
+        </LanguageProvider>
       </AuthProvider>
     </BrowserRouter>
   </StrictMode>

@@ -1,93 +1,93 @@
-import Icon from "./Icon";
+import { Link } from "react-router-dom";
 
-function CompareBar({
-  selectedTours,
-  onRemove,
-  onClear,
-  onOpenComparison,
-}) {
-  if (selectedTours.length === 0) {
-    return null;
-  }
+import {
+  useLanguage,
+} from "../context/LanguageContext";
 
-  const canCompare =
-    selectedTours.length >= 2;
+function Footer() {
+  const { t } =
+    useLanguage();
 
   return (
-    <aside
-      className="compare-bar"
-      aria-label="Comparación de experiencias"
-    >
-      <div className="compare-bar-content">
-        <div className="compare-bar-info">
-          <strong>
-            Comparar experiencias
-          </strong>
+    <footer className="footer">
+      <div className="footer-container">
+        <div className="footer-brand">
+          <Link
+            to="/"
+            className="footer-logo"
+          >
+            <img
+              src="/logo.png"
+              alt="PuraVida Trips"
+            />
+          </Link>
+
+          <p>
+            {t(
+              "footer.description"
+            )}
+          </p>
+        </div>
+
+        <div className="footer-column">
+          <h3>
+            {t("footer.explore")}
+          </h3>
+
+          <Link to="/tours">
+            {t("footer.tours")}
+          </Link>
+
+          <Link to="/tours?categoria=Aventura">
+            {t("footer.adventure")}
+          </Link>
+
+          <Link to="/tours?categoria=Naturaleza">
+            {t("footer.nature")}
+          </Link>
+
+          <Link to="/tours?categoria=Playa">
+            {t("footer.beach")}
+          </Link>
+        </div>
+
+        <div className="footer-column">
+          <h3>
+            {t("footer.account")}
+          </h3>
+
+          <Link to="/login">
+            {t("footer.login")}
+          </Link>
+
+          <Link to="/register">
+            {t("footer.register")}
+          </Link>
+        </div>
+
+        <div className="footer-column">
+          <h3>
+            {t("footer.brand")}
+          </h3>
 
           <span>
-            {selectedTours.length} de 3
-            seleccionadas
+            {t("footer.country")}
+          </span>
+
+          <span>
+            {t("footer.slogan")}
           </span>
         </div>
-
-        <div className="compare-bar-tours">
-          {selectedTours.map((tour) => (
-            <div
-              className="compare-mini-card"
-              key={tour.id}
-            >
-              <img
-                src={tour.imagen}
-                alt=""
-              />
-
-              <span>
-                {tour.nombre}
-              </span>
-
-              <button
-                type="button"
-                onClick={() =>
-                  onRemove(tour.id)
-                }
-                aria-label={`Quitar ${tour.nombre} de la comparación`}
-              >
-                <Icon
-                  name="close"
-                  size={15}
-                />
-              </button>
-            </div>
-          ))}
-        </div>
-
-        <div className="compare-bar-actions">
-          <button
-            type="button"
-            className="compare-clear-button"
-            onClick={onClear}
-          >
-            Limpiar
-          </button>
-
-          <button
-            type="button"
-            className={`compare-main-button ${
-              !canCompare
-                ? "disabled"
-                : ""
-            }`}
-            onClick={
-              onOpenComparison
-            }
-            disabled={!canCompare}
-          >
-            Comparar
-          </button>
-        </div>
       </div>
-    </aside>
+
+      <div className="footer-bottom">
+        <p>
+          © 2026 PuraVida Trips.{" "}
+          {t("footer.rights")}
+        </p>
+      </div>
+    </footer>
   );
 }
 
-export default CompareBar;
+export default Footer;

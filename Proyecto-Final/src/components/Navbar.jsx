@@ -7,6 +7,7 @@ import {
 import Swal from "sweetalert2";
 
 import { useAuth } from "../context/AuthContext";
+import { useLanguage } from "../context/LanguageContext";
 
 import AccessibilityPanel from "./AccessibilityPanel";
 import Icon from "./Icon";
@@ -20,18 +21,28 @@ function Navbar() {
     logout,
   } = useAuth();
 
+  const { t } = useLanguage();
+
   const handleLogout = async () => {
-    const result = await Swal.fire({
-      icon: "question",
-      title: "¿Cerrar sesión?",
-      text:
-        "Tu sesión actual se cerrará en este dispositivo.",
-      showCancelButton: true,
-      confirmButtonText: "Cerrar sesión",
-      cancelButtonText: "Cancelar",
-      confirmButtonColor: "#176a4e",
-      cancelButtonColor: "#56665f",
-    });
+    const result =
+      await Swal.fire({
+        icon: "question",
+        title: t(
+          "navbar.logoutTitle"
+        ),
+        text: t(
+          "navbar.logoutText"
+        ),
+        showCancelButton: true,
+        confirmButtonText: t(
+          "navbar.logoutConfirm"
+        ),
+        cancelButtonText: t(
+          "navbar.cancel"
+        ),
+        confirmButtonColor: "#176a4e",
+        cancelButtonColor: "#56665f",
+      });
 
     if (!result.isConfirmed) {
       return;
@@ -41,9 +52,12 @@ function Navbar() {
 
     await Swal.fire({
       icon: "success",
-      title: "Sesión cerrada",
-      text:
-        "Has cerrado sesión correctamente.",
+      title: t(
+        "navbar.logoutSuccess"
+      ),
+      text: t(
+        "navbar.logoutSuccessText"
+      ),
       timer: 1400,
       showConfirmButton: false,
     });
@@ -55,14 +69,18 @@ function Navbar() {
 
   const getRoleLabel = () => {
     if (user?.rol === "admin") {
-      return "Administrador";
+      return t(
+        "navbar.administrator"
+      );
     }
 
     if (user?.rol === "operador") {
-      return "Operador";
+      return t(
+        "navbar.operator"
+      );
     }
 
-    return "Turista";
+    return t("navbar.tourist");
   };
 
   return (
@@ -71,7 +89,9 @@ function Navbar() {
         <Link
           to="/"
           className="navbar-brand"
-          aria-label="PuraVida Trips - Inicio"
+          aria-label={t(
+            "navbar.brandLabel"
+          )}
         >
           <img
             src="/logo.png"
@@ -82,7 +102,9 @@ function Navbar() {
 
         <nav
           className="navbar-links"
-          aria-label="Navegación principal"
+          aria-label={t(
+            "navbar.home"
+          )}
         >
           <NavLink
             to="/"
@@ -92,7 +114,7 @@ function Navbar() {
                 : "nav-link"
             }
           >
-            Inicio
+            {t("navbar.home")}
           </NavLink>
 
           <NavLink
@@ -103,12 +125,13 @@ function Navbar() {
                 : "nav-link"
             }
           >
-            Explorar
+            {t("navbar.explore")}
           </NavLink>
 
           {isAuthenticated ? (
             <span className="navbar-user">
-              Hola, {user.nombre}
+              {t("navbar.hello")},{" "}
+              {user.nombre}
             </span>
           ) : (
             <NavLink
@@ -119,7 +142,7 @@ function Navbar() {
                   : "nav-link"
               }
             >
-              Iniciar sesión
+              {t("navbar.login")}
             </NavLink>
           )}
         </nav>
@@ -132,7 +155,9 @@ function Navbar() {
               to="/register"
               className="navbar-action"
             >
-              Crear cuenta
+              {t(
+                "navbar.register"
+              )}
             </Link>
           ) : (
             <>
@@ -150,7 +175,7 @@ function Navbar() {
                   size={15}
                 />
 
-                Cerrar sesión
+                {t("navbar.logout")}
               </button>
             </>
           )}
@@ -160,7 +185,9 @@ function Navbar() {
               to="/tours"
               className="navbar-action navbar-action-secondary"
             >
-              Explorar tours
+              {t(
+                "navbar.exploreTours"
+              )}
             </Link>
           )}
         </div>

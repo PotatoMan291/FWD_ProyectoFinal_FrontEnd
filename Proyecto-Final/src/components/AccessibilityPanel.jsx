@@ -4,32 +4,51 @@ import {
   useState,
 } from "react";
 
-import { useAccessibility } from "../context/AccessibilityContext";
+import {
+  useAccessibility,
+} from "../context/AccessibilityContext";
+
+import {
+  useLanguage,
+} from "../context/LanguageContext";
 
 import Icon from "./Icon";
 
 function AccessibilityPanel() {
   const {
     preferences,
+    voices,
     isSpeaking,
+    speechSupported,
     updatePreference,
     resetPreferences,
     stopSpeech,
     toggleSpeech,
   } = useAccessibility();
 
-  const [isOpen, setIsOpen] = useState(false);
+  const {
+    language,
+    changeLanguage,
+    t,
+  } = useLanguage();
+
+  const [isOpen, setIsOpen] =
+    useState(false);
 
   const panelRef = useRef(null);
-  const toggleButtonRef = useRef(null);
+  const toggleButtonRef =
+    useRef(null);
 
   useEffect(() => {
-    function handleKeyDown(event) {
-      if (event.key === "Escape" && isOpen) {
+    const handleKeyDown = (event) => {
+      if (
+        event.key === "Escape" &&
+        isOpen
+      ) {
         setIsOpen(false);
         toggleButtonRef.current?.focus();
       }
-    }
+    };
 
     document.addEventListener(
       "keydown",
@@ -49,24 +68,27 @@ function AccessibilityPanel() {
       return;
     }
 
-    const firstFocusableElement =
+    const firstFocusable =
       panelRef.current?.querySelector(
         "button, select"
       );
 
-    firstFocusableElement?.focus();
+    firstFocusable?.focus();
   }, [isOpen]);
 
   useEffect(() => {
-    function handleOutsideClick(event) {
-      if (
-        isOpen &&
-        panelRef.current &&
-        !panelRef.current.contains(event.target)
-      ) {
-        setIsOpen(false);
-      }
-    }
+    const handleOutsideClick =
+      (event) => {
+        if (
+          isOpen &&
+          panelRef.current &&
+          !panelRef.current.contains(
+            event.target
+          )
+        ) {
+          setIsOpen(false);
+        }
+      };
 
     document.addEventListener(
       "mousedown",
@@ -81,6 +103,17 @@ function AccessibilityPanel() {
     };
   }, [isOpen]);
 
+  const speechVoices =
+    voices.filter((voice) =>
+      voice.lang
+        ?.toLowerCase()
+        .startsWith(
+          language === "en"
+            ? "en"
+            : "es"
+        )
+    );
+
   return (
     <div
       className="accessibility-widget"
@@ -90,12 +123,18 @@ function AccessibilityPanel() {
         ref={toggleButtonRef}
         type="button"
         className="accessibility-toggle"
-        aria-label="Abrir opciones de accesibilidad"
+        aria-label={t(
+          "accessibility.open"
+        )}
         aria-expanded={isOpen}
         aria-controls="accessibility-panel"
-        title="Accesibilidad"
+        title={t(
+          "accessibility.title"
+        )}
         onClick={() =>
-          setIsOpen((current) => !current)
+          setIsOpen(
+            (current) => !current
+          )
         }
       >
         <Icon
@@ -108,21 +147,31 @@ function AccessibilityPanel() {
         <section
           id="accessibility-panel"
           className="accessibility-panel"
-          aria-label="Opciones de accesibilidad"
+          aria-label={t(
+            "accessibility.title"
+          )}
         >
           <div className="accessibility-panel-header">
             <div>
               <p className="accessibility-eyebrow">
-                PERSONALIZACIÓN
+                {t(
+                  "accessibility.personalization"
+                )}
               </p>
 
-              <h2>Accesibilidad</h2>
+              <h2>
+                {t(
+                  "accessibility.title"
+                )}
+              </h2>
             </div>
 
             <button
               type="button"
               className="accessibility-close"
-              aria-label="Cerrar opciones de accesibilidad"
+              aria-label={t(
+                "accessibility.close"
+              )}
               onClick={() => {
                 setIsOpen(false);
                 toggleButtonRef.current?.focus();
@@ -137,18 +186,70 @@ function AccessibilityPanel() {
 
           <div className="accessibility-options">
             <fieldset>
-              <legend>Tema</legend>
+              <legend>
+                {t("language.label")}
+              </legend>
 
               <div className="accessibility-option-grid">
                 <button
                   type="button"
                   className={
-                    preferences.theme === "light"
+                    language === "es"
                       ? "accessibility-option active"
                       : "accessibility-option"
                   }
                   aria-pressed={
-                    preferences.theme === "light"
+                    language === "es"
+                  }
+                  onClick={() =>
+                    changeLanguage("es")
+                  }
+                >
+                  ES ·{" "}
+                  {t(
+                    "language.spanish"
+                  )}
+                </button>
+
+                <button
+                  type="button"
+                  className={
+                    language === "en"
+                      ? "accessibility-option active"
+                      : "accessibility-option"
+                  }
+                  aria-pressed={
+                    language === "en"
+                  }
+                  onClick={() =>
+                    changeLanguage("en")
+                  }
+                >
+                  EN ·{" "}
+                  {t(
+                    "language.english"
+                  )}
+                </button>
+              </div>
+            </fieldset>
+
+            <fieldset>
+              <legend>
+                {t("accessibility.theme")}
+              </legend>
+
+              <div className="accessibility-option-grid">
+                <button
+                  type="button"
+                  className={
+                    preferences.theme ===
+                    "light"
+                      ? "accessibility-option active"
+                      : "accessibility-option"
+                  }
+                  aria-pressed={
+                    preferences.theme ===
+                    "light"
                   }
                   onClick={() =>
                     updatePreference(
@@ -162,18 +263,22 @@ function AccessibilityPanel() {
                     size={17}
                   />
 
-                  Claro
+                  {t(
+                    "accessibility.light"
+                  )}
                 </button>
 
                 <button
                   type="button"
                   className={
-                    preferences.theme === "dark"
+                    preferences.theme ===
+                    "dark"
                       ? "accessibility-option active"
                       : "accessibility-option"
                   }
                   aria-pressed={
-                    preferences.theme === "dark"
+                    preferences.theme ===
+                    "dark"
                   }
                   onClick={() =>
                     updatePreference(
@@ -187,24 +292,32 @@ function AccessibilityPanel() {
                     size={17}
                   />
 
-                  Oscuro
+                  {t(
+                    "accessibility.dark"
+                  )}
                 </button>
               </div>
             </fieldset>
 
             <fieldset>
-              <legend>Contraste</legend>
+              <legend>
+                {t(
+                  "accessibility.contrast"
+                )}
+              </legend>
 
               <div className="accessibility-option-grid">
                 <button
                   type="button"
                   className={
-                    preferences.contrast === "normal"
+                    preferences.contrast ===
+                    "normal"
                       ? "accessibility-option active"
                       : "accessibility-option"
                   }
                   aria-pressed={
-                    preferences.contrast === "normal"
+                    preferences.contrast ===
+                    "normal"
                   }
                   onClick={() =>
                     updatePreference(
@@ -213,18 +326,22 @@ function AccessibilityPanel() {
                     )
                   }
                 >
-                  Normal
+                  {t(
+                    "accessibility.normal"
+                  )}
                 </button>
 
                 <button
                   type="button"
                   className={
-                    preferences.contrast === "high"
+                    preferences.contrast ===
+                    "high"
                       ? "accessibility-option active"
                       : "accessibility-option"
                   }
                   aria-pressed={
-                    preferences.contrast === "high"
+                    preferences.contrast ===
+                    "high"
                   }
                   onClick={() =>
                     updatePreference(
@@ -233,87 +350,134 @@ function AccessibilityPanel() {
                     )
                   }
                 >
-                  Alto
+                  {t(
+                    "accessibility.high"
+                  )}
                 </button>
               </div>
             </fieldset>
 
             <fieldset>
-              <legend>Tamaño del texto</legend>
+              <legend>
+                {t(
+                  "accessibility.fontSize"
+                )}
+              </legend>
 
               <div className="accessibility-option-grid accessibility-font-options">
                 {[
-                  ["normal", "A"],
-                  ["large", "A+"],
-                  ["x-large", "A++"],
-                ].map(([value, label]) => (
-                  <button
-                    type="button"
-                    key={value}
-                    className={
-                      preferences.fontSize === value
-                        ? "accessibility-option active"
-                        : "accessibility-option"
-                    }
-                    aria-pressed={
-                      preferences.fontSize === value
-                    }
-                    onClick={() =>
-                      updatePreference(
-                        "fontSize",
+                  [
+                    "normal",
+                    t(
+                      "accessibility.fontNormal"
+                    ),
+                  ],
+                  [
+                    "large",
+                    t(
+                      "accessibility.fontLarge"
+                    ),
+                  ],
+                  [
+                    "x-large",
+                    t(
+                      "accessibility.fontXLarge"
+                    ),
+                  ],
+                ].map(
+                  ([value, label]) => (
+                    <button
+                      type="button"
+                      key={value}
+                      className={
+                        preferences.fontSize ===
                         value
-                      )
-                    }
-                  >
-                    {label}
-                  </button>
-                ))}
+                          ? "accessibility-option active"
+                          : "accessibility-option"
+                      }
+                      aria-pressed={
+                        preferences.fontSize ===
+                        value
+                      }
+                      onClick={() =>
+                        updatePreference(
+                          "fontSize",
+                          value
+                        )
+                      }
+                    >
+                      {label}
+                    </button>
+                  )
+                )}
               </div>
 
               <p className="accessibility-help">
-                Ajusta el tamaño general del contenido.
+                {t(
+                  "accessibility.fontHelp"
+                )}
               </p>
             </fieldset>
 
             <fieldset>
-              <legend>Modo de daltonismo</legend>
+              <legend>
+                {t(
+                  "accessibility.colorBlind"
+                )}
+              </legend>
 
               <select
-                value={preferences.colorBlindMode}
+                value={
+                  preferences.colorBlindMode
+                }
                 onChange={(event) =>
                   updatePreference(
                     "colorBlindMode",
                     event.target.value
                   )
                 }
-                aria-label="Seleccionar modo de daltonismo"
+                aria-label={t(
+                  "accessibility.colorBlind"
+                )}
               >
                 <option value="none">
-                  Ninguno
+                  {t(
+                    "accessibility.none"
+                  )}
                 </option>
 
                 <option value="protanopia">
-                  Protanopia
+                  {t(
+                    "accessibility.protanopia"
+                  )}
                 </option>
 
                 <option value="deuteranopia">
-                  Deuteranopia
+                  {t(
+                    "accessibility.deuteranopia"
+                  )}
                 </option>
 
                 <option value="tritanopia">
-                  Tritanopia
+                  {t(
+                    "accessibility.tritanopia"
+                  )}
                 </option>
               </select>
 
               <p className="accessibility-help">
-                Simula diferentes formas de percepción
-                del color sin modificar el resto de las
-                preferencias.
+                {t(
+                  "accessibility.colorBlindHelp"
+                )}
               </p>
             </fieldset>
 
             <fieldset>
-              <legend>Texto a voz</legend>
+              <legend>
+                {t(
+                  "accessibility.speech"
+                )}
+              </legend>
 
               <button
                 type="button"
@@ -325,6 +489,7 @@ function AccessibilityPanel() {
                 aria-pressed={
                   preferences.speechEnabled
                 }
+                disabled={!speechSupported}
                 onClick={toggleSpeech}
               >
                 <Icon
@@ -333,18 +498,73 @@ function AccessibilityPanel() {
                 />
 
                 {preferences.speechEnabled
-                  ? "Texto a voz activado"
-                  : "Activar texto a voz"}
+                  ? t(
+                      "accessibility.speechEnabled"
+                    )
+                  : t(
+                      "accessibility.speechEnable"
+                    )}
               </button>
 
               <p
                 className="accessibility-help"
                 aria-live="polite"
               >
-                {isSpeaking
-                  ? "Leyendo el elemento seleccionado..."
-                  : "Al activarlo, lee el texto bajo el cursor o el elemento enfocado con el teclado."}
+                {!speechSupported
+                  ? t(
+                      "accessibility.speechUnavailable"
+                    )
+                  : isSpeaking
+                  ? t(
+                      "accessibility.speechReading"
+                    )
+                  : t(
+                      "accessibility.speechHelp"
+                    )}
               </p>
+
+              {speechSupported &&
+                speechVoices.length >
+                  0 && (
+                  <div className="accessibility-voice-selector">
+                    <label htmlFor="speech-voice">
+                      {t(
+                        "accessibility.voice"
+                      )}
+                    </label>
+
+                    <select
+                      id="speech-voice"
+                      value={
+                        preferences.voiceName
+                      }
+                      onChange={(event) =>
+                        updatePreference(
+                          "voiceName",
+                          event.target.value
+                        )
+                      }
+                    >
+                      <option value="">
+                        {t(
+                          "accessibility.voiceAuto"
+                        )}
+                      </option>
+
+                      {speechVoices.map(
+                        (voice) => (
+                          <option
+                            key={`${voice.name}-${voice.lang}`}
+                            value={voice.name}
+                          >
+                            {voice.name} (
+                            {voice.lang})
+                          </option>
+                        )
+                      )}
+                    </select>
+                  </div>
+                )}
 
               {isSpeaking && (
                 <button
@@ -352,7 +572,9 @@ function AccessibilityPanel() {
                   className="accessibility-speech-button"
                   onClick={stopSpeech}
                 >
-                  Detener lectura
+                  {t(
+                    "accessibility.speechStop"
+                  )}
                 </button>
               )}
             </fieldset>
@@ -363,7 +585,9 @@ function AccessibilityPanel() {
             className="accessibility-reset"
             onClick={resetPreferences}
           >
-            Restablecer preferencias
+            {t(
+              "accessibility.reset"
+            )}
           </button>
         </section>
       )}

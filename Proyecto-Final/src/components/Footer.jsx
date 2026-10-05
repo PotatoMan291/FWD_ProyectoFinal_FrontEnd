@@ -1,6 +1,13 @@
 import { Link } from "react-router-dom";
 
+import {
+  useLanguage,
+} from "../context/LanguageContext";
+
 function Footer() {
+  const { t } =
+    useLanguage();
+
   return (
     <footer className="footer">
       <div className="footer-container">
@@ -8,7 +15,6 @@ function Footer() {
           <Link
             to="/"
             className="footer-logo"
-            aria-label="PuraVida Trips - Inicio"
           >
             <img
               src="/logo.png"
@@ -17,58 +23,67 @@ function Footer() {
           </Link>
 
           <p>
-            Descubre Costa Rica, compara experiencias
-            y encuentra tu próxima aventura.
+            {t(
+              "footer.description"
+            )}
           </p>
         </div>
 
         <div className="footer-column">
-          <h3>Explorar</h3>
+          <h3>
+            {t("footer.explore")}
+          </h3>
 
           <Link to="/tours">
-            Tours
+            {t("footer.tours")}
           </Link>
 
           <Link to="/tours?categoria=Aventura">
-            Aventura
+            {t("footer.adventure")}
           </Link>
 
           <Link to="/tours?categoria=Naturaleza">
-            Naturaleza
+            {t("footer.nature")}
           </Link>
 
           <Link to="/tours?categoria=Playa">
-            Playa
+            {t("footer.beach")}
           </Link>
         </div>
 
         <div className="footer-column">
-          <h3>Cuenta</h3>
+          <h3>
+            {t("footer.account")}
+          </h3>
 
           <Link to="/login">
-            Iniciar sesión
+            {t("footer.login")}
           </Link>
 
           <Link to="/register">
-            Registrarse
+            {t("footer.register")}
           </Link>
         </div>
 
         <div className="footer-column">
-          <h3>PuraVida Trips</h3>
-
-          <span>Costa Rica</span>
+          <h3>
+            {t("footer.brand")}
+          </h3>
 
           <span>
-            Experiencias que conectan
+            {t("footer.country")}
+          </span>
+
+          <span>
+            {t("footer.slogan")}
           </span>
         </div>
       </div>
 
       <div className="footer-bottom">
         <p>
-          © 2026 PuraVida Trips. Todos los derechos
-          reservados.
+          © 2026 PuraVida Trips.{" "}
+          {t("footer.rights")}
         </p>
       </div>
     </footer>
