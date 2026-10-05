@@ -44,6 +44,13 @@ const api = {
     });
   },
 
+  patch(endpoint, data) {
+    return request(endpoint, {
+      method: "PATCH",
+      body: JSON.stringify(data),
+    });
+  },
+
   put(endpoint, data) {
     return request(endpoint, {
       method: "PUT",

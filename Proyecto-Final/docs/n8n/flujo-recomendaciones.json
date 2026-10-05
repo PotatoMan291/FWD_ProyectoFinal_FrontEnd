@@ -1,0 +1,53 @@
+{
+  "name": "PuraVida Trips - Recomendaciones IA",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "puravida-recomendaciones",
+        "responseMode": "responseNode"
+      },
+      "name": "Webhook - Recomendaciones",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $json.body ?? $json;\nreturn [{ json: { ...body, tours: Array.isArray(body.tours) ? body.tours : [] } }];"
+      },
+      "name": "Normalizar solicitud",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [240, 0]
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "Eres el asistente turístico de PuraVida Trips. Recomienda como máximo 3 tours usando únicamente el catálogo recibido. No inventes datos. Responde en el idioma solicitado. Devuelve exclusivamente JSON con message y recommendations. Cada recommendation debe tener id, name y reason."
+        }
+      },
+      "name": "AI Agent - PuraVida Trips",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [500, 0]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json.output ? JSON.parse($json.output) : $json }}"
+      },
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [820, 0]
+    }
+  ],
+  "connections": {
+    "Webhook - Recomendaciones": { "main": [[{ "node": "Normalizar solicitud", "type": "main", "index": 0 }]] },
+    "Normalizar solicitud": { "main": [[{ "node": "AI Agent - PuraVida Trips", "type": "main", "index": 0 }]] },
+    "AI Agent - PuraVida Trips": { "main": [[{ "node": "Respond to Webhook", "type": "main", "index": 0 }]] }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" }
+}

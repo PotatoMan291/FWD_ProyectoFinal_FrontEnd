@@ -1,38 +1,38 @@
 import {
   createContext,
-  useCallback,
   useContext,
   useEffect,
   useMemo,
   useState,
 } from "react";
 
-const AuthContext =
-  createContext(null);
+const AuthContext = createContext();
 
-const AUTH_STORAGE_KEY =
-  "puravida_auth";
+const AUTH_STORAGE_KEY = "puravida_auth";
 
-function AuthProvider({
-  children,
-}) {
-  const [user, setUser] =
-    useState(null);
-
-  const [loading, setLoading] =
-    useState(true);
+function AuthProvider({ children }) {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     try {
       const savedUser =
-        localStorage.getItem(
-          AUTH_STORAGE_KEY
-        );
+        localStorage.getItem(AUTH_STORAGE_KEY);
 
       if (savedUser) {
-        setUser(
-          JSON.parse(savedUser)
-        );
+        const parsedUser = JSON.parse(savedUser);
+
+        if (
+          parsedUser?.id &&
+          parsedUser?.correo &&
+          parsedUser?.rol
+        ) {
+          setUser(parsedUser);
+        } else {
+          localStorage.removeItem(
+            AUTH_STORAGE_KEY
+          );
+        }
       }
     } catch (error) {
       console.error(
@@ -48,81 +48,70 @@ function AuthProvider({
     }
   }, []);
 
-  const login = useCallback(
-    (userData) => {
-      const sessionUser = {
-        id: userData.id,
-        nombre: userData.nombre,
-        correo: userData.correo,
-        rol: userData.rol,
-      };
+  const login = (userData) => {
+    const sessionUser = {
+      id: userData.id,
+      nombre: userData.nombre,
+      correo: userData.correo,
+      rol: userData.rol,
+    };
 
-      localStorage.setItem(
-        AUTH_STORAGE_KEY,
-        JSON.stringify(
-          sessionUser
-        )
-      );
+    setUser(sessionUser);
 
-      setUser(sessionUser);
-
-      return sessionUser;
-    },
-    []
-  );
-
-  const logout = useCallback(
-    () => {
-      localStorage.removeItem(
-        AUTH_STORAGE_KEY
-      );
-
-      setUser(null);
-    },
-    []
-  );
-
-  const isAuthenticated =
-    Boolean(user);
-
-  const hasRole = useCallback(
-    (role) =>
-      user?.rol === role,
-    [user]
-  );
-
-  const hasAnyRole =
-    useCallback(
-      (roles) =>
-        roles.includes(user?.rol),
-      [user]
+    localStorage.setItem(
+      AUTH_STORAGE_KEY,
+      JSON.stringify(sessionUser)
     );
+
+    return sessionUser;
+  };
+
+  const updateSessionUser = (userData) => {
+    const sessionUser = {
+      id: userData.id,
+      nombre: userData.nombre,
+      correo: userData.correo,
+      rol: userData.rol,
+    };
+    setUser(sessionUser);
+    localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(sessionUser));
+    return sessionUser;
+  };
+
+  const logout = () => {
+    setUser(null);
+
+    localStorage.removeItem(
+      AUTH_STORAGE_KEY
+    );
+  };
+
+  const hasRole = (role) => {
+    return user?.rol === role;
+  };
+
+  const hasAnyRole = (roles) => {
+    return user
+      ? roles.includes(user.rol)
+      : false;
+  };
 
   const value = useMemo(
     () => ({
       user,
       loading,
-      isAuthenticated,
+      isAuthenticated: Boolean(user),
       login,
+      updateSessionUser,
       logout,
       hasRole,
       hasAnyRole,
     }),
-    [
-      user,
-      loading,
-      isAuthenticated,
-      login,
-      logout,
-      hasRole,
-      hasAnyRole,
-    ]
+    [user, loading]
   );
 
   return (
-    <AuthContext.Provider
-      value={value}
-    >
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   );

@@ -1,9 +1,4 @@
 import { Link } from "react-router-dom";
-
-import {
-  useLanguage,
-} from "../context/LanguageContext";
-
 import Icon from "./Icon";
 
 function ComparisonModal({
@@ -12,12 +7,7 @@ function ComparisonModal({
   onRemove,
   onClear,
 }) {
-  const { t, getTour } =
-    useLanguage();
-
-  if (
-    selectedTours.length === 0
-  ) {
+  if (selectedTours.length === 0) {
     return null;
   }
 
@@ -38,21 +28,16 @@ function ComparisonModal({
         <div className="comparison-modal-header">
           <div>
             <span className="section-eyebrow">
-              {t(
-                "comparison.eyebrow"
-              )}
+              Comparación
             </span>
 
             <h2 id="comparison-modal-title">
-              {t(
-                "comparison.title"
-              )}
+              Compara tus experiencias
             </h2>
 
             <p>
-              {t(
-                "comparison.description"
-              )}
+              Revisa las características de cada
+              tour antes de elegir tu experiencia.
             </p>
           </div>
 
@@ -60,9 +45,7 @@ function ComparisonModal({
             type="button"
             className="comparison-modal-close"
             onClick={onClose}
-            aria-label={t(
-              "comparison.close"
-            )}
+            aria-label="Cerrar comparación"
           >
             <Icon
               name="close"
@@ -75,204 +58,159 @@ function ComparisonModal({
           <div
             className={`comparison-columns comparison-columns-${selectedTours.length}`}
           >
-            {selectedTours.map(
-              (tour) => {
-                const translated =
-                  getTour(tour);
+            {selectedTours.map((tour) => {
+              const formattedPrice =
+                new Intl.NumberFormat(
+                  "es-CR",
+                  {
+                    style: "currency",
+                    currency: "CRC",
+                    maximumFractionDigits: 0,
+                  }
+                ).format(tour.precio);
 
-                const formattedPrice =
-                  new Intl.NumberFormat(
-                    "es-CR",
-                    {
-                      style:
-                        "currency",
-                      currency:
-                        "CRC",
-                      maximumFractionDigits: 0,
-                    }
-                  ).format(
-                    tour.precio
-                  );
+              return (
+                <article
+                  className="comparison-tour-column"
+                  key={tour.id}
+                >
+                  <div className="comparison-tour-image">
+                    <img
+                      src={tour.imagen}
+                      alt={`Experiencia turística: ${tour.nombre}`}
+                    />
 
-                return (
-                  <article
-                    className="comparison-tour-column"
-                    key={tour.id}
-                  >
-                    <div className="comparison-tour-image">
-                      <img
-                        src={
-                          tour.imagen
+                    <span className="tour-card-category">
+                      {tour.categoria}
+                    </span>
+                  </div>
+
+                  <div className="comparison-tour-content">
+                    <div className="comparison-tour-heading">
+                      <h3>
+                        {tour.nombre}
+                      </h3>
+
+                      <button
+                        type="button"
+                        className="comparison-remove"
+                        onClick={() =>
+                          onRemove(
+                            tour.id
+                          )
                         }
-                        alt={`${translated.nombre}`}
-                      />
-
-                      <span className="tour-card-category">
-                        {
-                          translated.categoria
-                        }
-                      </span>
-                    </div>
-
-                    <div className="comparison-tour-content">
-                      <div className="comparison-tour-heading">
-                        <h3>
-                          {
-                            translated.nombre
-                          }
-                        </h3>
-
-                        <button
-                          type="button"
-                          className="comparison-remove"
-                          onClick={() =>
-                            onRemove(
-                              tour.id
-                            )
-                          }
-                          aria-label={`${t(
-                            "tour.removeFromComparison"
-                          )}: ${
-                            translated.nombre
-                          }`}
-                        >
-                          <Icon
-                            name="close"
-                            size={15}
-                          />
-                        </button>
-                      </div>
-
-                      <div className="comparison-item">
-                        <span>
-                          {t(
-                            "comparison.location"
-                          )}
-                        </span>
-
-                        <strong>
-                          {
-                            translated.ubicacion
-                          }
-                        </strong>
-                      </div>
-
-                      <div className="comparison-item">
-                        <span>
-                          {t(
-                            "comparison.price"
-                          )}
-                        </span>
-
-                        <strong>
-                          {
-                            formattedPrice
-                          }
-                        </strong>
-                      </div>
-
-                      <div className="comparison-item">
-                        <span>
-                          {t(
-                            "comparison.duration"
-                          )}
-                        </span>
-
-                        <strong>
-                          {
-                            translated.duracion
-                          }
-                        </strong>
-                      </div>
-
-                      <div className="comparison-item">
-                        <span>
-                          {t(
-                            "comparison.capacity"
-                          )}
-                        </span>
-
-                        <strong>
-                          {
-                            translated.personas
-                          }
-                        </strong>
-                      </div>
-
-                      <div className="comparison-item">
-                        <span>
-                          {t(
-                            "comparison.operator"
-                          )}
-                        </span>
-
-                        <strong>
-                          {tour.operador}
-                        </strong>
-                      </div>
-
-                      <div className="comparison-item comparison-description">
-                        <span>
-                          {t(
-                            "comparison.descriptionLabel"
-                          )}
-                        </span>
-
-                        <p>
-                          {
-                            translated.descripcion
-                          }
-                        </p>
-                      </div>
-
-                      <div className="comparison-item">
-                        <span>
-                          {t(
-                            "comparison.features"
-                          )}
-                        </span>
-
-                        <div className="comparison-features">
-                          {translated.caracteristicas?.map(
-                            (feature) => (
-                              <span
-                                key={
-                                  feature
-                                }
-                                className="tour-feature-badge"
-                              >
-                                {
-                                  feature
-                                }
-                              </span>
-                            )
-                          )}
-                        </div>
-                      </div>
-
-                      <Link
-                        to={`/tours/${tour.id}`}
-                        className="comparison-details-button"
-                        onClick={onClose}
+                        aria-label={`Quitar ${tour.nombre} de la comparación`}
                       >
-                        {t(
-                          "comparison.details"
-                        )}
-                      </Link>
+                        <Icon
+                          name="close"
+                          size={15}
+                        />
+                      </button>
                     </div>
-                  </article>
-                );
-              }
-            )}
+
+                    <div className="comparison-item">
+                      <span>
+                        Ubicación
+                      </span>
+
+                      <strong>
+                        {tour.ubicacion}
+                      </strong>
+                    </div>
+
+                    <div className="comparison-item">
+                      <span>
+                        Precio
+                      </span>
+
+                      <strong>
+                        {formattedPrice}
+                      </strong>
+                    </div>
+
+                    <div className="comparison-item">
+                      <span>
+                        Duración
+                      </span>
+
+                      <strong>
+                        {tour.duracion}
+                      </strong>
+                    </div>
+
+                    <div className="comparison-item">
+                      <span>
+                        Capacidad
+                      </span>
+
+                      <strong>
+                        {tour.personas}
+                      </strong>
+                    </div>
+
+                    <div className="comparison-item">
+                      <span>
+                        Operador
+                      </span>
+
+                      <strong>
+                        {tour.operador}
+                      </strong>
+                    </div>
+
+                    <div className="comparison-item comparison-description">
+                      <span>
+                        Descripción
+                      </span>
+
+                      <p>
+                        {tour.descripcion}
+                      </p>
+                    </div>
+
+                    <div className="comparison-item">
+                      <span>
+                        Características
+                      </span>
+
+                      <div className="comparison-features">
+                        {tour.caracteristicas?.map(
+                          (
+                            caracteristica
+                          ) => (
+                            <span
+                              key={
+                                caracteristica
+                              }
+                              className="tour-feature-badge"
+                            >
+                              {
+                                caracteristica
+                              }
+                            </span>
+                          )
+                        )}
+                      </div>
+                    </div>
+
+                    <Link
+                      to={`/tours/${tour.id}`}
+                      className="comparison-details-button"
+                      onClick={onClose}
+                    >
+                      Ver detalles del tour
+                    </Link>
+                  </div>
+                </article>
+              );
+            })}
           </div>
         </div>
 
         <div className="comparison-modal-footer">
           <span>
-            {selectedTours.length} / 3{" "}
-            {t(
-              "comparison.selected"
-            )}
+            {selectedTours.length} de 3
+            experiencias seleccionadas
           </span>
 
           <div>
@@ -281,9 +219,7 @@ function ComparisonModal({
               className="compare-clear-button"
               onClick={onClear}
             >
-              {t(
-                "comparison.clear"
-              )}
+              Limpiar comparación
             </button>
 
             <button
@@ -291,9 +227,7 @@ function ComparisonModal({
               className="comparison-close-button"
               onClick={onClose}
             >
-              {t(
-                "comparison.continue"
-              )}
+              Seguir explorando
             </button>
           </div>
         </div>

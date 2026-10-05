@@ -7,6 +7,7 @@ function Button({
   variant = "primary",
   onClick,
   className = "",
+  disabled = false,
 }) {
   const classes = `button button-${variant} ${className}`;
 
@@ -23,6 +24,7 @@ function Button({
       type={type}
       className={classes}
       onClick={onClick}
+      disabled={disabled}
     >
       {children}
     </button>

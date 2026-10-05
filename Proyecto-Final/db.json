@@ -82,14 +82,15 @@
       "precio": 35000,
       "duracion": "6 horas",
       "personas": "2 - 10 personas",
-      "imagen": "https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?auto=format&fit=crop&w=900&q=80",
+      "imagen": "https://res.cloudinary.com/wrwdszkl/image/upload/v1791234932/volcanArenal.jpg",
       "descripcion": "Explora los senderos cercanos al Volcán Arenal y disfruta de los paisajes naturales de la zona.",
       "caracteristicas": [
         "Guía incluido",
         "Transporte",
         "Almuerzo"
       ],
-      "operador": "Arenal Adventures"
+      "operador": "Arenal Adventures",
+      "operadorId": "3"
     },
     {
       "id": "2",
@@ -99,14 +100,15 @@
       "precio": 42000,
       "duracion": "4 horas",
       "personas": "1 - 8 personas",
-      "imagen": "https://images.unsplash.com/photo-1527631746610-bca00a040d60?auto=format&fit=crop&w=900&q=80",
+      "imagen": "https://res.cloudinary.com/wrwdszkl/image/upload/v1791234932/monteverde.jpg",
       "descripcion": "Vive una experiencia de aventura recorriendo las copas de los árboles de Monteverde.",
       "caracteristicas": [
         "Equipo incluido",
         "Guía incluido",
         "Seguro"
       ],
-      "operador": "Monteverde Experience"
+      "operador": "Monteverde Experience",
+      "operadorId": "3"
     },
     {
       "id": "3",
@@ -116,14 +118,15 @@
       "precio": 28000,
       "duracion": "3 horas",
       "personas": "2 - 12 personas",
-      "imagen": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=900&q=80",
+      "imagen": "https://res.cloudinary.com/wrwdszkl/image/upload/v1791234932/tamarindo.jpg",
       "descripcion": "Disfruta una tarde frente al océano y contempla el atardecer desde Playa Tamarindo.",
       "caracteristicas": [
         "Bebidas",
         "Guía incluido",
         "Fotografías"
       ],
-      "operador": "Tamarindo Tours"
+      "operador": "Tamarindo Tours",
+      "operadorId": "3"
     },
     {
       "id": "4",
@@ -133,7 +136,7 @@
       "precio": 18000,
       "duracion": "3 horas",
       "personas": "2 - 15 personas",
-      "imagen": "https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?auto=format&fit=crop&w=900&q=80",
+      "imagen": "https://res.cloudinary.com/wrwdszkl/image/upload/v1791234947/tourSanJose.jpg",
       "descripcion": "Conoce algunos de los principales espacios históricos y culturales de San José.",
       "caracteristicas": [
         "Guía local",
@@ -150,7 +153,7 @@
       "precio": 55000,
       "duracion": "8 horas",
       "personas": "2 - 8 personas",
-      "imagen": "https://images.unsplash.com/photo-1530866495561-507c3c8f1c4c?auto=format&fit=crop&w=900&q=80",
+      "imagen": "https://res.cloudinary.com/wrwdszkl/image/upload/v1791234948/rioPacuare.jpg",
       "descripcion": "Recorre los rápidos del Río Pacuare en una experiencia llena de adrenalina y naturaleza.",
       "caracteristicas": [
         "Equipo incluido",
@@ -167,7 +170,7 @@
       "precio": 32000,
       "duracion": "5 horas",
       "personas": "2 - 12 personas",
-      "imagen": "https://images.unsplash.com/photo-1516690561799-46d8f74f9abf?auto=format&fit=crop&w=900&q=80",
+      "imagen": "https://res.cloudinary.com/wrwdszkl/image/upload/v1791234948/manuelAntonio.webp",
       "descripcion": "Descubre la biodiversidad del Parque Nacional Manuel Antonio acompañado por un guía local.",
       "caracteristicas": [
         "Guía incluido",
@@ -184,7 +187,7 @@
       "precio": 45000,
       "duracion": "6 horas",
       "personas": "1 - 10 personas",
-      "imagen": "https://images.unsplash.com/photo-1539367628448-4bc5c9d171c8?auto=format&fit=crop&w=900&q=80",
+      "imagen": "https://res.cloudinary.com/wrwdszkl/image/upload/v1791234947/laFortuna.jpg",
       "descripcion": "Relájate en aguas termales rodeadas de naturaleza en la zona de La Fortuna.",
       "caracteristicas": [
         "Entrada incluida",
@@ -201,7 +204,7 @@
       "precio": 48000,
       "duracion": "7 horas",
       "personas": "2 - 15 personas",
-      "imagen": "https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=900&q=80",
+      "imagen": "https://res.cloudinary.com/wrwdszkl/image/upload/v1791234947/islaTortuga.png",
       "descripcion": "Navega hasta Isla Tortuga y descubre la vida marina durante una experiencia de snorkeling.",
       "caracteristicas": [
         "Equipo incluido",
