@@ -1,32 +1,54 @@
 import { Link } from "react-router-dom";
 
-import { useAuth } from "../context/AuthContext";
+import {
+  useAuth,
+} from "../context/AuthContext";
 
-function RoleDashboard({ role }) {
-  const { user } = useAuth();
+import {
+  useLanguage,
+} from "../context/LanguageContext";
+
+function RoleDashboard({
+  role,
+}) {
+  const { user } =
+    useAuth();
+
+  const { t } =
+    useLanguage();
 
   const roleInfo = {
     turista: {
-      title: "Panel del turista",
-      description:
-        "Aquí podrás gestionar tus favoritos, reservas y perfil.",
+      title: t(
+        "role.touristTitle"
+      ),
+      description: t(
+        "role.touristDescription"
+      ),
     },
 
     operador: {
-      title: "Panel del operador",
-      description:
-        "Aquí podrás administrar tus tours, disponibilidad y reservas.",
+      title: t(
+        "role.operatorTitle"
+      ),
+      description: t(
+        "role.operatorDescription"
+      ),
     },
 
     admin: {
-      title: "Panel administrativo",
-      description:
-        "Aquí podrás gestionar operadores, tours, categorías y contenido.",
+      title: t(
+        "role.adminTitle"
+      ),
+      description: t(
+        "role.adminDescription"
+      ),
     },
   };
 
   const currentRole =
-    roleInfo[role] || roleInfo.turista;
+    roleInfo[role] ||
+    roleInfo.turista;
 
   return (
     <main className="auth-page">
@@ -44,7 +66,8 @@ function RoleDashboard({ role }) {
           </h1>
 
           <p>
-            Hola, {user?.nombre}.
+            {t("role.greeting")},{" "}
+            {user?.nombre}.
           </p>
 
           <p>
@@ -55,14 +78,16 @@ function RoleDashboard({ role }) {
         <div className="auth-demo">
           <p>
             <strong>
-              Módulo en construcción
+              {t(
+                "role.underConstruction"
+              )}
             </strong>
           </p>
 
           <span>
-            Este espacio será reemplazado por el
-            panel correspondiente durante las
-            siguientes etapas del proyecto.
+            {t(
+              "role.moduleDescription"
+            )}
           </span>
         </div>
 
@@ -70,7 +95,7 @@ function RoleDashboard({ role }) {
           to="/"
           className="button button-primary"
         >
-          Volver al inicio
+          {t("role.backHome")}
         </Link>
       </section>
     </main>

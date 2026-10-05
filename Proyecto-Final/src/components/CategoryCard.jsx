@@ -1,4 +1,7 @@
 import { Link } from "react-router-dom";
+
+import { useLanguage } from "../context/LanguageContext";
+
 import Icon from "./Icon";
 
 function CategoryCard({
@@ -7,6 +10,9 @@ function CategoryCard({
   description,
   search,
 }) {
+  const { t } =
+    useLanguage();
+
   return (
     <Link
       to={`/tours?categoria=${encodeURIComponent(
@@ -29,7 +35,8 @@ function CategoryCard({
       <p>{description}</p>
 
       <span className="category-card-link">
-        Explorar
+        {t("category.explore")}
+
         <Icon
           name="arrowRight"
           size={16}

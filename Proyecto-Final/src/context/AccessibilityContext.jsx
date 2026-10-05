@@ -7,8 +7,9 @@ import {
   useState,
 } from "react";
 
-const AccessibilityContext =
-  createContext();
+import { useLanguage } from "./LanguageContext";
+
+const AccessibilityContext = createContext(null);
 
 const ACCESSIBILITY_STORAGE_KEY =
   "puravida_accessibility";
@@ -19,64 +20,125 @@ const defaultPreferences = {
   fontSize: "normal",
   colorBlindMode: "none",
   speechEnabled: false,
+  voiceName: "",
 };
 
-function getPreferredSpanishVoice(voices) {
+function getSpeechSupport() {
+  return (
+    typeof window !== "undefined" &&
+    "speechSynthesis" in window &&
+    "SpeechSynthesisUtterance" in window
+  );
+}
+
+function getVoiceScore(
+  voice,
+  language
+) {
+  const voiceLanguage =
+    voice.lang?.toLowerCase() || "";
+
+  const targetLanguage =
+    language === "en"
+      ? "en"
+      : "es";
+
+  let score = 0;
+
+  if (
+    voiceLanguage ===
+    (targetLanguage === "en"
+      ? "en-us"
+      : "es-cr")
+  ) {
+    score += 100;
+  }
+
+  if (
+    voiceLanguage.startsWith(
+      targetLanguage
+    )
+  ) {
+    score += 70;
+  }
+
+  if (
+    voice.name
+      ?.toLowerCase()
+      .includes("google")
+  ) {
+    score += 20;
+  }
+
+  if (
+    voice.name
+      ?.toLowerCase()
+      .includes("microsoft")
+  ) {
+    score += 15;
+  }
+
+  return score;
+}
+
+function findBestVoice(
+  voices,
+  language,
+  selectedVoiceName
+) {
   if (!voices.length) {
     return null;
   }
 
-  const spanishVoices = voices.filter(
-    (voice) =>
-      voice.lang
-        ?.toLowerCase()
-        .startsWith("es")
-  );
+  if (selectedVoiceName) {
+    const selected =
+      voices.find(
+        (voice) =>
+          voice.name ===
+          selectedVoiceName
+      );
 
-  return (
-    spanishVoices.find((voice) =>
-      voice.name
-        .toLowerCase()
-        .includes("google")
-    ) ||
-    spanishVoices.find((voice) =>
-      voice.lang
-        .toLowerCase()
-        .includes("es-cr")
-    ) ||
-    spanishVoices.find((voice) =>
-      voice.lang
-        .toLowerCase()
-        .includes("es-mx")
-    ) ||
-    spanishVoices.find((voice) =>
-      voice.lang
-        .toLowerCase()
-        .includes("es-es")
-    ) ||
-    spanishVoices[0] ||
-    voices[0]
-  );
+    if (selected) {
+      return selected;
+    }
+  }
+
+  return [...voices].sort(
+    (a, b) =>
+      getVoiceScore(
+        b,
+        language
+      ) -
+      getVoiceScore(
+        a,
+        language
+      )
+  )[0];
 }
 
-function AccessibilityProvider({ children }) {
+function AccessibilityProvider({
+  children,
+}) {
+  const { language } =
+    useLanguage();
+
   const [preferences, setPreferences] =
     useState(() => {
       try {
-        const savedPreferences =
+        const saved =
           localStorage.getItem(
             ACCESSIBILITY_STORAGE_KEY
           );
 
-        if (savedPreferences) {
+        if (saved) {
           return {
             ...defaultPreferences,
-            ...JSON.parse(savedPreferences),
+            ...JSON.parse(saved),
           };
         }
       } catch (error) {
         console.error(
-          "Error al cargar las preferencias de accesibilidad:",
+          "No se pudieron cargar las preferencias:",
           error
         );
       }
@@ -84,17 +146,27 @@ function AccessibilityProvider({ children }) {
       return defaultPreferences;
     });
 
-  const [isSpeaking, setIsSpeaking] =
-    useState(false);
-
   const [voices, setVoices] =
     useState([]);
 
+  const [isSpeaking, setIsSpeaking] =
+    useState(false);
+
+  const speechSupported =
+    getSpeechSupport();
+
   useEffect(() => {
-    localStorage.setItem(
-      ACCESSIBILITY_STORAGE_KEY,
-      JSON.stringify(preferences)
-    );
+    try {
+      localStorage.setItem(
+        ACCESSIBILITY_STORAGE_KEY,
+        JSON.stringify(preferences)
+      );
+    } catch (error) {
+      console.error(
+        "No se pudieron guardar las preferencias:",
+        error
+      );
+    }
   }, [preferences]);
 
   useEffect(() => {
@@ -115,16 +187,21 @@ function AccessibilityProvider({ children }) {
   }, [preferences]);
 
   useEffect(() => {
-    if (
-      !("speechSynthesis" in window)
-    ) {
+    if (!speechSupported) {
+      setVoices([]);
       return undefined;
     }
 
     const loadVoices = () => {
-      setVoices(
-        window.speechSynthesis.getVoices()
-      );
+      const available =
+        window.speechSynthesis
+          .getVoices()
+          .filter(
+            (voice) =>
+              voice?.name
+          );
+
+      setVoices(available);
     };
 
     loadVoices();
@@ -134,39 +211,49 @@ function AccessibilityProvider({ children }) {
       loadVoices
     );
 
+    const timer =
+      window.setTimeout(
+        loadVoices,
+        500
+      );
+
     return () => {
+      window.clearTimeout(timer);
+
       window.speechSynthesis.removeEventListener(
         "voiceschanged",
         loadVoices
       );
     };
-  }, []);
+  }, [speechSupported]);
 
-  const updatePreference = useCallback(
-    (key, value) => {
-      setPreferences(
-        (currentPreferences) => ({
-          ...currentPreferences,
-          [key]: value,
-        })
-      );
-    },
-    []
-  );
+  const updatePreference =
+    useCallback(
+      (key, value) => {
+        setPreferences(
+          (current) => ({
+            ...current,
+            [key]: value,
+          })
+        );
+      },
+      []
+    );
 
-  const stopSpeech = useCallback(() => {
-    if ("speechSynthesis" in window) {
-      window.speechSynthesis.cancel();
-    }
+  const stopSpeech =
+    useCallback(() => {
+      if (speechSupported) {
+        window.speechSynthesis.cancel();
+      }
 
-    setIsSpeaking(false);
-  }, []);
+      setIsSpeaking(false);
+    }, [speechSupported]);
 
   const speak = useCallback(
     (text) => {
       if (
         !preferences.speechEnabled ||
-        !("speechSynthesis" in window) ||
+        !speechSupported ||
         !text?.trim()
       ) {
         return;
@@ -175,50 +262,79 @@ function AccessibilityProvider({ children }) {
       const cleanText = text
         .replace(/\s+/g, " ")
         .trim()
-        .slice(0, 320);
+        .slice(0, 500);
 
       if (!cleanText) {
         return;
       }
 
-      window.speechSynthesis.cancel();
+      const synth =
+        window.speechSynthesis;
+
+      synth.cancel();
+
+      const voice =
+        findBestVoice(
+          voices,
+          language,
+          preferences.voiceName
+        );
 
       const utterance =
         new SpeechSynthesisUtterance(
           cleanText
         );
 
-      const preferredVoice =
-        getPreferredSpanishVoice(
-          voices
-        );
-
       utterance.lang =
-        preferredVoice?.lang ||
-        "es-CR";
+        voice?.lang ||
+        (language === "en"
+          ? "en-US"
+          : "es-CR");
 
-      utterance.voice =
-        preferredVoice || null;
+      if (voice) {
+        utterance.voice = voice;
+      }
 
       utterance.rate = 0.92;
       utterance.pitch = 1;
       utterance.volume = 1;
 
-      utterance.onstart = () =>
+      utterance.onstart = () => {
         setIsSpeaking(true);
+      };
 
-      utterance.onend = () =>
+      utterance.onend = () => {
         setIsSpeaking(false);
+      };
 
-      utterance.onerror = () =>
+      utterance.onerror = () => {
         setIsSpeaking(false);
+      };
 
-      window.speechSynthesis.speak(
-        utterance
-      );
+      try {
+        synth.resume();
+      } catch {
+        // Algunos navegadores no requieren resume().
+      }
+
+      window.setTimeout(() => {
+        try {
+          synth.speak(utterance);
+        } catch (error) {
+          console.error(
+            "No se pudo iniciar el texto a voz:",
+            error
+          );
+
+          setIsSpeaking(false);
+        }
+      }, 50);
     },
     [
+      language,
       preferences.speechEnabled,
+      preferences.voiceName,
+      speechSupported,
       voices,
     ]
   );
@@ -226,27 +342,38 @@ function AccessibilityProvider({ children }) {
   useEffect(() => {
     if (
       !preferences.speechEnabled ||
-      !("speechSynthesis" in window)
+      !speechSupported
     ) {
       return undefined;
     }
 
-    let hoverTimer;
+    let hoverTimer = null;
     let lastElement = null;
 
-    const getSpeakableElement = (
-      target
-    ) => {
-      if (
-        !(target instanceof Element)
-      ) {
-        return null;
-      }
+    const getSpeakableElement =
+      (target) => {
+        if (
+          !(target instanceof Element)
+        ) {
+          return null;
+        }
 
-      return target.closest(
-        '[data-speak], h1, h2, h3, h4, p, a, button, label, legend, li'
-      );
-    };
+        return target.closest(
+          [
+            "[data-speak]",
+            "h1",
+            "h2",
+            "h3",
+            "h4",
+            "p",
+            "a",
+            "button",
+            "label",
+            "legend",
+            "li",
+          ].join(", ")
+        );
+      };
 
     const getText = (element) => {
       if (!element) {
@@ -263,48 +390,56 @@ function AccessibilityProvider({ children }) {
       );
     };
 
-    const handlePointerOver = (
-      event
-    ) => {
-      const element =
-        getSpeakableElement(
-          event.target
-        );
-
-      if (
+    const shouldIgnore =
+      (element) =>
         !element ||
         element.closest(
           ".accessibility-widget"
-        )
-      ) {
-        return;
-      }
+        ) ||
+        element.matches(
+          "input, textarea, select"
+        );
 
-      if (
-        event.relatedTarget instanceof
-          Node &&
-        element.contains(
-          event.relatedTarget
-        )
-      ) {
-        return;
-      }
+    const handlePointerOver =
+      (event) => {
+        const element =
+          getSpeakableElement(
+            event.target
+          );
 
-      if (
-        element === lastElement
-      ) {
-        return;
-      }
+        if (shouldIgnore(element)) {
+          return;
+        }
 
-      lastElement = element;
+        if (
+          event.relatedTarget instanceof
+            Node &&
+          element.contains(
+            event.relatedTarget
+          )
+        ) {
+          return;
+        }
 
-      clearTimeout(hoverTimer);
+        if (
+          element === lastElement
+        ) {
+          return;
+        }
 
-      hoverTimer =
-        window.setTimeout(() => {
-          speak(getText(element));
-        }, 450);
-    };
+        lastElement = element;
+
+        window.clearTimeout(
+          hoverTimer
+        );
+
+        hoverTimer =
+          window.setTimeout(() => {
+            speak(
+              getText(element)
+            );
+          }, 550);
+      };
 
     const handleFocusIn = (
       event
@@ -314,12 +449,7 @@ function AccessibilityProvider({ children }) {
           event.target
         );
 
-      if (
-        !element ||
-        element.closest(
-          ".accessibility-widget"
-        )
-      ) {
+      if (shouldIgnore(element)) {
         return;
       }
 
@@ -339,7 +469,9 @@ function AccessibilityProvider({ children }) {
     );
 
     return () => {
-      clearTimeout(hoverTimer);
+      window.clearTimeout(
+        hoverTimer
+      );
 
       document.removeEventListener(
         "pointerover",
@@ -353,27 +485,33 @@ function AccessibilityProvider({ children }) {
     };
   }, [
     preferences.speechEnabled,
+    speechSupported,
     speak,
   ]);
+
+  const toggleSpeech =
+    useCallback(() => {
+      if (!speechSupported) {
+        return;
+      }
+
+      setPreferences(
+        (current) => ({
+          ...current,
+          speechEnabled:
+            !current.speechEnabled,
+        })
+      );
+    }, [speechSupported]);
 
   const resetPreferences =
     useCallback(() => {
       stopSpeech();
+
       setPreferences(
         defaultPreferences
       );
     }, [stopSpeech]);
-
-  const toggleSpeech =
-    useCallback(() => {
-      setPreferences(
-        (currentPreferences) => ({
-          ...currentPreferences,
-          speechEnabled:
-            !currentPreferences.speechEnabled,
-        })
-      );
-    }, []);
 
   useEffect(() => {
     if (!preferences.speechEnabled) {
@@ -385,27 +523,35 @@ function AccessibilityProvider({ children }) {
   ]);
 
   useEffect(() => {
-    return () => stopSpeech();
-  }, [stopSpeech]);
+    return () => {
+      if (speechSupported) {
+        window.speechSynthesis.cancel();
+      }
+    };
+  }, [speechSupported]);
 
   const value = useMemo(
     () => ({
       preferences,
+      voices,
       isSpeaking,
+      speechSupported,
       updatePreference,
-      resetPreferences,
       speak,
       stopSpeech,
       toggleSpeech,
+      resetPreferences,
     }),
     [
       preferences,
+      voices,
       isSpeaking,
+      speechSupported,
       updatePreference,
-      resetPreferences,
       speak,
       stopSpeech,
       toggleSpeech,
+      resetPreferences,
     ]
   );
 

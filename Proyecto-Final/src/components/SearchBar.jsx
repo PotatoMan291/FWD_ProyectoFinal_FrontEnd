@@ -1,15 +1,23 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+
+import { useLanguage } from "../context/LanguageContext";
+
 import Icon from "./Icon";
 
 function SearchBar() {
-  const [search, setSearch] = useState("");
+  const [search, setSearch] =
+    useState("");
+
   const navigate = useNavigate();
+
+  const { t } = useLanguage();
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    const searchValue = search.trim();
+    const searchValue =
+      search.trim();
 
     if (!searchValue) {
       navigate("/tours");
@@ -17,7 +25,9 @@ function SearchBar() {
     }
 
     navigate(
-      `/tours?search=${encodeURIComponent(searchValue)}`
+      `/tours?search=${encodeURIComponent(
+        searchValue
+      )}`
     );
   };
 
@@ -39,7 +49,7 @@ function SearchBar() {
 
         <div className="search-field-content">
           <label htmlFor="tour-search">
-            ¿Qué quieres explorar?
+            {t("search.label")}
           </label>
 
           <input
@@ -47,9 +57,13 @@ function SearchBar() {
             type="search"
             value={search}
             onChange={(event) =>
-              setSearch(event.target.value)
+              setSearch(
+                event.target.value
+              )
             }
-            placeholder="Ej. aventura, playa, naturaleza..."
+            placeholder={t(
+              "search.placeholder"
+            )}
           />
         </div>
       </div>
@@ -58,7 +72,7 @@ function SearchBar() {
         type="submit"
         className="search-button"
       >
-        Buscar
+        {t("search.button")}
       </button>
     </form>
   );

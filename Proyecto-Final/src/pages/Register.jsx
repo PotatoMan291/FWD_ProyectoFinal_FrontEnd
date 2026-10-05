@@ -10,21 +10,47 @@ import {
 import Swal from "sweetalert2";
 
 import api from "../services/api";
-import { useAuth } from "../context/AuthContext";
+
+import {
+  useAuth,
+} from "../context/AuthContext";
+
+import {
+  useLanguage,
+} from "../context/LanguageContext";
+
+function generateId() {
+  if (
+    typeof crypto !==
+      "undefined" &&
+    typeof crypto.randomUUID ===
+      "function"
+  ) {
+    return crypto.randomUUID();
+  }
+
+  return `${Date.now()}-${Math.random()
+    .toString(16)
+    .slice(2)}`;
+}
 
 function Register() {
-  const navigate = useNavigate();
+  const navigate =
+    useNavigate();
 
-  const {
-    login,
-  } = useAuth();
+  const { login } =
+    useAuth();
 
-  const [formData, setFormData] = useState({
-    nombre: "",
-    correo: "",
-    password: "",
-    confirmPassword: "",
-  });
+  const { t } =
+    useLanguage();
+
+  const [formData, setFormData] =
+    useState({
+      nombre: "",
+      correo: "",
+      password: "",
+      confirmPassword: "",
+    });
 
   const [errors, setErrors] =
     useState({});
@@ -32,21 +58,27 @@ function Register() {
   const [loading, setLoading] =
     useState(false);
 
-  const handleChange = (event) => {
+  const handleChange = (
+    event
+  ) => {
     const {
       name,
       value,
     } = event.target;
 
-    setFormData((previous) => ({
-      ...previous,
-      [name]: value,
-    }));
+    setFormData(
+      (previous) => ({
+        ...previous,
+        [name]: value,
+      })
+    );
 
-    setErrors((previous) => ({
-      ...previous,
-      [name]: "",
-    }));
+    setErrors(
+      (previous) => ({
+        ...previous,
+        [name]: "",
+      })
+    );
   };
 
   const validateForm = () => {
@@ -54,55 +86,79 @@ function Register() {
 
     if (!formData.nombre.trim()) {
       newErrors.nombre =
-        "Ingresa tu nombre.";
+        t(
+          "auth.nameRequired"
+        );
     } else if (
-      formData.nombre.trim().length < 2
+      formData.nombre.trim()
+        .length < 2
     ) {
       newErrors.nombre =
-        "El nombre debe tener al menos 2 caracteres.";
+        t(
+          "auth.nameMin"
+        );
     }
 
     if (!formData.correo.trim()) {
       newErrors.correo =
-        "Ingresa tu correo electrónico.";
+        t(
+          "auth.emailRequired"
+        );
     } else if (
       !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
         formData.correo
       )
     ) {
       newErrors.correo =
-        "Ingresa un correo electrónico válido.";
+        t(
+          "auth.invalidEmail"
+        );
     }
 
     if (!formData.password) {
       newErrors.password =
-        "Ingresa una contraseña.";
+        t(
+          "auth.passwordRequired"
+        );
     } else if (
-      formData.password.length < 6
+      formData.password.length <
+      6
     ) {
       newErrors.password =
-        "La contraseña debe tener al menos 6 caracteres.";
+        t(
+          "auth.passwordMin"
+        );
     }
 
     if (
       !formData.confirmPassword
     ) {
       newErrors.confirmPassword =
-        "Confirma tu contraseña.";
+        t(
+          "auth.confirmRequired"
+        );
     } else if (
       formData.password !==
       formData.confirmPassword
     ) {
       newErrors.confirmPassword =
-        "Las contraseñas no coinciden.";
+        t(
+          "auth.passwordsMismatch"
+        );
     }
 
     setErrors(newErrors);
 
-    return Object.keys(newErrors).length === 0;
+    return (
+      Object.keys(
+        newErrors
+      ).length === 0
+    );
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (
+    event
+  ) => {
     event.preventDefault();
 
     if (!validateForm()) {
@@ -112,33 +168,38 @@ function Register() {
     setLoading(true);
 
     try {
-      const correo = formData.correo
-        .trim()
-        .toLowerCase();
+      const correo =
+        formData.correo
+          .trim()
+          .toLowerCase();
 
-      const users = await api.get(
-        `/usuarios?correo=${encodeURIComponent(
-          correo
-        )}`
-      );
+      const users =
+        await api.get(
+          `/usuarios?correo=${encodeURIComponent(
+            correo
+          )}`
+        );
 
-      const existingUser = users.find(
-        (user) =>
-          user.correo.toLowerCase() ===
-          correo
-      );
+      const existingUser =
+        users.find(
+          (user) =>
+            user.correo.toLowerCase() ===
+            correo
+        );
 
       if (existingUser) {
         setErrors({
           correo:
-            "Ya existe una cuenta con este correo.",
+            t(
+              "auth.existingEmail"
+            ),
         });
 
         return;
       }
 
       const newUser = {
-        id: crypto.randomUUID(),
+        id: generateId(),
         nombre:
           formData.nombre.trim(),
         correo,
@@ -157,9 +218,12 @@ function Register() {
 
       await Swal.fire({
         icon: "success",
-        title: "Cuenta creada",
-        text:
-          "Tu cuenta de PuraVida Trips fue creada correctamente.",
+        title: t(
+          "auth.accountCreated"
+        ),
+        text: t(
+          "auth.accountCreatedText"
+        ),
         timer: 1800,
         showConfirmButton: false,
       });
@@ -175,10 +239,14 @@ function Register() {
 
       await Swal.fire({
         icon: "error",
-        title: "No se pudo crear la cuenta",
-        text:
-          "Ocurrió un problema al comunicarse con el servidor.",
-        confirmButtonText: "Aceptar",
+        title: t(
+          "auth.registerErrorTitle"
+        ),
+        text: t(
+          "auth.registerError"
+        ),
+        confirmButtonText:
+          t("auth.accept"),
         confirmButtonColor:
           "#176a4e",
       });
@@ -195,16 +263,19 @@ function Register() {
       >
         <div className="auth-header">
           <p className="section-eyebrow">
-            PURAVIDA TRIPS
+            {t("auth.brand")}
           </p>
 
           <h1 id="register-title">
-            Crear cuenta
+            {t(
+              "auth.registerTitle"
+            )}
           </h1>
 
           <p>
-            Regístrate para comenzar a
-            descubrir nuevas experiencias.
+            {t(
+              "auth.registerDescription"
+            )}
           </p>
         </div>
 
@@ -215,16 +286,22 @@ function Register() {
         >
           <div className="form-field">
             <label htmlFor="nombre">
-              Nombre completo
+              {t("auth.name")}
             </label>
 
             <input
               id="nombre"
               name="nombre"
               type="text"
-              value={formData.nombre}
-              onChange={handleChange}
-              placeholder="Tu nombre"
+              value={
+                formData.nombre
+              }
+              onChange={
+                handleChange
+              }
+              placeholder={t(
+                "auth.namePlaceholder"
+              )}
               autoComplete="name"
               aria-invalid={Boolean(
                 errors.nombre
@@ -248,16 +325,22 @@ function Register() {
 
           <div className="form-field">
             <label htmlFor="correo">
-              Correo electrónico
+              {t("auth.email")}
             </label>
 
             <input
               id="correo"
               name="correo"
               type="email"
-              value={formData.correo}
-              onChange={handleChange}
-              placeholder="correo@ejemplo.com"
+              value={
+                formData.correo
+              }
+              onChange={
+                handleChange
+              }
+              placeholder={t(
+                "auth.emailPlaceholder"
+              )}
               autoComplete="email"
               aria-invalid={Boolean(
                 errors.correo
@@ -281,16 +364,24 @@ function Register() {
 
           <div className="form-field">
             <label htmlFor="password">
-              Contraseña
+              {t(
+                "auth.password"
+              )}
             </label>
 
             <input
               id="password"
               name="password"
               type="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Mínimo 6 caracteres"
+              value={
+                formData.password
+              }
+              onChange={
+                handleChange
+              }
+              placeholder={t(
+                "auth.passwordMinPlaceholder"
+              )}
               autoComplete="new-password"
               aria-invalid={Boolean(
                 errors.password
@@ -307,14 +398,18 @@ function Register() {
                 id="register-password-error"
                 className="form-error"
               >
-                {errors.password}
+                {
+                  errors.password
+                }
               </span>
             )}
           </div>
 
           <div className="form-field">
             <label htmlFor="confirmPassword">
-              Confirmar contraseña
+              {t(
+                "auth.confirmPassword"
+              )}
             </label>
 
             <input
@@ -324,8 +419,12 @@ function Register() {
               value={
                 formData.confirmPassword
               }
-              onChange={handleChange}
-              placeholder="Repite tu contraseña"
+              onChange={
+                handleChange
+              }
+              placeholder={t(
+                "auth.confirmPasswordPlaceholder"
+              )}
               autoComplete="new-password"
               aria-invalid={Boolean(
                 errors.confirmPassword
@@ -342,7 +441,9 @@ function Register() {
                 id="confirm-password-error"
                 className="form-error"
               >
-                {errors.confirmPassword}
+                {
+                  errors.confirmPassword
+                }
               </span>
             )}
           </div>
@@ -353,18 +454,26 @@ function Register() {
             disabled={loading}
           >
             {loading
-              ? "Creando cuenta..."
-              : "Crear cuenta"}
+              ? t(
+                  "auth.creatingAccount"
+                )
+              : t(
+                  "auth.createButton"
+                )}
           </button>
         </form>
 
         <div className="auth-footer">
           <p>
-            ¿Ya tienes una cuenta?
+            {t(
+              "auth.alreadyAccount"
+            )}
           </p>
 
           <Link to="/login">
-            Iniciar sesión
+            {t(
+              "auth.accountLogin"
+            )}
           </Link>
         </div>
       </section>

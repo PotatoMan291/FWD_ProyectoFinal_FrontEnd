@@ -7,6 +7,10 @@ import Icon from "../components/Icon";
 import SearchBar from "../components/SearchBar";
 import SectionTitle from "../components/SectionTitle";
 
+import {
+  useLanguage,
+} from "../context/LanguageContext";
+
 import { getTours } from "../services/tourService";
 
 const fallbackFeaturedTours = [
@@ -15,7 +19,8 @@ const fallbackFeaturedTours = [
     image:
       "https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?auto=format&fit=crop&w=900&q=80",
     category: "Naturaleza",
-    title: "Caminata al Volcán Arenal",
+    title:
+      "Caminata al Volcán Arenal",
     location: "Alajuela",
     price: 35000,
   },
@@ -24,7 +29,8 @@ const fallbackFeaturedTours = [
     image:
       "https://images.unsplash.com/photo-1527631746610-bca00a040d60?auto=format&fit=crop&w=900&q=80",
     category: "Aventura",
-    title: "Canopy y aventura en Monteverde",
+    title:
+      "Canopy y aventura en Monteverde",
     location: "Puntarenas",
     price: 42000,
   },
@@ -33,44 +39,16 @@ const fallbackFeaturedTours = [
     image:
       "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=900&q=80",
     category: "Playa",
-    title: "Atardecer en Playa Tamarindo",
+    title:
+      "Atardecer en Playa Tamarindo",
     location: "Guanacaste",
     price: 28000,
   },
 ];
 
-const categories = [
-  {
-    icon: "leaf",
-    title: "Naturaleza",
-    description:
-      "Bosques, volcanes y paisajes únicos.",
-    search: "Naturaleza",
-  },
-  {
-    icon: "mountain",
-    title: "Aventura",
-    description:
-      "Experiencias para quienes buscan adrenalina.",
-    search: "Aventura",
-  },
-  {
-    icon: "wave",
-    title: "Playa",
-    description:
-      "Descubre las costas y playas de Costa Rica.",
-    search: "Playa",
-  },
-  {
-    icon: "culture",
-    title: "Cultura",
-    description:
-      "Conoce la historia y cultura local.",
-    search: "Cultura",
-  },
-];
-
-function normalizeFeaturedTour(tour) {
+function normalizeFeaturedTour(
+  tour
+) {
   return {
     id: tour.id,
     image: tour.imagen,
@@ -83,19 +61,35 @@ function normalizeFeaturedTour(tour) {
 
 function Home() {
   const [featuredTours, setFeaturedTours] =
-    useState(fallbackFeaturedTours);
+    useState(
+      fallbackFeaturedTours
+    );
+
+  const {
+    t,
+    language,
+  } = useLanguage();
 
   useEffect(() => {
     async function loadFeaturedTours() {
       try {
-        const tours = await getTours();
+        const tours =
+          await getTours();
 
-        const normalizedTours = tours
-          .slice(0, 3)
-          .map(normalizeFeaturedTour);
+        const normalizedTours =
+          tours
+            .slice(0, 3)
+            .map(
+              normalizeFeaturedTour
+            );
 
-        if (normalizedTours.length > 0) {
-          setFeaturedTours(normalizedTours);
+        if (
+          normalizedTours.length >
+          0
+        ) {
+          setFeaturedTours(
+            normalizedTours
+          );
         }
       } catch (error) {
         console.error(
@@ -108,6 +102,49 @@ function Home() {
     loadFeaturedTours();
   }, []);
 
+  const categories = [
+    {
+      icon: "leaf",
+      title: t(
+        "home.categories.nature.title"
+      ),
+      description: t(
+        "home.categories.nature.description"
+      ),
+      search: "Naturaleza",
+    },
+    {
+      icon: "mountain",
+      title: t(
+        "home.categories.adventure.title"
+      ),
+      description: t(
+        "home.categories.adventure.description"
+      ),
+      search: "Aventura",
+    },
+    {
+      icon: "wave",
+      title: t(
+        "home.categories.beach.title"
+      ),
+      description: t(
+        "home.categories.beach.description"
+      ),
+      search: "Playa",
+    },
+    {
+      icon: "culture",
+      title: t(
+        "home.categories.culture.title"
+      ),
+      description: t(
+        "home.categories.culture.description"
+      ),
+      search: "Cultura",
+    },
+  ];
+
   return (
     <main>
       <section className="hero">
@@ -117,17 +154,12 @@ function Home() {
           muted
           loop
           playsInline
-          preload="metadata"
+          preload="auto"
           aria-hidden="true"
         >
           <source
             src="/videos/costa-rica.mp4"
             type="video/mp4"
-          />
-
-          <source
-            src="/videos/costa-rica.webm"
-            type="video/webm"
           />
         </video>
 
@@ -139,18 +171,18 @@ function Home() {
         <div className="hero-container">
           <div className="hero-content">
             <p className="hero-eyebrow">
-              COSTA RICA · EXPERIENCIAS · PURA VIDA
+              {t("home.eyebrow")}
             </p>
 
             <h1>
-              Descubre Costa Rica
-              <span> a tu manera.</span>
+              {t("home.title")}
+              <span>
+                {t("home.titleAccent")}
+              </span>
             </h1>
 
             <p className="hero-description">
-              Encuentra, compara y reserva tours y
-              experiencias turísticas pensadas para que
-              vivas Costa Rica.
+              {t("home.description")}
             </p>
 
             <SearchBar />
@@ -161,18 +193,28 @@ function Home() {
       <section className="categories-section">
         <div className="content-container">
           <SectionTitle
-            eyebrow="EXPLORA"
-            title="Encuentra tu próxima experiencia"
-            description="Explora diferentes formas de conocer y disfrutar Costa Rica."
+            eyebrow={t(
+              "home.exploreEyebrow"
+            )}
+            title={t(
+              "home.exploreTitle"
+            )}
+            description={t(
+              "home.exploreDescription"
+            )}
           />
 
           <div className="categories-grid">
-            {categories.map((category) => (
-              <CategoryCard
-                key={category.title}
-                {...category}
-              />
-            ))}
+            {categories.map(
+              (category) => (
+                <CategoryCard
+                  key={
+                    category.title
+                  }
+                  {...category}
+                />
+              )
+            )}
           </div>
         </div>
       </section>
@@ -181,26 +223,36 @@ function Home() {
         <div className="content-container">
           <div className="section-header-row">
             <SectionTitle
-              eyebrow="EXPERIENCIAS DESTACADAS"
-              title="Vive algo diferente"
-              description="Descubre algunas de las experiencias que podrás encontrar en PuraVida Trips."
+              eyebrow={t(
+                "home.featuredEyebrow"
+              )}
+              title={t(
+                "home.featuredTitle"
+              )}
+              description={t(
+                "home.featuredDescription"
+              )}
             />
 
             <Button
               to="/tours"
               variant="outline"
             >
-              Ver todos los tours
+              {t(
+                "home.allTours"
+              )}
             </Button>
           </div>
 
           <div className="featured-grid">
-            {featuredTours.map((tour) => (
-              <FeaturedTourCard
-                key={tour.id}
-                {...tour}
-              />
-            ))}
+            {featuredTours.map(
+              (tour) => (
+                <FeaturedTourCard
+                  key={tour.id}
+                  {...tour}
+                />
+              )
+            )}
           </div>
         </div>
       </section>
@@ -209,21 +261,27 @@ function Home() {
         <div className="experience-banner-container">
           <div>
             <p className="section-eyebrow">
-              TU PRÓXIMA AVENTURA
+              {t(
+                "home.adventureEyebrow"
+              )}
             </p>
 
             <h2>
-              Costa Rica tiene una experiencia esperándote.
+              {t(
+                "home.adventureTitle"
+              )}
             </h2>
 
             <p>
-              Explora nuevos lugares, apoya experiencias
-              locales y crea recuerdos que duren para
-              siempre.
+              {t(
+                "home.adventureDescription"
+              )}
             </p>
 
             <Button to="/tours">
-              Explorar experiencias
+              {t(
+                "home.exploreExperiences"
+              )}
             </Button>
           </div>
 
@@ -231,7 +289,10 @@ function Home() {
             className="experience-decoration"
             aria-hidden="true"
           >
-            <Icon name="compass" size={112} />
+            <Icon
+              name="compass"
+              size={112}
+            />
           </div>
         </div>
       </section>
@@ -239,20 +300,23 @@ function Home() {
       <section className="cta-section">
         <div className="cta-container">
           <p className="section-eyebrow">
-            PURAVIDA TRIPS
+            {t("home.ctaEyebrow")}
           </p>
 
           <h2>
-            Tu próxima aventura comienza aquí.
+            {t("home.ctaTitle")}
           </h2>
 
           <p>
-            Explora experiencias turísticas en Costa Rica
-            y encuentra una que se adapte a ti.
+            {t(
+              "home.ctaDescription"
+            )}
           </p>
 
           <Button to="/tours">
-            Comenzar a explorar
+            {t(
+              "home.startExploring"
+            )}
           </Button>
         </div>
       </section>

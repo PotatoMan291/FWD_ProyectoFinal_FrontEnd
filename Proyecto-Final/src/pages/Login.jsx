@@ -11,40 +11,58 @@ import {
 import Swal from "sweetalert2";
 
 import api from "../services/api";
-import { useAuth } from "../context/AuthContext";
+import {
+  useAuth,
+} from "../context/AuthContext";
+
+import {
+  useLanguage,
+} from "../context/LanguageContext";
 
 function Login() {
   const navigate = useNavigate();
-  const location = useLocation();
+  const location =
+    useLocation();
 
-  const {
-    login,
-  } = useAuth();
+  const { login } =
+    useAuth();
 
-  const [formData, setFormData] = useState({
-    correo: "",
-    password: "",
-  });
+  const { t } =
+    useLanguage();
 
-  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] =
+    useState({
+      correo: "",
+      password: "",
+    });
 
-  const [errors, setErrors] = useState({});
+  const [loading, setLoading] =
+    useState(false);
 
-  const handleChange = (event) => {
+  const [errors, setErrors] =
+    useState({});
+
+  const handleChange = (
+    event
+  ) => {
     const {
       name,
       value,
     } = event.target;
 
-    setFormData((previous) => ({
-      ...previous,
-      [name]: value,
-    }));
+    setFormData(
+      (previous) => ({
+        ...previous,
+        [name]: value,
+      })
+    );
 
-    setErrors((previous) => ({
-      ...previous,
-      [name]: "",
-    }));
+    setErrors(
+      (previous) => ({
+        ...previous,
+        [name]: "",
+      })
+    );
   };
 
   const validateForm = () => {
@@ -52,46 +70,39 @@ function Login() {
 
     if (!formData.correo.trim()) {
       newErrors.correo =
-        "Ingresa tu correo electrónico.";
+        t(
+          "auth.emailRequired"
+        );
     } else if (
       !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
         formData.correo
       )
     ) {
       newErrors.correo =
-        "Ingresa un correo electrónico válido.";
+        t(
+          "auth.invalidEmail"
+        );
     }
 
     if (!formData.password) {
       newErrors.password =
-        "Ingresa tu contraseña.";
+        t(
+          "auth.passwordRequired"
+        );
     }
 
     setErrors(newErrors);
 
-    return Object.keys(newErrors).length === 0;
+    return (
+      Object.keys(
+        newErrors
+      ).length === 0
+    );
   };
 
-  const getRedirectPath = (user) => {
-    const previousPath =
-      location.state?.from;
-
-    if (previousPath) {
-      return previousPath;
-    }
-
-    if (user.rol === "admin") {
-      return "/admin";
-    }
-
-    if (user.rol === "operador") {
-      return "/operador";
-    }
-
-    return "/";
-  };
-
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (
+    event
+  ) => {
     event.preventDefault();
 
     if (!validateForm()) {
@@ -101,29 +112,39 @@ function Login() {
     setLoading(true);
 
     try {
-      const correo = formData.correo
-        .trim()
-        .toLowerCase();
+      const correo =
+        formData.correo
+          .trim()
+          .toLowerCase();
 
-      const users = await api.get(
-        `/usuarios?correo=${encodeURIComponent(
-          correo
-        )}`
-      );
+      const users =
+        await api.get(
+          `/usuarios?correo=${encodeURIComponent(
+            correo
+          )}`
+        );
 
-      const foundUser = users.find(
-        (user) =>
-          user.correo.toLowerCase() === correo &&
-          user.password === formData.password
-      );
+      const foundUser =
+        users.find(
+          (user) =>
+            user.correo
+              .toLowerCase() ===
+              correo &&
+            user.password ===
+              formData.password
+        );
 
       if (!foundUser) {
         await Swal.fire({
           icon: "error",
-          title: "No pudimos iniciar sesión",
-          text:
-            "El correo o la contraseña son incorrectos.",
-          confirmButtonText: "Intentar nuevamente",
+          title: t(
+            "auth.invalidCredentialsTitle"
+          ),
+          text: t(
+            "auth.invalidCredentials"
+          ),
+          confirmButtonText:
+            t("auth.accept"),
           confirmButtonColor:
             "#176a4e",
         });
@@ -131,18 +152,21 @@ function Login() {
         return;
       }
 
-      const sessionUser = login(foundUser);
+      const sessionUser =
+        login(foundUser);
 
-      await Swal.fire({
-        icon: "success",
-        title: "Bienvenido",
-        text: `Hola, ${sessionUser.nombre}.`,
-        timer: 1500,
-        showConfirmButton: false,
-      });
+      const redirectPath =
+        location.state?.from?.pathname ||
+        (sessionUser?.rol ===
+        "admin"
+          ? "/admin"
+          : sessionUser?.rol ===
+            "operador"
+          ? "/operador"
+          : "/turista");
 
       navigate(
-        getRedirectPath(sessionUser),
+        redirectPath,
         {
           replace: true,
         }
@@ -155,10 +179,14 @@ function Login() {
 
       await Swal.fire({
         icon: "error",
-        title: "No se pudo iniciar sesión",
-        text:
-          "No fue posible conectarse con el servidor. Verifica que JSON Server esté ejecutándose.",
-        confirmButtonText: "Aceptar",
+        title: t(
+          "auth.serverErrorTitle"
+        ),
+        text: t(
+          "auth.serverError"
+        ),
+        confirmButtonText:
+          t("auth.accept"),
         confirmButtonColor:
           "#176a4e",
       });
@@ -175,16 +203,19 @@ function Login() {
       >
         <div className="auth-header">
           <p className="section-eyebrow">
-            PURAVIDA TRIPS
+            {t("auth.brand")}
           </p>
 
           <h1 id="login-title">
-            Iniciar sesión
+            {t(
+              "auth.loginTitle"
+            )}
           </h1>
 
           <p>
-            Ingresa a tu cuenta para continuar
-            explorando Costa Rica.
+            {t(
+              "auth.loginDescription"
+            )}
           </p>
         </div>
 
@@ -195,30 +226,36 @@ function Login() {
         >
           <div className="form-field">
             <label htmlFor="correo">
-              Correo electrónico
+              {t("auth.email")}
             </label>
 
             <input
               id="correo"
               name="correo"
               type="email"
-              value={formData.correo}
-              onChange={handleChange}
-              placeholder="correo@ejemplo.com"
+              value={
+                formData.correo
+              }
+              onChange={
+                handleChange
+              }
+              placeholder={t(
+                "auth.emailPlaceholder"
+              )}
               autoComplete="email"
               aria-invalid={Boolean(
                 errors.correo
               )}
               aria-describedby={
                 errors.correo
-                  ? "correo-error"
+                  ? "login-correo-error"
                   : undefined
               }
             />
 
             {errors.correo && (
               <span
-                id="correo-error"
+                id="login-correo-error"
                 className="form-error"
               >
                 {errors.correo}
@@ -228,33 +265,43 @@ function Login() {
 
           <div className="form-field">
             <label htmlFor="password">
-              Contraseña
+              {t(
+                "auth.password"
+              )}
             </label>
 
             <input
               id="password"
               name="password"
               type="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Ingresa tu contraseña"
+              value={
+                formData.password
+              }
+              onChange={
+                handleChange
+              }
+              placeholder={t(
+                "auth.passwordPlaceholder"
+              )}
               autoComplete="current-password"
               aria-invalid={Boolean(
                 errors.password
               )}
               aria-describedby={
                 errors.password
-                  ? "password-error"
+                  ? "login-password-error"
                   : undefined
               }
             />
 
             {errors.password && (
               <span
-                id="password-error"
+                id="login-password-error"
                 className="form-error"
               >
-                {errors.password}
+                {
+                  errors.password
+                }
               </span>
             )}
           </div>
@@ -265,25 +312,35 @@ function Login() {
             disabled={loading}
           >
             {loading
-              ? "Iniciando sesión..."
-              : "Iniciar sesión"}
+              ? t(
+                  "auth.loggingIn"
+                )
+              : t(
+                  "auth.loginButton"
+                )}
           </button>
         </form>
 
         <div className="auth-footer">
           <p>
-            ¿No tienes una cuenta?
+            {t(
+              "auth.noAccount"
+            )}
           </p>
 
           <Link to="/register">
-            Crear una cuenta
+            {t(
+              "auth.createAccount"
+            )}
           </Link>
         </div>
 
         <div className="auth-demo">
           <p>
             <strong>
-              Usuarios de demostración
+              {t(
+                "auth.demoTitle"
+              )}
             </strong>
           </p>
 
