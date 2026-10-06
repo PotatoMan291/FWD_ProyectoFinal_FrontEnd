@@ -1,93 +1,77 @@
-import { Link } from "react-router-dom";
+import { createPortal } from "react-dom";
 
-import {
-  useLanguage,
-} from "../context/LanguageContext";
+import Icon from "./Icon";
 
-function Footer() {
-  const { t } =
-    useLanguage();
+function CompareBar({
+  selectedTours,
+  onRemove,
+  onClear,
+  onOpenComparison,
+}) {
+  if (selectedTours.length === 0) {
+    return null;
+  }
 
-  return (
-    <footer className="footer">
-      <div className="footer-container">
-        <div className="footer-brand">
-          <Link
-            to="/"
-            className="footer-logo"
+  const canCompare = selectedTours.length >= 2;
+
+  const content = (
+    <aside
+      className="compare-bar"
+      aria-label="Comparación de experiencias"
+    >
+      <div className="compare-bar-content">
+        <div className="compare-bar-info">
+          <strong>Comparar experiencias</strong>
+          <span>
+            {selectedTours.length} de 3 seleccionadas
+          </span>
+        </div>
+
+        <div className="compare-bar-tours">
+          {selectedTours.map((tour) => (
+            <div
+              className="compare-mini-card"
+              key={tour.id}
+            >
+              <img src={tour.imagen} alt="" />
+
+              <span>{tour.nombre}</span>
+
+              <button
+                type="button"
+                onClick={() => onRemove(tour.id)}
+                aria-label={`Quitar ${tour.nombre} de la comparación`}
+              >
+                <Icon name="close" size={15} />
+              </button>
+            </div>
+          ))}
+        </div>
+
+        <div className="compare-bar-actions">
+          <button
+            type="button"
+            className="compare-clear-button"
+            onClick={onClear}
           >
-            <img
-              src="/logo.png"
-              alt="PuraVida Trips"
-            />
-          </Link>
+            Limpiar
+          </button>
 
-          <p>
-            {t(
-              "footer.description"
-            )}
-          </p>
-        </div>
-
-        <div className="footer-column">
-          <h3>
-            {t("footer.explore")}
-          </h3>
-
-          <Link to="/tours">
-            {t("footer.tours")}
-          </Link>
-
-          <Link to="/tours?categoria=Aventura">
-            {t("footer.adventure")}
-          </Link>
-
-          <Link to="/tours?categoria=Naturaleza">
-            {t("footer.nature")}
-          </Link>
-
-          <Link to="/tours?categoria=Playa">
-            {t("footer.beach")}
-          </Link>
-        </div>
-
-        <div className="footer-column">
-          <h3>
-            {t("footer.account")}
-          </h3>
-
-          <Link to="/login">
-            {t("footer.login")}
-          </Link>
-
-          <Link to="/register">
-            {t("footer.register")}
-          </Link>
-        </div>
-
-        <div className="footer-column">
-          <h3>
-            {t("footer.brand")}
-          </h3>
-
-          <span>
-            {t("footer.country")}
-          </span>
-
-          <span>
-            {t("footer.slogan")}
-          </span>
+          <button
+            type="button"
+            className="compare-main-button"
+            onClick={onOpenComparison}
+            disabled={!canCompare}
+            aria-disabled={!canCompare}
+          >
+            Comparar
+          </button>
         </div>
       </div>
-
-      <div className="footer-bottom">
-        <p>
-          © 2026 PuraVida Trips.{" "}
-          {t("footer.rights")}
-        </p>
-      </div>
-    </footer>
+    </aside>
   );
+
+  return createPortal(content, document.body);
 }
 
-export default Footer;
+export default CompareBar;

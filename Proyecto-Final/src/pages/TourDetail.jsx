@@ -1,16 +1,8 @@
-import {
-  useEffect,
-  useState,
-} from "react";
-
+import { useEffect, useState } from "react";
 import {
   Link,
   useParams,
 } from "react-router-dom";
-
-import {
-  useLanguage,
-} from "../context/LanguageContext";
 
 import {
   getGoogleMapsEmbedUrl,
@@ -19,9 +11,7 @@ import {
   getWeatherDescription,
 } from "../services/externalService";
 
-import {
-  getTourById,
-} from "../services/tourService";
+import { getTourById } from "../services/tourService";
 
 import Icon from "../components/Icon";
 
@@ -37,11 +27,7 @@ function formatPrice(price) {
 }
 
 function TourDetail() {
-  const { id } =
-    useParams();
-
-  const { t, getTour } =
-    useLanguage();
+  const { id } = useParams();
 
   const [tour, setTour] =
     useState(null);
@@ -75,7 +61,7 @@ function TourDetail() {
         );
 
         setError(
-          t("tour.notFoundDescription")
+          "No se pudo cargar la información del tour."
         );
       } finally {
         setLoading(false);
@@ -83,7 +69,7 @@ function TourDetail() {
     }
 
     loadTour();
-  }, [id, t]);
+  }, [id]);
 
   useEffect(() => {
     if (!tour?.ubicacion) {
@@ -121,7 +107,7 @@ function TourDetail() {
         <div className="content-container">
           <div className="tour-detail-state">
             <p>
-              {t("tour.loading")}
+              Cargando información del tour...
             </p>
           </div>
         </div>
@@ -134,24 +120,18 @@ function TourDetail() {
       <main className="tour-detail-page">
         <div className="content-container">
           <div className="tour-detail-state tour-detail-state-error">
-            <h1>
-              {t("tour.notFound")}
-            </h1>
+            <h1>Tour no encontrado</h1>
 
             <p>
               {error ||
-                t(
-                  "tour.notFoundDescription"
-                )}
+                "No encontramos la experiencia que estás buscando."}
             </p>
 
             <Link
               className="tour-detail-back-button"
               to="/tours"
             >
-              {t(
-                "tour.backToCatalog"
-              )}
+              Volver al catálogo
             </Link>
           </div>
         </div>
@@ -159,15 +139,11 @@ function TourDetail() {
     );
   }
 
-  const translatedTour =
-    getTour(tour);
-
   const weatherCode =
     weather?.current?.weather_code;
 
   const temperature =
-    weather?.current
-      ?.temperature_2m;
+    weather?.current?.temperature_2m;
 
   return (
     <main className="tour-detail-page">
@@ -181,9 +157,7 @@ function TourDetail() {
             size={17}
           />
 
-          {t(
-            "tour.backToCatalog"
-          )}
+          Volver al catálogo
         </Link>
 
         <section
@@ -194,19 +168,17 @@ function TourDetail() {
             <img
               className="tour-detail-image"
               src={tour.imagen}
-              alt={`${translatedTour.nombre}`}
+              alt={`Paisaje relacionado con ${tour.nombre}`}
             />
           </div>
 
           <div className="tour-detail-summary">
             <span className="tour-detail-category">
-              {
-                translatedTour.categoria
-              }
+              {tour.categoria}
             </span>
 
             <h1 id="tour-detail-title">
-              {translatedTour.nombre}
+              {tour.nombre}
             </h1>
 
             <p className="tour-detail-location">
@@ -215,20 +187,15 @@ function TourDetail() {
                 size={17}
               />
 
-              {translatedTour.ubicacion},{" "}
-              Costa Rica
+              {tour.ubicacion}, Costa Rica
             </p>
 
             <p className="tour-detail-description">
-              {
-                translatedTour.descripcion
-              }
+              {tour.descripcion}
             </p>
 
             <div className="tour-detail-price-block">
-              <span>
-                {t("tour.from")}
-              </span>
+              <span>Desde</span>
 
               <strong>
                 {formatPrice(
@@ -237,9 +204,7 @@ function TourDetail() {
               </strong>
 
               <small>
-                {t(
-                  "tour.perPerson"
-                )}
+                por persona
               </small>
             </div>
 
@@ -252,7 +217,7 @@ function TourDetail() {
                 target="_blank"
                 rel="noreferrer"
               >
-                {t("tour.maps")}
+                Ver ubicación en Google Maps
 
                 <Icon
                   name="external"
@@ -264,53 +229,52 @@ function TourDetail() {
                 className="tour-detail-secondary-button"
                 to="/tours"
               >
-                {t(
-                  "tour.keepExploring"
-                )}
+                Seguir explorando
               </Link>
             </div>
           </div>
         </section>
 
+        {tour.video && (
+          <section className="tour-detail-video-section" aria-label="Video del tour">
+            <div className="tour-detail-video-header">
+              <span className="section-eyebrow">PURAVIDA TRIPS</span>
+              <h2>Conoce la experiencia</h2>
+            </div>
+            <video className="tour-detail-video" controls preload="metadata">
+              <source src={tour.video} type="video/mp4" />
+              Tu navegador no admite la reproducción de video.
+            </video>
+          </section>
+        )}
+
         <section
           className="tour-detail-info-grid"
-          aria-label={t(
-            "tour.details"
-          )}
+          aria-label="Información del tour"
         >
           <article className="tour-detail-info-card">
             <span className="tour-detail-info-label">
-              {t(
-                "tour.duration"
-              )}
+              Duración
             </span>
 
             <strong>
-              {
-                translatedTour.duracion
-              }
+              {tour.duracion}
             </strong>
           </article>
 
           <article className="tour-detail-info-card">
             <span className="tour-detail-info-label">
-              {t(
-                "tour.capacity"
-              )}
+              Capacidad
             </span>
 
             <strong>
-              {
-                translatedTour.personas
-              }
+              {tour.personas}
             </strong>
           </article>
 
           <article className="tour-detail-info-card">
             <span className="tour-detail-info-label">
-              {t(
-                "tour.operator"
-              )}
+              Operador
             </span>
 
             <strong>
@@ -322,17 +286,15 @@ function TourDetail() {
         <section className="tour-detail-content-grid">
           <article className="tour-detail-panel">
             <span className="section-eyebrow">
-              {t("tour.includes")}
+              Incluye
             </span>
 
             <h2>
-              {t(
-                "tour.featuresTitle"
-              )}
+              Características de la experiencia
             </h2>
 
             <ul className="tour-detail-features">
-              {translatedTour.caracteristicas?.map(
+              {tour.caracteristicas?.map(
                 (feature) => (
                   <li key={feature}>
                     <span aria-hidden="true">
@@ -351,22 +313,16 @@ function TourDetail() {
 
           <article className="tour-detail-panel tour-detail-weather-panel">
             <span className="section-eyebrow">
-              {t(
-                "tour.destination"
-              )}
+              Información del destino
             </span>
 
             <h2>
-              {t(
-                "tour.currentWeather"
-              )}
+              Clima actual
             </h2>
 
             {weatherLoading ? (
               <p className="tour-detail-muted">
-                {t(
-                  "tour.checkingWeather"
-                )}
+                Consultando el clima...
               </p>
             ) : weather ? (
               <div className="tour-detail-weather">
@@ -385,21 +341,15 @@ function TourDetail() {
                   </strong>
 
                   <p>
-                    {t(
-                      "tour.currentConditions"
-                    )}{" "}
-                    {
-                      translatedTour.ubicacion
-                    }
-                    .
+                    Condiciones actuales en{" "}
+                    {tour.ubicacion}.
                   </p>
                 </div>
               </div>
             ) : (
               <p className="tour-detail-muted">
-                {t(
-                  "tour.weatherError"
-                )}
+                No fue posible consultar el clima
+                en este momento.
               </p>
             )}
           </article>
@@ -411,23 +361,23 @@ function TourDetail() {
         >
           <div className="section-heading">
             <span className="section-eyebrow">
-              {t("tour.location")}
+              Ubicación
             </span>
 
             <h2 id="map-title">
-              {t("tour.where")}
+              ¿Dónde se realiza?
             </h2>
 
             <p className="section-description">
-              {t(
-                "tour.mapDescription"
-              )}
+              Consulta la zona aproximada del tour
+              y abre Google Maps para explorar el
+              destino.
             </p>
           </div>
 
           <div className="tour-detail-map-wrapper">
             <iframe
-              title={`Map ${translatedTour.ubicacion}`}
+              title={`Mapa de ${tour.ubicacion}`}
               src={getGoogleMapsEmbedUrl(
                 tour.ubicacion
               )}
