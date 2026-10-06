@@ -26,7 +26,7 @@ function Navbar() {
       <NavLink to="/" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>{t("nav.home")}</NavLink>
       <NavLink to="/tours" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>{t("nav.explore")}</NavLink>
       {isAuthenticated ? <NavLink to={dashboardPath} className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>{t("nav.dashboard")}</NavLink> : <NavLink to="/login" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>{t("nav.login")}</NavLink>}
-      {isAuthenticated && <span className="navbar-user">Hola, {user.nombre}</span>}
+      {isAuthenticated && <span className="navbar-user">¡Hola, {user.nombre}!</span>}
     </nav>
     <div className="navbar-actions"><AccessibilityPanel />
       {!isAuthenticated ? <><Link to="/register" className="navbar-action">{t("nav.register")}</Link><Link to="/tours" className="navbar-action navbar-action-secondary">{t("nav.explore")}</Link></> : <><span className="navbar-role">{roleLabel}</span><button type="button" className="navbar-logout" onClick={handleLogout}><Icon name="logout" size={15} />{t("nav.logout")}</button></>}

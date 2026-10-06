@@ -1,13 +1,26 @@
 import { countBy, filterTours, formatCRC } from "./tourUtils.js";
 
 describe("formatCRC", () => {
-  test("formatea un precio en colones", () => {
-    expect(formatCRC(35000)).toContain("35.000");
+  test("convierte un número a moneda CRC", () => {
+    expect(formatCRC(35000)).toMatch(/₡35\s000/);
   });
 });
 
 describe("filterTours", () => {
-  const tours = [{ nombre: "Canopy Monteverde", descripcion: "Aventura", categoria: "Aventura", ubicacion: "Puntarenas" }, { nombre: "Playa Tamarindo", descripcion: "Atardecer", categoria: "Playa", ubicacion: "Guanacaste" }];
+  const tours = [
+    {
+      nombre: "Canopy Monteverde",
+      descripcion: "Aventura",
+      categoria: "Aventura",
+      ubicacion: "Puntarenas",
+    },
+    {
+      nombre: "Playa Tamarindo",
+      descripcion: "Atardecer",
+      categoria: "Playa",
+      ubicacion: "Guanacaste",
+    },
+  ];
   test("encuentra tours por nombre", () => {
     expect(filterTours(tours, "canopy")).toHaveLength(1);
   });
@@ -18,6 +31,15 @@ describe("filterTours", () => {
 
 describe("countBy", () => {
   test("cuenta elementos por categoría", () => {
-    expect(countBy([{ categoria: "Playa" }, { categoria: "Playa" }, { categoria: "Aventura" }], "categoria")).toEqual({ Playa: 2, Aventura: 1 });
+    expect(
+      countBy(
+        [
+          { categoria: "Playa" },
+          { categoria: "Playa" },
+          { categoria: "Aventura" },
+        ],
+        "categoria",
+      ),
+    ).toEqual({ Playa: 2, Aventura: 1 });
   });
 });

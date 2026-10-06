@@ -1,0 +1,90 @@
+{
+  "name": "PuraVida Trips - Recomendaciones IA",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "puravida-recomendaciones",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "name": "Webhook - Recomendaciones",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 0],
+      "id": "f8ff595e-a40a-4803-9db5-d7ac884c3e82",
+      "webhookId": "294f5e5e-5cbc-425f-aa15-7c2aea9aeec1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $json.body ?? $json;\nreturn [{ json: { ...body, tours: Array.isArray(body.tours) ? body.tours : [] } }];"
+      },
+      "name": "Normalizar solicitud",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [240, 0],
+      "id": "ff16fc1f-c864-4767-842a-5cb5b0c518fd"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ JSON.stringify({ user: $json.user, preferences: $json.preferences, language: $json.language, tours: $json.tours }) }}",
+        "options": {
+          "systemMessage": "Eres el asistente turístico de PuraVida Trips, una plataforma para descubrir experiencias en Costa Rica.\n\nRecibirás un JSON con el usuario, sus preferencias, idioma y una lista de tours reales del catálogo.\n\nReglas:\n1. Recomienda únicamente tours cuyo id exista en el catálogo recibido.\n2. No inventes precios, ubicaciones, duración ni características.\n3. Selecciona como máximo 3 tours.\n4. Prioriza la coincidencia con las preferencias y el presupuesto indicado.\n5. Responde en el idioma indicado en el campo language.\n6. Devuelve exclusivamente JSON válido, sin markdown ni texto adicional, con esta estructura:\n{\n  \"message\": \"texto breve\",\n  \"recommendations\": [\n    {\n      \"id\": \"id del tour\",\n      \"name\": \"nombre exacto del tour\",\n      \"reason\": \"motivo breve de la recomendación\"\n    }\n  ]\n}"
+        }
+      },
+      "name": "AI Agent - PuraVida Trips",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [512, 0],
+      "id": "8cf768d8-9451-4ef3-9cbd-2edc88a83e28"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json.output ? JSON.parse($json.output) : $json }}",
+        "options": {}
+      },
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [832, 0],
+      "id": "94c4b943-74cd-4cb4-9739-53a6a624445d"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [384, 208],
+      "id": "f1da33ae-b490-4fe8-89ac-34b17787f60a",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "azFoEaZU4hrRAQYl",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook - Recomendaciones": {
+      "main": [[{"node": "Normalizar solicitud", "type": "main", "index": 0}]]
+    },
+    "Normalizar solicitud": {
+      "main": [[{"node": "AI Agent - PuraVida Trips", "type": "main", "index": 0}]]
+    },
+    "AI Agent - PuraVida Trips": {
+      "main": [[{"node": "Respond to Webhook", "type": "main", "index": 0}]]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [[{"node": "AI Agent - PuraVida Trips", "type": "ai_languageModel", "index": 0}]]
+    }
+  },
+  "active": false,
+  "settings": {"executionOrder": "v1", "binaryMode": "separate"},
+  "meta": {"templateCredsSetupCompleted": true},
+  "tags": []
+}
