@@ -31,7 +31,6 @@ function AITripAssistant() {
       const data = await getTourRecommendations({
         user,
         preferences,
-        tours,
         language,
       });
 
