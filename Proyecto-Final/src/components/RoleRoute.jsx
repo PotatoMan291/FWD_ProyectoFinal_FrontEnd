@@ -46,7 +46,7 @@ function RoleRoute({
   if (!allowedRoles.includes(user?.rol)) {
     return (
       <Navigate
-        to="/"
+        to="/403"
         replace
       />
     );

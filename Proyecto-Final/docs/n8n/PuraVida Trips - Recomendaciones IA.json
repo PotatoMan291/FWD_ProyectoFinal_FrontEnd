@@ -1,5 +1,5 @@
 {
-  "name": "PuraVida Trips - Recomendaciones IA",
+  "name": "PuraVida Trips - Recomendaciones IA + Tools",
   "nodes": [
     {
       "parameters": {
@@ -8,36 +8,120 @@
         "responseMode": "responseNode",
         "options": {}
       },
+      "id": "pv-webhook-recommendations",
       "name": "Webhook - Recomendaciones",
       "type": "n8n-nodes-base.webhook",
-      "typeVersion": 2,
-      "position": [0, 0],
-      "id": "f8ff595e-a40a-4803-9db5-d7ac884c3e82",
-      "webhookId": "294f5e5e-5cbc-425f-aa15-7c2aea9aeec1"
+      "typeVersion": 2.1,
+      "position": [
+        -720,
+        0
+      ],
+      "webhookId": "pv-recomendaciones-tools"
     },
     {
       "parameters": {
-        "jsCode": "const body = $json.body ?? $json;\nreturn [{ json: { ...body, tours: Array.isArray(body.tours) ? body.tours : [] } }];"
+        "jsCode": "const body = $json.body ?? $json;\n\nreturn [\n  {\n    json: {\n      user: body.user ?? null,\n      preferences: body.preferences ?? '',\n      language: body.language ?? 'es'\n    }\n  }\n];"
       },
+      "id": "pv-normalize",
       "name": "Normalizar solicitud",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [240, 0],
-      "id": "ff16fc1f-c864-4767-842a-5cb5b0c518fd"
+      "position": [
+        -480,
+        0
+      ]
     },
     {
       "parameters": {
         "promptType": "define",
-        "text": "={{ JSON.stringify({ user: $json.user, preferences: $json.preferences, language: $json.language, tours: $json.tours }) }}",
+        "text": "={{ JSON.stringify({ user: $json.user, preferences: $json.preferences, language: $json.language }) }}",
         "options": {
-          "systemMessage": "Eres el asistente turístico de PuraVida Trips, una plataforma para descubrir experiencias en Costa Rica.\n\nRecibirás un JSON con el usuario, sus preferencias, idioma y una lista de tours reales del catálogo.\n\nReglas:\n1. Recomienda únicamente tours cuyo id exista en el catálogo recibido.\n2. No inventes precios, ubicaciones, duración ni características.\n3. Selecciona como máximo 3 tours.\n4. Prioriza la coincidencia con las preferencias y el presupuesto indicado.\n5. Responde en el idioma indicado en el campo language.\n6. Devuelve exclusivamente JSON válido, sin markdown ni texto adicional, con esta estructura:\n{\n  \"message\": \"texto breve\",\n  \"recommendations\": [\n    {\n      \"id\": \"id del tour\",\n      \"name\": \"nombre exacto del tour\",\n      \"reason\": \"motivo breve de la recomendación\"\n    }\n  ]\n}"
+          "systemMessage": "Eres el asistente turístico de PuraVida Trips, una plataforma para descubrir experiencias turísticas en Costa Rica.\n\nTu trabajo es recomendar tours reales del catálogo de PuraVida Trips.\n\nREGLAS IMPORTANTES:\n1. Antes de recomendar tours debes utilizar la herramienta 'Consultar catálogo de tours'.\n2. Nunca inventes tours, IDs, precios, ubicaciones, duración, operadores o características.\n3. Solo puedes recomendar tours que existan en la respuesta de la herramienta de catálogo.\n4. Puedes recomendar como máximo 3 tours.\n5. Analiza las preferencias del usuario, presupuesto, categoría, ubicación, duración y características.\n6. Si el usuario menciona temperatura, clima, calor, frío, lluvia o condiciones meteorológicas, utiliza la herramienta 'Consultar clima'.\n7. Para Costa Rica puedes inferir las coordenadas aproximadas de destinos conocidos. Por ejemplo: San José 9.9281,-84.0907; Alajuela 10.0163,-84.2142; Cartago 9.8644,-83.9194; Heredia 10.0024,-84.1165; Guanacaste 10.4958,-85.3550; Puntarenas 9.9763,-84.8384; Limón 9.9907,-83.0360; Monteverde 10.3021,-84.8258; La Fortuna 10.4716,-84.6450; Manuel Antonio 9.3929,-84.1367; Tamarindo 10.2997,-85.8374; Isla Tortuga 9.7550,-84.9300.\n8. No utilices la herramienta meteorológica si el usuario no solicita información relacionada con clima o temperatura.\n9. Si utilizas el clima, úsalo solamente como información complementaria para la recomendación.\n10. Responde en el idioma indicado por 'language'.\n11. Devuelve exclusivamente JSON válido. No utilices markdown ni bloques ```json.\n\nFORMATO OBLIGATORIO:\n{\n  \"message\": \"mensaje breve para el usuario\",\n  \"weather\": null,\n  \"recommendations\": [\n    {\n      \"id\": \"id real del tour\",\n      \"name\": \"nombre exacto del tour\",\n      \"reason\": \"motivo breve de la recomendación\"\n    }\n  ]\n}\n\nSi se utilizó la herramienta meteorológica, 'weather' debe tener esta estructura:\n{\n  \"temperature\": 25,\n  \"apparentTemperature\": 26,\n  \"description\": \"Condición meteorológica\"\n}\n\nSi no se utilizó, 'weather' debe ser null."
         }
       },
+      "id": "pv-agent",
       "name": "AI Agent - PuraVida Trips",
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3,
-      "position": [512, 0],
-      "id": "8cf768d8-9451-4ef3-9cbd-2edc88a83e28"
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "model": "llama-3.3-70b-versatile",
+        "options": {
+          "temperature": 0.2
+        }
+      },
+      "id": "pv-groq",
+      "name": "Groq Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        -16,
+        240
+      ],
+      "credentials": {
+        "groqApi": {
+          "id": "REEMPLAZAR_GROQ_CREDENTIAL_ID",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "toolDescription": "Consulta exclusivamente el catálogo real de tours de PuraVida Trips. Utiliza esta herramienta antes de recomendar cualquier tour. Devuelve los tours disponibles con sus IDs, nombres, categorías, ubicaciones, precios, duración, capacidad, descripción y características.",
+        "method": "GET",
+        "url": "http://localhost:3001/tours",
+        "options": {}
+      },
+      "id": "pv-tours-tool",
+      "name": "Consultar catálogo de tours",
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        240,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "toolDescription": "Consulta el clima actual utilizando Open-Meteo. Utiliza esta herramienta solamente cuando el usuario pregunte o mencione temperatura, clima, calor, frío, lluvia o condiciones meteorológicas. Debes proporcionar latitud y longitud aproximadas del destino.",
+        "method": "GET",
+        "url": "https://api.open-meteo.com/v1/forecast",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "latitude",
+              "value": "={{ $fromAI('latitude', 'Latitud aproximada del destino turístico en Costa Rica. Ejemplo: 9.9281 para San José.', 'string') }}"
+            },
+            {
+              "name": "longitude",
+              "value": "={{ $fromAI('longitude', 'Longitud aproximada del destino turístico en Costa Rica. Ejemplo: -84.0907 para San José.', 'string') }}"
+            },
+            {
+              "name": "current",
+              "value": "temperature_2m,apparent_temperature,weather_code"
+            },
+            {
+              "name": "timezone",
+              "value": "America/Costa_Rica"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "pv-weather-tool",
+      "name": "Consultar clima",
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        240
+      ]
     },
     {
       "parameters": {
@@ -45,46 +129,88 @@
         "responseBody": "={{ $json.output ? JSON.parse($json.output) : $json }}",
         "options": {}
       },
+      "id": "pv-response",
       "name": "Respond to Webhook",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.4,
-      "position": [832, 0],
-      "id": "94c4b943-74cd-4cb4-9739-53a6a624445d"
-    },
-    {
-      "parameters": {
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
-      "typeVersion": 1.1,
-      "position": [384, 208],
-      "id": "f1da33ae-b490-4fe8-89ac-34b17787f60a",
-      "name": "Google Gemini Chat Model",
-      "credentials": {
-        "googlePalmApi": {
-          "id": "azFoEaZU4hrRAQYl",
-          "name": "Google Gemini(PaLM) Api account"
-        }
-      }
+      "position": [
+        720,
+        0
+      ]
     }
   ],
   "pinData": {},
   "connections": {
     "Webhook - Recomendaciones": {
-      "main": [[{"node": "Normalizar solicitud", "type": "main", "index": 0}]]
+      "main": [
+        [
+          {
+            "node": "Normalizar solicitud",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Normalizar solicitud": {
-      "main": [[{"node": "AI Agent - PuraVida Trips", "type": "main", "index": 0}]]
+      "main": [
+        [
+          {
+            "node": "AI Agent - PuraVida Trips",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "AI Agent - PuraVida Trips": {
-      "main": [[{"node": "Respond to Webhook", "type": "main", "index": 0}]]
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
-    "Google Gemini Chat Model": {
-      "ai_languageModel": [[{"node": "AI Agent - PuraVida Trips", "type": "ai_languageModel", "index": 0}]]
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent - PuraVida Trips",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Consultar catálogo de tours": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent - PuraVida Trips",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Consultar clima": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent - PuraVida Trips",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": false,
-  "settings": {"executionOrder": "v1", "binaryMode": "separate"},
-  "meta": {"templateCredsSetupCompleted": true},
+  "settings": {
+    "executionOrder": "v1"
+  },
   "tags": []
 }

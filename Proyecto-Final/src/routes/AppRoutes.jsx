@@ -8,6 +8,7 @@ import Marketplace from "../pages/Marketplace";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import NotFound from "../pages/NotFound";
+import Forbidden from "../pages/Forbidden";
 import TourDetail from "../pages/TourDetail";
 import RoleDashboard from "../pages/RoleDashboard";
 
@@ -108,6 +109,15 @@ function AppRoutes() {
           }
         />
       </Route>
+
+      {/* =========================
+          403
+      ========================= */}
+
+      <Route
+        path="/403"
+        element={<Forbidden />}
+      />
 
       {/* =========================
           404

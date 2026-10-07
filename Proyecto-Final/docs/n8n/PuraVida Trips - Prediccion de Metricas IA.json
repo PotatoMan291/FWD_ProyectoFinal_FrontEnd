@@ -1,0 +1,141 @@
+{
+  "name": "PuraVida Trips - Predicción de Métricas IA",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "puravida-metricas-prediccion",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "pv-metrics-webhook",
+      "name": "Webhook - Métricas",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -640,
+        0
+      ],
+      "webhookId": "pv-metricas-prediccion"
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $json.body ?? $json;\n\nconst current = body.current ?? {};\nconst history = Array.isArray(body.history) ? body.history : [];\n\nreturn [\n  {\n    json: {\n      current,\n      history,\n      language: body.language ?? 'es',\n      forecastPeriods: Number(body.forecastPeriods ?? 3)\n    }\n  }\n];"
+      },
+      "id": "pv-metrics-normalize",
+      "name": "Normalizar métricas",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -400,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ JSON.stringify({ current: $json.current, history: $json.history, forecastPeriods: $json.forecastPeriods, language: $json.language }) }}",
+        "options": {
+          "systemMessage": "Eres el analista de métricas de PuraVida Trips.\n\nTu función es analizar métricas actuales e históricas de una plataforma turística y generar una proyección futura.\n\nREGLAS:\n1. Utiliza únicamente los datos proporcionados.\n2. No inventes datos históricos.\n3. Identifica tendencias observables en usuarios, tours, reservas e ingresos.\n4. Genera una proyección razonable para los próximos períodos solicitados.\n5. Las proyecciones son estimaciones, no valores garantizados.\n6. Si existen pocos datos históricos, reduce la confianza de la predicción.\n7. Explica brevemente qué tendencia utilizaste.\n8. Responde en el idioma indicado por 'language'.\n9. Devuelve exclusivamente JSON válido, sin markdown.\n\nFORMATO OBLIGATORIO:\n{\n  \"summary\": \"resumen general de la tendencia\",\n  \"forecast\": [\n    {\n      \"period\": \"Periodo futuro\",\n      \"users\": 0,\n      \"tours\": 0,\n      \"reservations\": 0,\n      \"revenue\": 0\n    }\n  ],\n  \"growth\": {\n    \"users\": 0,\n    \"tours\": 0,\n    \"reservations\": 0,\n    \"revenue\": 0\n  },\n  \"insights\": [\n    \"insight 1\",\n    \"insight 2\",\n    \"insight 3\"\n  ],\n  \"confidence\": \"baja | media | alta\"\n}\n\nLos valores de growth deben representar porcentajes aproximados de crecimiento esperado respecto al último período histórico disponible."
+        }
+      },
+      "id": "pv-metrics-agent",
+      "name": "AI Agent - Predicción",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        -80,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "model": "llama-3.3-70b-versatile",
+        "options": {
+          "temperature": 0.2
+        }
+      },
+      "id": "pv-metrics-groq",
+      "name": "Groq Chat Model - Métricas",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        -96,
+        240
+      ],
+      "credentials": {
+        "groqApi": {
+          "id": "REEMPLAZAR_GROQ_CREDENTIAL_ID",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json.output ? JSON.parse($json.output) : $json }}",
+        "options": {}
+      },
+      "id": "pv-metrics-response",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        480,
+        0
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook - Métricas": {
+      "main": [
+        [
+          {
+            "node": "Normalizar métricas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalizar métricas": {
+      "main": [
+        [
+          {
+            "node": "AI Agent - Predicción",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent - Predicción": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model - Métricas": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent - Predicción",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": []
+}
