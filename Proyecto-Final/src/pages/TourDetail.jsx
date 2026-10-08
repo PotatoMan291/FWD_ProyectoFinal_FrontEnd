@@ -81,9 +81,7 @@ function TourDetail() {
         setWeatherLoading(true);
 
         const data =
-          await getWeatherByLocation(
-            tour.ubicacion
-          );
+          await getWeatherByLocation(tour);
 
         setWeather(data);
       } catch (weatherError) {
@@ -187,7 +185,7 @@ function TourDetail() {
                 size={17}
               />
 
-              {tour.ubicacion}, Costa Rica
+              {tour.destino || tour.ubicacion}, Costa Rica
             </p>
 
             <p className="tour-detail-description">
@@ -211,9 +209,7 @@ function TourDetail() {
             <div className="tour-detail-actions">
               <a
                 className="tour-detail-primary-button"
-                href={getGoogleMapsUrl(
-                  tour.ubicacion
-                )}
+                href={getGoogleMapsUrl(tour)}
                 target="_blank"
                 rel="noreferrer"
               >
@@ -369,18 +365,14 @@ function TourDetail() {
             </h2>
 
             <p className="section-description">
-              Consulta la zona aproximada del tour
-              y abre Google Maps para explorar el
-              destino.
+              Consulta la ubicación del destino y abre Google Maps para explorar el lugar del tour.
             </p>
           </div>
 
           <div className="tour-detail-map-wrapper">
             <iframe
-              title={`Mapa de ${tour.ubicacion}`}
-              src={getGoogleMapsEmbedUrl(
-                tour.ubicacion
-              )}
+              title={`Mapa de ${tour.destino || tour.ubicacion}`}
+              src={getGoogleMapsEmbedUrl(tour)}
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
             />

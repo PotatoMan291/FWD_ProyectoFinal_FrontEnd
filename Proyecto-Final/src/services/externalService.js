@@ -1,97 +1,74 @@
-const WEATHER_API_URL =
-  "https://api.open-meteo.com/v1/forecast";
+const WEATHER_API_URL = "https://api.open-meteo.com/v1/forecast";
 
 const LOCATION_COORDINATES = {
-  "San José": {
-    latitude: 9.9281,
-    longitude: -84.0907,
-  },
-
-  Alajuela: {
-    latitude: 10.0163,
-    longitude: -84.2142,
-  },
-
-  Cartago: {
-    latitude: 9.8644,
-    longitude: -83.9194,
-  },
-
-  Heredia: {
-    latitude: 10.0024,
-    longitude: -84.1165,
-  },
-
-  Guanacaste: {
-    latitude: 10.4958,
-    longitude: -85.355,
-  },
-
-  Puntarenas: {
-    latitude: 9.9763,
-    longitude: -84.8384,
-  },
-
-  Limón: {
-    latitude: 9.9907,
-    longitude: -83.036,
-  },
-
-  "Monteverde, Puntarenas": {
-    latitude: 10.3021,
-    longitude: -84.8258,
-  },
+  "San José": { latitude: 9.9281, longitude: -84.0907 },
+  Alajuela: { latitude: 10.0163, longitude: -84.2142 },
+  Cartago: { latitude: 9.8644, longitude: -83.9194 },
+  Heredia: { latitude: 10.0024, longitude: -84.1165 },
+  Guanacaste: { latitude: 10.4958, longitude: -85.355 },
+  Puntarenas: { latitude: 9.9763, longitude: -84.8384 },
+  Limón: { latitude: 9.9907, longitude: -83.036 },
+  "Monteverde, Puntarenas": { latitude: 10.3021, longitude: -84.8258 },
 };
 
-export async function getWeatherByLocation(
-  location
-) {
-  const coordinates =
-    LOCATION_COORDINATES[location];
-
-  if (!coordinates) {
-    throw new Error(
-      "No existen coordenadas para esta ubicación."
-    );
+function resolveCoordinates(locationOrTour) {
+  if (
+    locationOrTour &&
+    typeof locationOrTour === "object" &&
+    Number.isFinite(Number(locationOrTour.latitud)) &&
+    Number.isFinite(Number(locationOrTour.longitud))
+  ) {
+    return {
+      latitude: Number(locationOrTour.latitud),
+      longitude: Number(locationOrTour.longitud),
+    };
   }
 
-  const params =
-    new URLSearchParams({
-      latitude: coordinates.latitude,
-      longitude: coordinates.longitude,
-      current:
-        "temperature_2m,weather_code",
-      timezone: "America/Costa_Rica",
-    });
+  return LOCATION_COORDINATES[locationOrTour];
+}
 
-  const response = await fetch(
-    `${WEATHER_API_URL}?${params.toString()}`
-  );
+export async function getWeatherByLocation(locationOrTour) {
+  const coordinates = resolveCoordinates(locationOrTour);
+
+  if (!coordinates) {
+    throw new Error("No existen coordenadas para esta ubicación.");
+  }
+
+  const params = new URLSearchParams({
+    latitude: coordinates.latitude,
+    longitude: coordinates.longitude,
+    current: "temperature_2m,weather_code",
+    timezone: "America/Costa_Rica",
+  });
+
+  const response = await fetch(`${WEATHER_API_URL}?${params.toString()}`);
 
   if (!response.ok) {
-    throw new Error(
-      "No se pudo obtener el clima del destino."
-    );
+    throw new Error("No se pudo obtener el clima del destino.");
   }
 
   return response.json();
 }
 
-export function getGoogleMapsEmbedUrl(
-  location
-) {
-  const query = encodeURIComponent(
-    `${location}, Costa Rica`
-  );
+export function getGoogleMapsEmbedUrl(locationOrTour) {
+  const coordinates = resolveCoordinates(locationOrTour);
 
+  if (coordinates) {
+    return `https://www.google.com/maps?q=${coordinates.latitude},${coordinates.longitude}&output=embed`;
+  }
+
+  const query = encodeURIComponent(`${locationOrTour}, Costa Rica`);
   return `https://www.google.com/maps?q=${query}&output=embed`;
 }
 
-export function getGoogleMapsUrl(location) {
-  const query = encodeURIComponent(
-    `${location}, Costa Rica`
-  );
+export function getGoogleMapsUrl(locationOrTour) {
+  const coordinates = resolveCoordinates(locationOrTour);
 
+  if (coordinates) {
+    return `https://www.google.com/maps/search/?api=1&query=${coordinates.latitude},${coordinates.longitude}`;
+  }
+
+  const query = encodeURIComponent(`${locationOrTour}, Costa Rica`);
   return `https://www.google.com/maps/search/?api=1&query=${query}`;
 }
 
@@ -117,8 +94,5 @@ export function getWeatherDescription(code) {
     99: "Tormenta con granizo fuerte",
   };
 
-  return (
-    descriptions[code] ||
-    "Condiciones variables"
-  );
+  return descriptions[code] || "Condiciones variables";
 }
