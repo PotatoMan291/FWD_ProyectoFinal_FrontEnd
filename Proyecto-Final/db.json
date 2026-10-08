@@ -90,7 +90,11 @@
         "Almuerzo"
       ],
       "operador": "Arenal Adventures",
-      "operadorId": "3"
+      "operadorId": "3",
+      "destino": "Volcán Arenal",
+      "direccion": "Parque Nacional Volcán Arenal, La Fortuna, Alajuela",
+      "latitud": 10.4626,
+      "longitud": -84.7033
     },
     {
       "id": "2",
@@ -108,7 +112,11 @@
         "Seguro"
       ],
       "operador": "Monteverde Experience",
-      "operadorId": "3"
+      "operadorId": "3",
+      "destino": "Monteverde",
+      "direccion": "Reserva Biológica Bosque Nuboso de Monteverde, Puntarenas",
+      "latitud": 10.302,
+      "longitud": -84.8153
     },
     {
       "id": "3",
@@ -126,7 +134,11 @@
         "Fotografías"
       ],
       "operador": "Tamarindo Tours",
-      "operadorId": "3"
+      "operadorId": "3",
+      "destino": "Playa Tamarindo",
+      "direccion": "Playa Tamarindo, Guanacaste",
+      "latitud": 10.2995,
+      "longitud": -85.8373
     },
     {
       "id": "4",
@@ -143,7 +155,11 @@
         "Recorrido histórico",
         "Entrada incluida"
       ],
-      "operador": "San José Cultural"
+      "operador": "San José Cultural",
+      "destino": "San José Centro",
+      "direccion": "Teatro Nacional de Costa Rica, San José",
+      "latitud": 9.9329,
+      "longitud": -84.0806
     },
     {
       "id": "5",
@@ -160,7 +176,11 @@
         "Guía certificado",
         "Almuerzo"
       ],
-      "operador": "Pacuare Adventures"
+      "operador": "Pacuare Adventures",
+      "destino": "Río Pacuare",
+      "direccion": "Río Pacuare, Siquirres, Limón",
+      "latitud": 10.0464,
+      "longitud": -83.4952
     },
     {
       "id": "6",
@@ -177,7 +197,11 @@
         "Entrada incluida",
         "Observación de fauna"
       ],
-      "operador": "Pacific Nature Tours"
+      "operador": "Pacific Nature Tours",
+      "destino": "Parque Nacional Manuel Antonio",
+      "direccion": "Parque Nacional Manuel Antonio, Quepos, Puntarenas",
+      "latitud": 9.3925,
+      "longitud": -84.1475
     },
     {
       "id": "7",
@@ -194,7 +218,11 @@
         "Cena",
         "Transporte"
       ],
-      "operador": "Fortuna Relax"
+      "operador": "Fortuna Relax",
+      "destino": "La Fortuna",
+      "direccion": "La Fortuna, San Carlos, Alajuela",
+      "latitud": 10.467,
+      "longitud": -84.6427
     },
     {
       "id": "8",
@@ -211,110 +239,16 @@
         "Almuerzo",
         "Transporte marítimo"
       ],
-      "operador": "Tortuga Adventures"
+      "operador": "Tortuga Adventures",
+      "destino": "Isla Tortuga",
+      "direccion": "Isla Tortuga, Golfo de Nicoya, Puntarenas",
+      "latitud": 9.7686,
+      "longitud": -84.8828
     }
   ],
   "disponibilidades": [],
   "reservas": [],
   "pagos": [],
   "favoritos": [],
-  "metricasHistoricas": [
-    {
-      "id": "2025-10",
-      "periodo": "2025-10",
-      "usuarios": 8,
-      "tours": 5,
-      "reservas": 4,
-      "ingresos": 95000
-    },
-    {
-      "id": "2025-11",
-      "periodo": "2025-11",
-      "usuarios": 10,
-      "tours": 6,
-      "reservas": 5,
-      "ingresos": 125000
-    },
-    {
-      "id": "2025-12",
-      "periodo": "2025-12",
-      "usuarios": 13,
-      "tours": 6,
-      "reservas": 7,
-      "ingresos": 175000
-    },
-    {
-      "id": "2026-01",
-      "periodo": "2026-01",
-      "usuarios": 15,
-      "tours": 7,
-      "reservas": 8,
-      "ingresos": 200000
-    },
-    {
-      "id": "2026-02",
-      "periodo": "2026-02",
-      "usuarios": 17,
-      "tours": 7,
-      "reservas": 9,
-      "ingresos": 225000
-    },
-    {
-      "id": "2026-03",
-      "periodo": "2026-03",
-      "usuarios": 19,
-      "tours": 8,
-      "reservas": 10,
-      "ingresos": 250000
-    },
-    {
-      "id": "2026-04",
-      "periodo": "2026-04",
-      "usuarios": 22,
-      "tours": 8,
-      "reservas": 11,
-      "ingresos": 285000
-    },
-    {
-      "id": "2026-05",
-      "periodo": "2026-05",
-      "usuarios": 25,
-      "tours": 9,
-      "reservas": 13,
-      "ingresos": 325000
-    },
-    {
-      "id": "2026-06",
-      "periodo": "2026-06",
-      "usuarios": 28,
-      "tours": 9,
-      "reservas": 15,
-      "ingresos": 375000
-    },
-    {
-      "id": "2026-07",
-      "periodo": "2026-07",
-      "usuarios": 31,
-      "tours": 10,
-      "reservas": 17,
-      "ingresos": 425000
-    },
-    {
-      "id": "2026-08",
-      "periodo": "2026-08",
-      "usuarios": 35,
-      "tours": 10,
-      "reservas": 19,
-      "ingresos": 475000
-    },
-    {
-      "id": "2026-09",
-      "periodo": "2026-09",
-      "usuarios": 39,
-      "tours": 11,
-      "reservas": 22,
-      "ingresos": 550000
-    }
-  ],
   "$schema": "./node_modules/json-server/schema.json"
 }
